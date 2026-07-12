@@ -164,7 +164,7 @@ function SolarTermCalendar({ onBack }) {
               {weekLabels.map((label) => <span key={label}>{label}</span>)}
             </div>
 
-            <div className="calendar-grid">
+            <div className="calendar-grid" key={`${monthDate.getFullYear()}-${monthDate.getMonth()}`}>
               {monthDays.map((date) => {
                 const dayData = dayLookup.get(dateKey(date))
                 const inMonth = date.getMonth() === monthDate.getMonth()
@@ -196,7 +196,7 @@ function SolarTermCalendar({ onBack }) {
             </div>
           </section>
 
-          <aside className="day-panel" aria-live="polite">
+          <aside className="day-panel" key={dateKey(selectedDate)} aria-live="polite">
             <div className="day-heading">
               <div className="day-heading__date">
                 <span>{weekLabels[selectedDate.getDay()] === '日' ? '星期日' : `星期${weekLabels[selectedDate.getDay()]}`}</span>
