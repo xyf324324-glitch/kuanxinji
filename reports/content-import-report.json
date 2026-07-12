@@ -1,0 +1,50 @@
+{
+  "source": "C:\\Users\\WIN10\\WPSDrive\\350411431\\WPS云盘\\公众号赖老师文案链接.xlsx",
+  "sheet": "Sheet1",
+  "importedAt": "2026-07-12T05:44:13.657Z",
+  "imported": 190,
+  "skipped": [
+    {
+      "rowNumber": 74,
+      "reason": "与第 73 行完全重复"
+    },
+    {
+      "rowNumber": 153,
+      "reason": "与第 150 行完全重复"
+    }
+  ],
+  "duplicateLinks": [
+    {
+      "rowNumber": 74,
+      "firstRow": 73,
+      "sourceUrl": "https://mp.weixin.qq.com/s/Bo-CaIp_Xn0bMsptKGkb2w",
+      "exactDuplicate": true
+    },
+    {
+      "rowNumber": 153,
+      "firstRow": 150,
+      "sourceUrl": "https://mp.weixin.qq.com/s/mcMZFKvKeVPMImVNxI2_Ug",
+      "exactDuplicate": true
+    }
+  ],
+  "duplicateTitles": [
+    {
+      "rowNumber": 66,
+      "firstRow": 60,
+      "title": "随笔文字"
+    }
+  ],
+  "missingLinks": [],
+  "paragraphStats": {
+    "min": 4,
+    "max": 175,
+    "average": 31.1
+  },
+  "themeCounts": {
+    "情绪": 114,
+    "修行": 108,
+    "因缘": 60,
+    "生活": 50,
+    "关系": 42
+  }
+}
