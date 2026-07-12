@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import {
   ArrowLeft,
   ArrowClockwise,
@@ -34,6 +34,8 @@ import {
 } from './lib/library'
 import { usePwaStatus } from './hooks/usePwaStatus'
 import './index.css'
+
+const SolarTermCalendar = lazy(() => import('./components/SolarTermCalendar'))
 
 const prompts = [
   '我放不下一段关系，怎么办？',
@@ -153,6 +155,8 @@ function App() {
         setView('content')
       } else if (section === 'articles') {
         setView('articles')
+      } else if (section === 'calendar') {
+        setView('calendar')
       } else if (section === 'breathing') {
         setView('breathing')
       } else {
@@ -287,6 +291,12 @@ function App() {
     window.location.hash = '/articles'
   }
 
+  const openCalendar = () => {
+    setMenuOpen(false)
+    setView('calendar')
+    window.location.hash = '/calendar'
+  }
+
   const toggleSavedArticle = async (targetArticle = article) => {
     const isSaved = savedArticleIds.includes(targetArticle.id)
     if (isSaved) {
@@ -404,7 +414,7 @@ function App() {
                 <button type="button" onClick={begin}>答案之书</button>
                 <button type="button" onClick={() => setAskOpen(true)}>此刻有什么想问？</button>
                 <button type="button" onClick={openLibrary}>离线书架 · {savedArticleIds.length}篇</button>
-                <button type="button" onClick={() => setMenuOpen(false)}>节气日历 · 敬请期待</button>
+                <button type="button" onClick={openCalendar}>节气日历 · 今日农历</button>
                 <button type="button" onClick={() => setMenuOpen(false)}>经典阅读 · 敬请期待</button>
               </nav>
             )}
@@ -503,7 +513,7 @@ function App() {
                 <section>
                   <Leaf size={22} weight="light" />
                   <div><span>二十四节气</span><h2>顺四时，养身心</h2><p>节气物候、日常起居与一般养生科普。</p></div>
-                  <small>内容整理中</small>
+                  <button className="coming-path-action" type="button" onClick={openCalendar}>打开四时日历 <ArrowRight size={15} /></button>
                 </section>
                 <section>
                   <BookOpenText size={22} weight="light" />
@@ -567,6 +577,12 @@ function App() {
             )}
             <p className="catalog-count">当前收录 {articles.length} 篇 · 内容版本 {contentVersion.version}</p>
           </section>
+        )}
+
+        {view === 'calendar' && (
+          <Suspense fallback={<div className="calendar-loading" role="status">正在翻开四时日历…</div>}>
+            <SolarTermCalendar onBack={openContent} />
+          </Suspense>
         )}
 
         {view === 'article' && (

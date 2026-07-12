@@ -896,6 +896,28 @@ button:focus-visible, input:focus-visible { outline: 2px solid #b27b35; outline-
 .coming-paths h2 { font-size: 18px; }
 .coming-paths p { margin: 7px 0 0; color: #625d55; font-size: 11px; line-height: 1.65; }
 .coming-paths small { color: #7f776e; font-size: 9px; }
+.coming-path-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  padding: 5px 0;
+  border: 0;
+  border-bottom: 1px solid rgba(129, 101, 55, .42);
+  background: transparent;
+  color: #5c533f;
+  cursor: pointer;
+  font-size: 10px;
+}
+.calendar-loading {
+  display: grid;
+  min-height: 100svh;
+  place-items: center;
+  background: #f6f6f2;
+  color: #687064;
+  font-size: 13px;
+  letter-spacing: .08em;
+}
 .content-library-entry {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -1039,6 +1061,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid #b27b35; outline-
 @media (max-width: 390px) {
   .coming-paths section { grid-template-columns: auto minmax(0, 1fr); }
   .coming-paths small { grid-column: 2; }
+  .coming-path-action { grid-column: 2; }
   .content-intro { margin-top: 20px; }
   .content-paths { margin-top: 35px; }
   .articles-intro { padding-top: 36px; }
