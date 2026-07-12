@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/prepare-sites-build.mjs",
     "content:check": "node scripts/validate-content.mjs",
     "content:import": "node scripts/import-teacher-workbook.mjs",
     "lint": "oxlint",
