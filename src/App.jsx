@@ -36,6 +36,9 @@ import { usePwaStatus } from './hooks/usePwaStatus'
 import './index.css'
 
 const SolarTermCalendar = lazy(() => import('./components/SolarTermCalendar'))
+const SolarTermWellness = lazy(() => import('./components/SolarTermWellness'))
+const MeridianAtlas = lazy(() => import('./components/MeridianAtlas'))
+const ClassicsReader = lazy(() => import('./components/ClassicsReader'))
 
 const prompts = [
   '我放不下一段关系，怎么办？',
@@ -116,6 +119,9 @@ function App() {
   const [articleQuery, setArticleQuery] = useState('')
   const [activeTheme, setActiveTheme] = useState('全部')
   const [visibleArticleCount, setVisibleArticleCount] = useState(20)
+  const [wellnessTerm, setWellnessTerm] = useState('xiaoshu')
+  const [meridianId, setMeridianId] = useState('lung')
+  const [classicId, setClassicId] = useState('daily-rhythm')
   const {
     isOnline,
     offlineReady,
@@ -157,6 +163,15 @@ function App() {
         setView('articles')
       } else if (section === 'calendar') {
         setView('calendar')
+      } else if (section === 'wellness' && id) {
+        setWellnessTerm(decodeURIComponent(id))
+        setView('wellness')
+      } else if (section === 'meridians') {
+        setMeridianId(id || 'lung')
+        setView('meridians')
+      } else if (section === 'classics') {
+        setClassicId(id || 'daily-rhythm')
+        setView('classics')
       } else if (section === 'breathing') {
         setView('breathing')
       } else {
@@ -297,6 +312,41 @@ function App() {
     window.location.hash = '/calendar'
   }
 
+  const openWellness = (term) => {
+    setWellnessTerm(term)
+    setView('wellness')
+    window.location.hash = `/wellness/${encodeURIComponent(term)}`
+  }
+
+  const returnFromWellness = () => {
+    setView('calendar')
+    window.location.hash = '/calendar'
+  }
+
+  const openMeridians = (id = 'lung') => {
+    setMenuOpen(false)
+    setMeridianId(id)
+    setView('meridians')
+    window.location.hash = `/meridians/${id}`
+  }
+
+  const returnFromMeridians = () => {
+    setView('content')
+    window.location.hash = '/content'
+  }
+
+  const openClassics = (id = 'daily-rhythm') => {
+    setMenuOpen(false)
+    setClassicId(id)
+    setView('classics')
+    window.location.hash = `/classics/${id}`
+  }
+
+  const returnFromClassics = () => {
+    setView('content')
+    window.location.hash = '/content'
+  }
+
   const toggleSavedArticle = async (targetArticle = article) => {
     const isSaved = savedArticleIds.includes(targetArticle.id)
     if (isSaved) {
@@ -415,7 +465,8 @@ function App() {
                 <button type="button" onClick={() => setAskOpen(true)}>此刻有什么想问？</button>
                 <button type="button" onClick={openLibrary}>离线书架 · {savedArticleIds.length}篇</button>
                 <button type="button" onClick={openCalendar}>节气日历 · 今日农历</button>
-                <button type="button" onClick={() => setMenuOpen(false)}>经典阅读 · 敬请期待</button>
+                <button type="button" onClick={() => openMeridians()}>传统知识 · 十二经络</button>
+                <button type="button" onClick={() => openClassics()}>经典阅读 · 内经小笺</button>
               </nav>
             )}
 
@@ -509,7 +560,7 @@ function App() {
                 <button className="path-action" type="button" onClick={openArticles}>进入老师文章库 <ArrowRight size={16} /></button>
               </section>
 
-              <div className="coming-paths" aria-label="即将开放的内容">
+              <div className="coming-paths" aria-label="时令与传统知识">
                 <section>
                   <Leaf size={22} weight="light" />
                   <div><span>二十四节气</span><h2>顺四时，养身心</h2><p>节气物候、日常起居与一般养生科普。</p></div>
@@ -517,8 +568,13 @@ function App() {
                 </section>
                 <section>
                   <BookOpenText size={22} weight="light" />
-                  <div><span>经典阅读</span><h2>每日读一小章</h2><p>按章节阅读传统经典，保留离线进度。</p></div>
-                  <small>内容整理中</small>
+                  <div><span>十二经络</span><h2>读懂经脉的次序</h2><p>名称、表里关系与传统循行概览。</p></div>
+                  <button className="coming-path-action" type="button" onClick={() => openMeridians()}>打开经络图志 <ArrowRight size={15} /></button>
+                </section>
+                <section>
+                  <BookOpenText size={22} weight="light" />
+                  <div><span>内经小笺</span><h2>每日读一小章</h2><p>十二则原典短句、逐句提示与今日思考。</p></div>
+                  <button className="coming-path-action" type="button" onClick={() => openClassics()}>翻开内经小笺 <ArrowRight size={15} /></button>
                 </section>
               </div>
 
@@ -581,7 +637,31 @@ function App() {
 
         {view === 'calendar' && (
           <Suspense fallback={<div className="calendar-loading" role="status">正在翻开四时日历…</div>}>
-            <SolarTermCalendar onBack={openContent} />
+            <SolarTermCalendar onBack={openContent} onOpenWellness={openWellness} />
+          </Suspense>
+        )}
+
+        {view === 'wellness' && (
+          <Suspense fallback={<div className="calendar-loading" role="status">正在展开四时养生…</div>}>
+            <SolarTermWellness term={wellnessTerm} onBack={returnFromWellness} onNavigate={openWellness} onOpenMeridians={() => openMeridians()} />
+          </Suspense>
+        )}
+
+        {view === 'meridians' && (
+          <Suspense fallback={<div className="calendar-loading" role="status">正在展开经络图志…</div>}>
+            <MeridianAtlas meridianId={meridianId} onBack={returnFromMeridians} onNavigate={openMeridians} onOpenClassics={() => openClassics()} />
+          </Suspense>
+        )}
+
+        {view === 'classics' && (
+          <Suspense fallback={<div className="calendar-loading" role="status">正在翻开内经小笺…</div>}>
+            <ClassicsReader
+              classicId={classicId}
+              onBack={returnFromClassics}
+              onNavigate={openClassics}
+              onOpenCalendar={openCalendar}
+              onOpenMeridians={() => openMeridians()}
+            />
           </Suspense>
         )}
 

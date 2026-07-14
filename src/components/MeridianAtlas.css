@@ -1,0 +1,123 @@
+.meridian-screen {
+  min-height: 100svh;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(83, 112, 76, .09), transparent 28rem),
+    #f3f4f0;
+  color: #292d27;
+}
+
+.meridian-header {
+  position: sticky;
+  z-index: 5;
+  top: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  min-height: 64px;
+  padding: max(8px, env(safe-area-inset-top)) 20px 8px;
+  border-bottom: 1px solid rgba(69, 83, 63, .13);
+  background: rgba(243, 244, 240, .93);
+  backdrop-filter: blur(12px);
+}
+.meridian-header img { width: 78px; height: 46px; object-fit: cover; mix-blend-mode: multiply; }
+.meridian-header button { display: inline-flex; align-items: center; gap: 6px; justify-self: start; border: 0; background: transparent; color: #4b5845; font: inherit; font-size: 13px; cursor: pointer; }
+.meridian-header > span { justify-self: end; color: #7d8877; font-family: ui-serif, Georgia, serif; font-size: 12px; }
+
+.meridian-main { width: min(100% - 36px, 1080px); margin: 0 auto; padding: 48px 0 100px; }
+.meridian-intro { max-width: 690px; }
+.meridian-intro > div { display: flex; align-items: center; gap: 7px; color: #66795e; font-size: 11px; letter-spacing: .12em; }
+.meridian-intro h1 { margin: 13px 0 12px; font-family: "Songti SC", "STSong", ui-serif, serif; font-size: 44px; font-weight: 400; letter-spacing: .08em; }
+.meridian-intro p { margin: 0; color: #626b5d; font-size: 14px; line-height: 1.9; }
+
+.meridian-cycle { display: flex; gap: 7px; margin: 34px 0 42px; padding: 0 0 11px; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x proximity; scrollbar-color: rgba(83, 103, 75, .25) transparent; scrollbar-width: thin; }
+.meridian-cycle button { display: flex; flex: 0 0 auto; align-items: center; gap: 7px; padding: 8px 12px; border: 0; border-bottom: 1px solid rgba(73, 89, 66, .22); background: transparent; color: #697365; font: inherit; cursor: pointer; scroll-snap-align: center; }
+.meridian-cycle small { color: #a09684; font-family: ui-serif, Georgia, serif; font-size: 9px; }
+.meridian-cycle span { font-size: 12px; }
+.meridian-cycle button.is-active { border-bottom-color: #526b4a; color: #40513b; }
+.meridian-cycle button.is-active small { color: #6d825f; }
+
+.meridian-layout { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 58px; align-items: start; }
+.meridian-index { position: sticky; top: 94px; }
+.meridian-index > p { margin: 0 0 13px; color: #879082; font-size: 10px; letter-spacing: .12em; }
+.meridian-index button { display: grid; grid-template-columns: 27px 1fr; gap: 8px; align-items: center; width: 100%; padding: 10px 5px; border: 0; border-bottom: 1px solid rgba(73, 89, 66, .11); background: transparent; color: #687064; text-align: left; cursor: pointer; }
+.meridian-index button > span { color: #a09583; font-family: ui-serif, Georgia, serif; font-size: 9px; }
+.meridian-index button strong { font-size: 12px; font-weight: 400; }
+.meridian-index button.is-active { color: #40553b; }
+.meridian-index button.is-active strong { font-weight: 600; }
+
+.meridian-article { min-width: 0; }
+.meridian-title { padding: 8px 0 34px; border-bottom: 1px solid rgba(73, 89, 66, .17); }
+.meridian-title p { margin: 0 0 10px; color: #75866d; font-size: 10px; letter-spacing: .12em; }
+.meridian-title h2 { margin: 0; font-family: "Songti SC", "STSong", ui-serif, serif; font-size: clamp(34px, 6vw, 54px); font-weight: 400; letter-spacing: .05em; text-wrap: balance; }
+.meridian-title > span { display: inline-block; margin-top: 16px; padding-bottom: 4px; border-bottom: 1px solid rgba(151, 116, 77, .45); color: #8c6c4d; font-size: 12px; }
+
+.meridian-name, .meridian-route, .meridian-pair { padding: 40px 0; border-bottom: 1px solid rgba(73, 89, 66, .17); }
+.meridian-name h3, .meridian-route h3, .meridian-pair h3 { margin: 0; font-family: "Songti SC", "STSong", ui-serif, serif; font-size: 22px; font-weight: 400; }
+.meridian-name dl { display: grid; grid-template-columns: repeat(3, 1fr); margin: 25px 0 22px; border-top: 1px solid rgba(73, 89, 66, .14); border-bottom: 1px solid rgba(73, 89, 66, .14); }
+.meridian-name dl > div { padding: 18px 15px; }
+.meridian-name dl > div + div { border-left: 1px solid rgba(73, 89, 66, .14); }
+.meridian-name dt { color: #4f6348; font-family: "Songti SC", "STSong", ui-serif, serif; font-size: 18px; }
+.meridian-name dd { margin: 5px 0 0; color: #8a9085; font-size: 10px; }
+.meridian-name > p, .meridian-route > p, .meridian-pair > p { margin: 0; color: #626a5e; font-size: 14px; line-height: 1.9; }
+
+.meridian-route__heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+.meridian-route__heading span, .meridian-pair span, .meridian-classic span { display: block; margin-bottom: 7px; color: #7b8b73; font-size: 10px; letter-spacing: .12em; }
+.meridian-route__heading small { color: #999d96; font-size: 9px; }
+.meridian-route ol { display: flex; align-items: flex-start; margin: 32px 0 28px; padding: 0; list-style: none; }
+.meridian-route li { position: relative; flex: 1; min-width: 0; text-align: center; }
+.meridian-route li:not(:last-child)::after { position: absolute; z-index: 0; top: 13px; left: calc(50% + 13px); width: calc(100% - 26px); height: 1px; background: rgba(85, 108, 77, .3); content: ''; }
+.meridian-route li > span { position: relative; z-index: 1; display: grid; width: 27px; height: 27px; margin: 0 auto 10px; place-items: center; border-radius: 50%; background: #62775a; color: #fff; font-family: ui-serif, Georgia, serif; font-size: 9px; }
+.meridian-route li strong { display: block; color: #667061; font-size: 10px; font-weight: 400; line-height: 1.45; }
+
+.meridian-pair { display: grid; grid-template-columns: minmax(180px, .65fr) 1.35fr; gap: 34px; align-items: start; }
+.meridian-pair > p { padding-top: 18px; }
+
+.meridian-classic { display: grid; grid-template-columns: 32px 1fr; gap: 18px; margin: 46px 0; padding: 31px 34px; background: #e7ebe3; color: #53624d; }
+.meridian-classic blockquote { margin: 0 0 8px; color: #30372d; font-family: "Songti SC", "STSong", ui-serif, serif; font-size: 23px; line-height: 1.7; }
+.meridian-classic cite { color: #8b7158; font-size: 10px; font-style: normal; }
+.meridian-classic p { margin: 19px 0 0; color: #626b5e; font-size: 12px; line-height: 1.85; }
+
+.meridian-safety { display: grid; grid-template-columns: 28px 1fr; gap: 13px; padding: 24px 0; border-top: 1px solid rgba(73, 89, 66, .17); border-bottom: 1px solid rgba(73, 89, 66, .17); color: #6c7b65; }
+.meridian-safety h3 { margin: 0 0 7px; color: #4c5848; font-size: 13px; font-weight: 500; }
+.meridian-safety p { margin: 0; color: #747c70; font-size: 11px; line-height: 1.75; }
+
+.meridian-sources { padding: 30px 0 15px; color: #767e72; }
+.meridian-sources > p { margin: 0 0 11px; color: #4f584b; font-size: 12px; }
+.meridian-sources ul { margin: 0; padding-left: 18px; }
+.meridian-sources li { margin: 7px 0; font-size: 11px; line-height: 1.6; }
+.meridian-sources a { display: inline-flex; align-items: center; gap: 5px; color: #5f7458; text-underline-offset: 3px; }
+.meridian-sources > small { display: block; margin-top: 16px; color: #989c95; font-size: 9px; line-height: 1.7; }
+
+.meridian-pagination { display: grid; grid-template-columns: 1fr 1fr; margin-top: 31px; border-top: 1px solid rgba(73, 89, 66, .17); }
+.meridian-pagination button { display: flex; align-items: center; gap: 12px; padding: 24px 2px; border: 0; background: transparent; color: #45533f; font: inherit; cursor: pointer; }
+.meridian-pagination button:last-child { justify-self: end; text-align: right; }
+.meridian-pagination small { display: block; margin-bottom: 4px; color: #969c92; font-size: 9px; }
+
+.meridian-screen button:focus-visible, .meridian-screen a:focus-visible { outline: 2px solid #607957; outline-offset: 3px; }
+
+@media (max-width: 780px) {
+  .meridian-main { padding-top: 30px; }
+  .meridian-layout { grid-template-columns: 1fr; gap: 0; }
+  .meridian-index { display: none; }
+}
+
+@media (max-width: 520px) {
+  .meridian-main { width: calc(100% - 28px); }
+  .meridian-intro h1 { font-size: 36px; }
+  .meridian-intro p { font-size: 13px; }
+  .meridian-cycle { margin-bottom: 29px; }
+  .meridian-title h2 { font-size: 36px; }
+  .meridian-name dl > div { padding: 15px 8px; }
+  .meridian-name dt { font-size: 16px; }
+  .meridian-route__heading { align-items: start; flex-direction: column; gap: 8px; }
+  .meridian-route ol { overflow-x: auto; padding-bottom: 8px; }
+  .meridian-route li { flex: 0 0 74px; }
+  .meridian-pair { grid-template-columns: 1fr; gap: 9px; }
+  .meridian-pair > p { padding-top: 0; }
+  .meridian-classic { margin-inline: -2px; padding: 27px 20px; }
+  .meridian-classic blockquote { font-size: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .meridian-screen *, .meridian-screen *::before, .meridian-screen *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}

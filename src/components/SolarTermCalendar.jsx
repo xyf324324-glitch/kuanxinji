@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import {
   ArrowLeft,
+  ArrowRight,
+  BookOpenText,
   CalendarBlank,
   CaretLeft,
   CaretRight,
@@ -8,6 +10,7 @@ import {
 } from '@phosphor-icons/react'
 import lunarPackage from 'lunar-javascript'
 import kuanxinLogo from '../assets/kuanxin-logo-transparent.png'
+import { hasSolarTermWellness } from '../content/solar-terms'
 import './SolarTermCalendar.css'
 
 const { Solar } = lunarPackage
@@ -56,6 +59,8 @@ function getLunarData(date) {
   const lunar = solar.getLunar()
   const nextTerm = lunar.getNextJieQi()
   const nextTermSolar = nextTerm.getSolar()
+  const previousTerm = lunar.getPrevJieQi()
+  const previousTermSolar = previousTerm.getSolar()
 
   return {
     lunar,
@@ -77,6 +82,16 @@ function getLunarData(date) {
         nextTermSolar.getDay(),
         nextTermSolar.getHour(),
         nextTermSolar.getMinute(),
+      ),
+    },
+    previousTerm: {
+      name: previousTerm.getName(),
+      date: new Date(
+        previousTermSolar.getYear(),
+        previousTermSolar.getMonth() - 1,
+        previousTermSolar.getDay(),
+        previousTermSolar.getHour(),
+        previousTermSolar.getMinute(),
       ),
     },
   }
@@ -111,15 +126,16 @@ function TraditionList({ title, items, tone }) {
   )
 }
 
-function SolarTermCalendar({ onBack }) {
+function SolarTermCalendar({ onBack, onOpenWellness }) {
   const today = useMemo(() => new Date(), [])
   const [selectedDate, setSelectedDate] = useState(today)
   const [monthDate, setMonthDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1))
   const monthDays = useMemo(() => buildMonthDays(monthDate), [monthDate])
   const selectedData = useMemo(() => getLunarData(selectedDate), [selectedDate])
   const dayLookup = useMemo(() => new Map(monthDays.map((date) => [dateKey(date), getLunarData(date)])), [monthDays])
-  const activeTermName = selectedData.solarTerm || selectedData.nextTerm.name
+  const activeTermName = selectedData.solarTerm || selectedData.previousTerm.name
   const daysUntilTerm = Math.max(0, Math.ceil((selectedData.nextTerm.date - selectedDate) / 86400000))
+  const wellnessAvailable = hasSolarTermWellness(activeTermName)
 
   const moveMonth = (offset) => {
     const next = new Date(monthDate.getFullYear(), monthDate.getMonth() + offset, 1)
@@ -212,17 +228,31 @@ function SolarTermCalendar({ onBack }) {
             <section className="solar-term-focus">
               <div className="solar-term-focus__icon"><CalendarBlank size={23} weight="light" /></div>
               <div>
-                <span>{selectedData.solarTerm ? '今日节气' : '下一节气'}</span>
+                <span>{selectedData.solarTerm ? '今日节气' : '当前节气'}</span>
                 <h3>{activeTermName}</h3>
                 <p>{solarTermNotes[activeTermName]}</p>
                 {!selectedData.solarTerm && (
                   <small>
-                    {selectedData.nextTerm.date.getMonth() + 1}月{selectedData.nextTerm.date.getDate()}日
+                    下一节气 {selectedData.nextTerm.name} · {selectedData.nextTerm.date.getMonth() + 1}月{selectedData.nextTerm.date.getDate()}日
                     {' · '}{daysUntilTerm}天后
                   </small>
                 )}
               </div>
             </section>
+
+            <button
+              className="wellness-entry"
+              type="button"
+              onClick={() => wellnessAvailable && onOpenWellness(activeTermName)}
+              disabled={!wellnessAvailable}
+            >
+              <span className="wellness-entry__icon"><BookOpenText size={21} weight="light" /></span>
+              <span>
+                <small>宽心纪 · 四时养生</small>
+                <strong>{wellnessAvailable ? `读${activeTermName}养生` : `${activeTermName}内容整理中`}</strong>
+              </span>
+              {wellnessAvailable && <ArrowRight size={18} />}
+            </button>
 
             <div className="tradition-lists">
               <TraditionList title="宜" items={selectedData.yi} tone="yi" />

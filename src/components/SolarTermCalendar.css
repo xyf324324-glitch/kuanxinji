@@ -96,6 +96,27 @@
 .solar-term-focus p { margin: 0; color: #626a5e; font-size: 13px; line-height: 1.75; }
 .solar-term-focus small { display: block; margin-top: 9px; color: #9a673e; font-size: 11px; }
 
+.wellness-entry {
+  display: grid;
+  grid-template-columns: 42px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  width: 100%;
+  margin: 18px 0 2px;
+  padding: 15px 16px;
+  border: 1px solid rgba(77, 103, 69, .2);
+  background: #eef1e9;
+  color: #4e6248;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 160ms cubic-bezier(.25, 1, .5, 1), border-color 160ms ease, background-color 160ms ease;
+}
+.wellness-entry:hover:not(:disabled) { border-color: rgba(77, 103, 69, .42); background: #e8ede3; transform: translateY(-1px); }
+.wellness-entry:disabled { cursor: default; opacity: .58; }
+.wellness-entry__icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 50%; background: rgba(255, 255, 255, .62); }
+.wellness-entry small { display: block; margin-bottom: 4px; color: #86917f; font-size: 9px; letter-spacing: .1em; }
+.wellness-entry strong { font-size: 14px; font-weight: 500; }
+
 .tradition-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; padding: 26px 0; }
 .tradition-list__heading { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 9px; border-bottom: 1px solid rgba(70, 83, 63, .16); }
 .tradition-list__heading span { font-size: 18px; }
