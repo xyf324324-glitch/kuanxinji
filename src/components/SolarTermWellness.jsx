@@ -73,7 +73,7 @@ function SolarTermWellness({ term, onBack, onNavigate, onOpenMeridians }) {
           ))}
         </nav>
 
-        <article className="wellness-article">
+        <article className="wellness-article" key={item.id}>
           <header className="wellness-hero">
             <div className="wellness-hero__eyebrow"><Leaf size={16} /> 四时养生 · 第{item.sequence}节气</div>
             <p className="wellness-hero__season">{item.season} · {item.period}</p>
@@ -92,7 +92,7 @@ function SolarTermWellness({ term, onBack, onNavigate, onOpenMeridians }) {
             <div>
               <p className="wellness-kicker">内经小笺</p>
               <blockquote id="classic-title">“{item.classic.quote}”</blockquote>
-              <cite>— {item.classic.source}</cite>
+              <cite>- {item.classic.source}</cite>
               <p>{item.classic.note}</p>
             </div>
           </section>

@@ -47,14 +47,15 @@ export async function listSavedArticles() {
   }
 }
 
-export async function saveArticle(article) {
-  const entry = { id: article.id, savedAt: new Date().toISOString() }
+export async function saveArticle(article, savedAt = new Date().toISOString()) {
+  const entry = { id: article.id, savedAt }
   try {
     await transact('saved', 'readwrite', (store) => store.put(entry))
   } catch {
     const saved = fallbackRead('kuanxin-saved', []).filter((item) => item.id !== article.id)
     window.localStorage.setItem('kuanxin-saved', JSON.stringify([...saved, entry]))
   }
+  return entry
 }
 
 export async function removeSavedArticle(articleId) {

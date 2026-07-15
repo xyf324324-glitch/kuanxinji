@@ -44,6 +44,9 @@
 .month-toolbar button { display: grid; width: 40px; height: 40px; place-items: center; border-radius: 50%; }
 .month-toolbar button:hover { background: rgba(76, 99, 69, .08); }
 .month-toolbar > div { display: flex; align-items: baseline; justify-content: center; gap: 10px; }
+.month-toolbar__label { animation: month-label-in 220ms cubic-bezier(.22, 1, .36, 1) both; }
+.month-toolbar__label--previous { --month-label-shift: -7px; }
+.month-toolbar__label--next { --month-label-shift: 7px; }
 .month-toolbar strong { font-size: 27px; font-weight: 500; }
 .month-toolbar span { color: #7f867a; font-size: 13px; letter-spacing: .08em; }
 
@@ -51,8 +54,11 @@
 .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
 .calendar-week { padding-bottom: 10px; border-bottom: 1px solid rgba(70, 83, 63, .2); }
 .calendar-week span { color: #788074; font-size: 11px; text-align: center; }
+.calendar-grid-viewport { overflow: hidden; border-bottom: 1px solid rgba(70, 83, 63, .17); }
 .calendar-grid { border-bottom: 1px solid rgba(70, 83, 63, .17); }
-.calendar-grid { animation: calendar-grid-in 260ms cubic-bezier(.22, 1, .36, 1) both; }
+.calendar-grid { border-bottom: 0; animation: calendar-month-in 260ms cubic-bezier(.22, 1, .36, 1) both; }
+.calendar-grid--previous { --calendar-shift: -18px; }
+.calendar-grid--next { --calendar-shift: 18px; }
 
 .calendar-day {
   position: relative;
@@ -71,16 +77,16 @@
   transition: background-color 160ms cubic-bezier(.25, 1, .5, 1), color 160ms cubic-bezier(.25, 1, .5, 1), opacity 160ms ease;
 }
 .calendar-day:hover { background: rgba(90, 112, 80, .06); }
-.calendar-day__number { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; font-family: ui-serif, Georgia, serif; font-size: 17px; transition: transform 160ms cubic-bezier(.25, 1, .5, 1), background-color 160ms ease, color 160ms ease; }
+.calendar-day__number { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; font-family: ui-serif, Georgia, serif; font-size: 17px; transform-origin: center; transition: transform 160ms cubic-bezier(.25, 1, .5, 1), background-color 160ms ease, color 160ms ease, filter 160ms ease; }
 .calendar-day__lunar { overflow: hidden; max-width: 100%; color: #858b80; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
 .calendar-day--muted { opacity: .3; }
 .calendar-day--today .calendar-day__number { box-shadow: inset 0 0 0 1px #87967d; }
 .calendar-day--selected { background: rgba(87, 108, 78, .08); }
-.calendar-day--selected .calendar-day__number { background: #4c6245; color: #f8faf5; box-shadow: none; }
+.calendar-day--selected .calendar-day__number { background: #4c6245; color: #f8faf5; box-shadow: none; animation: calendar-ink-settle 280ms cubic-bezier(.22, 1, .36, 1) both; }
 .calendar-day:active .calendar-day__number { transform: scale(.9); }
 .calendar-day--term .calendar-day__lunar { color: #9c5d2d; font-weight: 600; }
 
-.day-panel { padding: 4px 0 0 34px; border-left: 1px solid rgba(70, 83, 63, .22); animation: calendar-detail-in 220ms cubic-bezier(.25, 1, .5, 1) both; }
+.day-panel { padding: 4px 0 0 34px; border-left: 1px solid rgba(70, 83, 63, .22); animation: calendar-detail-crossfade 210ms cubic-bezier(.25, 1, .5, 1) both; }
 .day-heading { display: grid; grid-template-columns: 70px 1fr; gap: 21px; align-items: center; padding-bottom: 25px; border-bottom: 1px solid rgba(70, 83, 63, .16); }
 .day-heading__date { text-align: center; }
 .day-heading__date span { color: #778171; font-size: 11px; }
@@ -90,7 +96,17 @@
 .day-heading > div:last-child > span { color: #6e746a; font-size: 11px; }
 
 .solar-term-focus { display: grid; grid-template-columns: 42px 1fr; gap: 15px; padding: 27px 0; border-bottom: 1px solid rgba(70, 83, 63, .16); }
-.solar-term-focus__icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 50%; background: #e5eadf; color: #53684c; }
+.solar-term-focus__icon { position: relative; display: grid; width: 42px; height: 42px; place-items: center; border-radius: 50%; background: #e5eadf; color: #53684c; }
+.solar-term-focus__icon svg { position: relative; z-index: 1; }
+.solar-term-focus--current .solar-term-focus__icon::after {
+  position: absolute;
+  inset: -5px;
+  border: 1px solid rgba(85, 112, 76, .28);
+  border-radius: 50%;
+  content: '';
+  animation: current-term-breathe 4.8s ease-in-out infinite;
+  pointer-events: none;
+}
 .solar-term-focus span { color: #718168; font-size: 10px; letter-spacing: .12em; }
 .solar-term-focus h3 { margin: 5px 0 8px; font-size: 25px; font-weight: 500; }
 .solar-term-focus p { margin: 0; color: #626a5e; font-size: 13px; line-height: 1.75; }
@@ -131,14 +147,29 @@
 
 .calendar-screen button:focus-visible { outline: 2px solid #607957; outline-offset: 3px; }
 
-@keyframes calendar-grid-in {
-  from { opacity: .5; transform: translateY(5px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes month-label-in {
+  from { opacity: .45; transform: translateX(var(--month-label-shift)); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
-@keyframes calendar-detail-in {
-  from { opacity: .35; transform: translateY(7px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes calendar-month-in {
+  from { opacity: .62; transform: translateX(var(--calendar-shift)); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes calendar-ink-settle {
+  from { opacity: .48; filter: blur(1.2px); transform: scale(.72); }
+  to { opacity: 1; filter: blur(0); transform: scale(1); }
+}
+
+@keyframes calendar-detail-crossfade {
+  from { opacity: .5; filter: blur(1px); }
+  to { opacity: 1; filter: blur(0); }
+}
+
+@keyframes current-term-breathe {
+  0%, 100% { opacity: .32; transform: scale(.92); }
+  50% { opacity: .82; transform: scale(1.06); }
 }
 
 @media (max-width: 760px) {
@@ -164,5 +195,10 @@
 @media (prefers-reduced-motion: reduce) {
   .calendar-screen *,
   .calendar-screen *::before,
-  .calendar-screen *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+  .calendar-screen *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
 }

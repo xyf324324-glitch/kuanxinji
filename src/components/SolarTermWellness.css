@@ -28,7 +28,7 @@
 
 .wellness-main { width: min(100% - 36px, 920px); margin: 0 auto; padding: 28px 0 100px; }
 .wellness-term-nav { display: flex; justify-content: flex-start; gap: 7px; margin-bottom: 34px; padding: 2px 2px 10px; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x proximity; scrollbar-color: rgba(88, 105, 79, .24) transparent; scrollbar-width: thin; }
-.wellness-term-nav button { flex: 0 0 auto; padding: 8px 16px; border: 1px solid rgba(79, 94, 70, .18); border-radius: 999px; background: rgba(255, 255, 255, .24); color: #73796f; font: inherit; font-size: 12px; cursor: pointer; scroll-snap-align: center; transition: 160ms ease; }
+.wellness-term-nav button { flex: 0 0 auto; padding: 8px 16px; border: 1px solid rgba(79, 94, 70, .18); border-radius: 999px; background: rgba(255, 255, 255, .24); color: #73796f; font: inherit; font-size: 12px; cursor: pointer; scroll-snap-align: center; transform-origin: center; transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, transform 160ms ease; }
 .wellness-term-nav button:hover { border-color: rgba(79, 94, 70, .42); color: #4f6048; }
 .wellness-term-nav button.is-active { border-color: #64775b; background: #64775b; color: #fff; }
 
@@ -86,6 +86,34 @@
 .wellness-pagination button { display: flex; align-items: center; gap: 13px; padding: 25px 4px; border: 0; background: transparent; color: #465140; font: inherit; cursor: pointer; }
 .wellness-pagination button:last-child { justify-self: end; text-align: right; }
 .wellness-pagination small { display: block; margin-bottom: 4px; color: #969990; font-size: 9px; }
+.wellness-pagination button svg { transition: transform 190ms cubic-bezier(.22, 1, .36, 1); }
+
+@media (hover: hover) and (pointer: fine) {
+  .wellness-pagination button:first-of-type:hover svg { transform: translateX(-3px); }
+  .wellness-pagination button:last-of-type:hover svg { transform: translateX(3px); }
+  .wellness-library-link:hover > svg:last-child { transform: translateX(3px); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .wellness-term-nav button.is-active { animation: wellness-nav-settle 260ms cubic-bezier(.22, 1, .36, 1) both; }
+  .wellness-article > .wellness-hero { animation: wellness-page-settle 420ms cubic-bezier(.22, 1, .36, 1) both; }
+  .wellness-article > .wellness-classic { animation: wellness-reading-follow 460ms 90ms cubic-bezier(.22, 1, .36, 1) both; }
+}
+
+@keyframes wellness-nav-settle {
+  from { opacity: .62; transform: scale(.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes wellness-page-settle {
+  from { opacity: .62; transform: translateY(9px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes wellness-reading-follow {
+  from { opacity: .55; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 .wellness-screen button:focus-visible, .wellness-screen a:focus-visible { outline: 2px solid #607957; outline-offset: 3px; }
 

@@ -15,6 +15,8 @@ function MeridianAtlas({ meridianId, onBack, onNavigate, onOpenClassics }) {
   const navRef = useRef(null)
   const item = getMeridian(meridianId)
   const itemIndex = meridianItems.findIndex((entry) => entry.id === item.id)
+  const previousItemIndexRef = useRef(itemIndex)
+  const pageDirection = itemIndex < previousItemIndexRef.current ? 'previous' : 'next'
   const previousItem = meridianItems[itemIndex - 1]
   const nextItem = meridianItems[itemIndex + 1]
 
@@ -22,7 +24,8 @@ function MeridianAtlas({ meridianId, onBack, onNavigate, onOpenClassics }) {
     window.scrollTo({ top: 0, behavior: 'instant' })
     const activeButton = navRef.current?.querySelector('[aria-current="page"]')
     activeButton?.scrollIntoView({ block: 'nearest', inline: 'center' })
-  }, [item.id])
+    previousItemIndexRef.current = itemIndex
+  }, [item.id, itemIndex])
 
   return (
     <section className="meridian-screen">
@@ -70,7 +73,7 @@ function MeridianAtlas({ meridianId, onBack, onNavigate, onOpenClassics }) {
             ))}
           </aside>
 
-          <article className="meridian-article">
+          <article className={`meridian-article meridian-article--${pageDirection}`} key={item.id}>
             <header className="meridian-title">
               <p>{item.group} · 第{item.sequence}经</p>
               <h2>{item.name}</h2>
@@ -116,7 +119,7 @@ function MeridianAtlas({ meridianId, onBack, onNavigate, onOpenClassics }) {
               <div>
                 <span>原典一则</span>
                 <blockquote id="meridian-classic-title">“{meridianMeta.classic.quote}”</blockquote>
-                <cite>— {meridianMeta.classic.source}</cite>
+                <cite>- {meridianMeta.classic.source}</cite>
                 <p>{meridianMeta.classic.note}</p>
               </div>
             </section>

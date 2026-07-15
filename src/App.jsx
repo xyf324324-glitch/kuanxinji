@@ -107,14 +107,14 @@ function App() {
   const [view, setView] = useState('home')
   const [article, setArticle] = useState(articles[0])
   const [articleOrigin, setArticleOrigin] = useState('result')
-  const [dailyVisible, setDailyVisible] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [askOpen, setAskOpen] = useState(false)
   const [question, setQuestion] = useState(() => window.sessionStorage.getItem('kuanxin-question') || '')
   const [shared, setShared] = useState(false)
   const [saved, setSaved] = useState(false)
   const [homeLineIndex, setHomeLineIndex] = useState(0)
-  const [savedArticleIds, setSavedArticleIds] = useState([])
+  const [savedArticleEntries, setSavedArticleEntries] = useState([])
+  const [libraryUndo, setLibraryUndo] = useState(null)
   const [readingProgress, setReadingProgress] = useState({})
   const [articleQuery, setArticleQuery] = useState('')
   const [activeTheme, setActiveTheme] = useState('全部')
@@ -133,7 +133,7 @@ function App() {
 
   useEffect(() => {
     Promise.all([listSavedArticles(), loadReadingProgress()]).then(([savedEntries, progressEntries]) => {
-      setSavedArticleIds(savedEntries.map((entry) => entry.id))
+      setSavedArticleEntries(savedEntries)
       setReadingProgress(progressEntries)
     })
   }, [])
@@ -185,6 +185,29 @@ function App() {
   }, [])
 
   useEffect(() => {
+    const titles = {
+      home: '宽心纪｜愿您宽心',
+      breathing: '片刻安住｜宽心纪',
+      result: `${article.title}｜宽心纪`,
+      content: '内容导航｜宽心纪',
+      articles: '老师文章库｜宽心纪',
+      calendar: '二十四节气｜宽心纪',
+      wellness: '四时养生｜宽心纪',
+      meridians: '十二经络｜宽心纪',
+      classics: '内经小笺｜宽心纪',
+      article: `${article.title}｜宽心纪`,
+      library: '离线书架｜宽心纪',
+      search: '寻文结果｜宽心纪',
+    }
+    document.title = titles[view] || '宽心纪｜愿您宽心'
+
+    const focusFrame = window.requestAnimationFrame(() => {
+      document.querySelector(`[data-view="${view}"] [data-route-heading]`)?.focus({ preventScroll: true })
+    })
+    return () => window.cancelAnimationFrame(focusFrame)
+  }, [view, article.id, article.title])
+
+  useEffect(() => {
     if (view !== 'breathing') return undefined
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const timer = window.setTimeout(() => {
@@ -197,29 +220,44 @@ function App() {
   }, [view])
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setDailyVisible(true), 1400)
-    return () => window.clearTimeout(timer)
-  }, [])
-
-  useEffect(() => {
     if (view !== 'article') return undefined
     window.scrollTo({ top: 0, behavior: 'instant' })
+    let progressFrame
     let saveTimer
+    let latestProgress = 0
+
+    const persistProgress = () => {
+      setReadingProgress((current) => current[article.id] === latestProgress
+        ? current
+        : { ...current, [article.id]: latestProgress })
+      saveReadingProgress(article.id, latestProgress)
+    }
 
     const updateProgress = () => {
       const scrollable = document.documentElement.scrollHeight - window.innerHeight
       const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 100
       const normalized = Math.max(0, Math.min(100, Math.round(progress)))
-      setReadingProgress((current) => ({ ...current, [article.id]: normalized }))
+      latestProgress = normalized
+      document.querySelector('.reading-progress')?.style.setProperty('--reading-progress', `${normalized}%`)
       window.clearTimeout(saveTimer)
-      saveTimer = window.setTimeout(() => saveReadingProgress(article.id, normalized), 250)
+      saveTimer = window.setTimeout(persistProgress, 250)
     }
 
-    window.addEventListener('scroll', updateProgress, { passive: true })
+    const scheduleProgressUpdate = () => {
+      if (progressFrame) return
+      progressFrame = window.requestAnimationFrame(() => {
+        progressFrame = undefined
+        updateProgress()
+      })
+    }
+
+    window.addEventListener('scroll', scheduleProgressUpdate, { passive: true })
     updateProgress()
     return () => {
-      window.removeEventListener('scroll', updateProgress)
+      window.removeEventListener('scroll', scheduleProgressUpdate)
+      if (progressFrame) window.cancelAnimationFrame(progressFrame)
       window.clearTimeout(saveTimer)
+      persistProgress()
     }
   }, [view, article.id])
 
@@ -228,7 +266,6 @@ function App() {
       if (event.key !== 'Escape') return
       setMenuOpen(false)
       setAskOpen(false)
-      setDailyVisible(false)
     }
     window.addEventListener('keydown', closeOverlays)
     return () => window.removeEventListener('keydown', closeOverlays)
@@ -238,8 +275,29 @@ function App() {
   const recommendations = searchResult.items
   const hasCloseMatch = searchResult.hasCloseMatch
   const isHighRisk = /自杀|自伤|不想活|活不下去|结束生命|极度绝望|严重疾病|重病/.test(question)
-  const savedArticles = articles.filter((item) => savedArticleIds.includes(item.id))
+  const savedArticleIds = useMemo(() => savedArticleEntries.map((entry) => entry.id), [savedArticleEntries])
+  const savedArticles = useMemo(() => [...savedArticleEntries]
+    .sort((a, b) => Date.parse(b.savedAt || 0) - Date.parse(a.savedAt || 0))
+    .map((entry) => articles.find((item) => item.id === entry.id))
+    .filter(Boolean), [savedArticleEntries])
   const articleIsSaved = savedArticleIds.includes(article.id)
+  const relatedArticles = useMemo(() => {
+    const themes = new Set(article.themes || [])
+    const keywords = new Set(article.keywords || [])
+    const concerns = new Set(article.userConcerns || [])
+
+    return articles
+      .filter((item) => item.id !== article.id)
+      .map((item) => ({
+        item,
+        score: item.themes.filter((theme) => themes.has(theme)).length * 5
+          + item.keywords.filter((keyword) => keywords.has(keyword)).length * 3
+          + item.userConcerns.filter((concern) => concerns.has(concern)).length * 2,
+      }))
+      .sort((a, b) => b.score - a.score || a.item.order - b.item.order)
+      .slice(0, 3)
+      .map(({ item }) => item)
+  }, [article.id, article.keywords, article.themes, article.userConcerns])
   const articleThemes = ['全部', ...new Set(articles.flatMap((item) => item.themes))]
   const filteredArticles = useMemo(() => {
     const query = articleQuery.trim().toLowerCase()
@@ -251,6 +309,12 @@ function App() {
   }, [activeTheme, articleQuery])
 
   useEffect(() => setVisibleArticleCount(20), [activeTheme, articleQuery])
+
+  useEffect(() => {
+    if (!libraryUndo) return undefined
+    const timer = window.setTimeout(() => setLibraryUndo(null), 10000)
+    return () => window.clearTimeout(timer)
+  }, [libraryUndo])
 
   const begin = () => {
     setMenuOpen(false)
@@ -351,18 +415,32 @@ function App() {
     const isSaved = savedArticleIds.includes(targetArticle.id)
     if (isSaved) {
       await removeSavedArticle(targetArticle.id)
-      setSavedArticleIds((current) => current.filter((id) => id !== targetArticle.id))
+      setSavedArticleEntries((current) => current.filter((entry) => entry.id !== targetArticle.id))
     } else {
-      await saveArticle(targetArticle)
-      setSavedArticleIds((current) => [...new Set([...current, targetArticle.id])])
+      const entry = await saveArticle(targetArticle)
+      setSavedArticleEntries((current) => [entry, ...current.filter((item) => item.id !== targetArticle.id)])
     }
   }
 
-  const openOriginalArticle = () => {
-    if (!article.sourceUrl) {
-      window.alert('这篇内容暂未配置公众号原文链接。')
-      return
+  const removeFromLibrary = async (targetArticle) => {
+    const entry = savedArticleEntries.find((item) => item.id === targetArticle.id) || {
+      id: targetArticle.id,
+      savedAt: new Date().toISOString(),
     }
+    await removeSavedArticle(targetArticle.id)
+    setSavedArticleEntries((current) => current.filter((item) => item.id !== targetArticle.id))
+    setLibraryUndo({ article: targetArticle, entry })
+  }
+
+  const undoLibraryRemoval = async () => {
+    if (!libraryUndo) return
+    const restoredEntry = await saveArticle(libraryUndo.article, libraryUndo.entry.savedAt)
+    setSavedArticleEntries((current) => [restoredEntry, ...current.filter((item) => item.id !== restoredEntry.id)])
+    setLibraryUndo(null)
+  }
+
+  const openOriginalArticle = () => {
+    if (!article.sourceUrl) return
     window.open(article.sourceUrl, '_blank', 'noopener,noreferrer')
   }
 
@@ -372,6 +450,13 @@ function App() {
     window.sessionStorage.setItem('kuanxin-question', question.trim())
     setView('search')
     window.location.hash = '/search'
+  }
+
+  const reviseQuestion = () => {
+    setMenuOpen(false)
+    setView('home')
+    setAskOpen(true)
+    window.location.hash = '/'
   }
 
   const switchHomeLine = () => {
@@ -448,6 +533,14 @@ function App() {
       <main className="mobile-prototype" aria-label="宽心纪答案之书原型">
         {view === 'home' && (
           <section className="hero-screen reference-home" style={{ '--mist-image': `url(${mistLake})` }}>
+            <div className="home-atmosphere" aria-hidden="true">
+              <span className="home-atmosphere__layer mist-layer mist-layer--far" />
+              <span className="home-atmosphere__layer mist-layer mist-layer--near" />
+              <span className="home-atmosphere__layer water-ripple" />
+              <span className="sun-shimmer" />
+              <span className="home-atmosphere__layer lotus-motion" />
+              <span className="home-atmosphere__layer lotus-reflection" />
+            </div>
             <header className="topbar">
               <button className="brand" type="button" onClick={goHome} aria-label="回到宽心纪首页">
                 <img src={kuanxinLogo} alt="宽心纪" />
@@ -588,27 +681,30 @@ function App() {
         )}
 
         {view === 'articles' && (
-          <section className="articles-screen">
+          <section className="articles-screen" data-view="articles">
             <header className="article-header">
               <button className="back-button" type="button" onClick={openContent}><ArrowLeft size={18} /> 内容</button>
               <img src={kuanxinLogo} alt="宽心纪" />
             </header>
             <div className="articles-intro">
               <div><img src={brandCloud} alt="" /><span>老师文章</span></div>
-              <h1>此刻，想读些什么？</h1>
+              <h1 data-route-heading tabIndex="-1">此刻，想读些什么？</h1>
               <p>可以按主题慢慢翻，也可以写下一个词。搜索只在这台设备上进行。</p>
               <label className="article-search">
                 <MagnifyingGlass size={18} />
-                <input value={articleQuery} onChange={(event) => setArticleQuery(event.target.value)} placeholder="搜索标题、主题或困惑" />
+                <input value={articleQuery} onChange={(event) => setArticleQuery(event.target.value)} placeholder="搜索标题、主题或困惑" aria-label="搜索文章标题、主题或困惑" />
                 {articleQuery && <button type="button" onClick={() => setArticleQuery('')} aria-label="清除搜索"><X size={16} /></button>}
               </label>
               <div className="theme-filters" aria-label="文章主题筛选">
                 {articleThemes.map((theme) => (
-                  <button className={theme === activeTheme ? 'active' : ''} key={theme} type="button" onClick={() => setActiveTheme(theme)}>{theme}</button>
+                  <button className={theme === activeTheme ? 'active' : ''} key={theme} type="button" aria-pressed={theme === activeTheme} onClick={() => setActiveTheme(theme)}>{theme}</button>
                 ))}
               </div>
             </div>
-            <div className="article-catalog" aria-live="polite">
+            <p className="catalog-status" role="status" aria-live="polite">
+              找到 {filteredArticles.length} 篇{filteredArticles.length > 0 ? `，当前显示 ${Math.min(visibleArticleCount, filteredArticles.length)} 篇` : ''}
+            </p>
+            <div className="article-catalog" key={`${activeTheme}-${articleQuery}`}>
               {filteredArticles.length > 0 ? filteredArticles.slice(0, visibleArticleCount).map((item) => (
                 <article key={item.id}>
                   <button className="catalog-open" type="button" onClick={() => openArticle(item, 'articles')}>
@@ -618,7 +714,7 @@ function App() {
                     <small>{readingProgress[item.id] ? `上次读到 ${readingProgress[item.id]}%` : '开始阅读'}</small>
                     <CaretRight size={18} />
                   </button>
-                  <button className="catalog-save" type="button" onClick={() => toggleSavedArticle(item)} aria-label={savedArticleIds.includes(item.id) ? `移除${item.title}` : `离线保存${item.title}`}>
+                  <button className="catalog-save" type="button" onClick={() => toggleSavedArticle(item)} aria-pressed={savedArticleIds.includes(item.id)} aria-label={savedArticleIds.includes(item.id) ? `从离线书架移除《${item.title}》` : `离线保存《${item.title}》`}>
                     <BookmarkSimple size={18} weight={savedArticleIds.includes(item.id) ? 'fill' : 'regular'} />
                   </button>
                 </article>
@@ -666,7 +762,7 @@ function App() {
         )}
 
         {view === 'article' && (
-          <section className="article-screen">
+          <section className="article-screen" data-view="article">
             <header className="article-header">
               <button className="back-button" type="button" onClick={returnFromArticle}><ArrowLeft size={18} /> 返回</button>
               <img src={kuanxinLogo} alt="宽心纪" />
@@ -675,13 +771,13 @@ function App() {
             <article className="article-body">
               <div className="article-kicker"><img src={brandCloud} alt="" /><span>宽心阅读</span></div>
               <p className="article-theme">{article.theme}</p>
-              <h2 className={article.title.length > 45 ? 'long-title' : ''}>{article.title}</h2>
+              <h1 className={article.title.length > 45 ? 'long-title' : ''} data-route-heading tabIndex="-1">{article.title}</h1>
               <div className="article-rule" />
               {article.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
               <p className="article-signature">{article.sourceStatus === 'published-source' ? '— 赖宽心 · 整理自公众号原文' : '— 原型示例 · 上线前替换为经审核的授权原文'}</p>
               <section className="article-related" aria-label="继续阅读">
-                <p>读完这一篇，再看看</p>
-                {articles.filter((item) => item.id !== article.id).map((item) => (
+                <h2>读完这一篇，再看看</h2>
+                {relatedArticles.map((item) => (
                   <button key={item.id} type="button" onClick={() => openArticle(item, articleOrigin)}>
                     <span>{item.theme}</span><strong>{item.title}</strong><CaretRight size={16} />
                   </button>
@@ -693,13 +789,13 @@ function App() {
                 <BookmarkSimple size={18} weight={articleIsSaved ? 'fill' : 'regular'} /> {articleIsSaved ? '已存离线' : '离线保存'}
               </button>
               <button type="button" onClick={shareQuote}><ShareNetwork size={18} /> {shared ? '已准备分享' : '分享文章'}</button>
-              <button type="button" onClick={openOriginalArticle}><BookOpenText size={18} /> 公众号原文</button>
+              <button type="button" onClick={openOriginalArticle} disabled={!article.sourceUrl}><BookOpenText size={18} /> {article.sourceUrl ? '公众号原文' : '原文待核对'}</button>
             </footer>
           </section>
         )}
 
         {view === 'library' && (
-          <section className="library-screen" style={{ '--mist-image': `url(${mistLake})` }}>
+          <section className="library-screen" data-view="library" style={{ '--mist-image': `url(${mistLake})` }}>
             <header className="result-header">
               <button className="back-button" type="button" onClick={goHome}><ArrowLeft size={18} /> 首页</button>
               <img src={kuanxinLogo} alt="宽心纪" />
@@ -707,7 +803,7 @@ function App() {
             <div className="library-heading">
               <img src={brandCloud} alt="" />
               <p>离线书架</p>
-              <h2>留在这台手机里的文字</h2>
+              <h1 data-route-heading tabIndex="-1">留在这台手机里的文字</h1>
               <span>收藏和阅读进度只保存在当前设备，不会上传。</span>
             </div>
             {savedArticles.length > 0 ? (
@@ -720,7 +816,7 @@ function App() {
                       <span>{readingProgress[item.id] ? `已读 ${readingProgress[item.id]}%` : '尚未开始阅读'}</span>
                       <CaretRight size={18} />
                     </button>
-                    <button className="library-remove" type="button" onClick={() => toggleSavedArticle(item)}>移出书架</button>
+                    <button className="library-remove" type="button" onClick={() => removeFromLibrary(item)} aria-label={`从离线书架移除《${item.title}》`}>移出书架</button>
                   </article>
                 ))}
               </div>
@@ -729,15 +825,21 @@ function App() {
                 <Books size={34} weight="light" />
                 <strong>书架还是空的</strong>
                 <p>读文章时点击“离线保存”，它就会留在这里。</p>
-                <button type="button" onClick={goHome}>回首页看看</button>
+                <button type="button" onClick={openArticles}>去文章库看看</button>
               </div>
             )}
             <p className="library-version">本地内容版本 {contentVersion.version}</p>
+            {libraryUndo && (
+              <div className="library-undo" role="status">
+                <span>已移出《{libraryUndo.article.title}》</span>
+                <button type="button" onClick={undoLibraryRemoval}>撤销</button>
+              </div>
+            )}
           </section>
         )}
 
         {view === 'search' && (
-          <section className="search-screen" style={{ '--mist-image': `url(${mistLake})` }}>
+          <section className="search-screen" data-view="search" style={{ '--mist-image': `url(${mistLake})` }}>
             <header className="result-header">
               <button className="back-button" type="button" onClick={goHome}><ArrowLeft size={18} /> 首页</button>
               <img src={kuanxinLogo} alt="宽心纪" />
@@ -745,34 +847,31 @@ function App() {
             <div className="search-result-copy">
               <div className="search-kicker"><img src={brandCloud} alt="" /><span>为此刻的心事寻文</span></div>
               <p>宽心提示 · 摘自推荐文章</p>
-              <h2>{recommendations[0].quote}</h2>
+              <h1 data-route-heading tabIndex="-1">{recommendations[0].quote}</h1>
               <span>{hasCloseMatch ? '以下是与此刻心事相近的宽心纪文章，供你慢慢读。' : '暂未找到非常接近的内容，你可以先参考这些相近主题。'}</span>
             </div>
+            {question.trim() && (
+              <div className="search-query-context">
+                <span>你问：{question.trim()}</span>
+                <button type="button" onClick={reviseQuestion}>换个说法</button>
+              </div>
+            )}
             {isHighRisk && (
               <aside className="safety-note" role="alert">
                 <strong>请先照顾好此刻的安全。</strong>
                 <span>如果你正准备伤害自己、感到无法保证安全，或身体处于紧急状况，请立即联系身边可信任的人，并联系当地紧急服务或专业机构。以下内容不能替代医疗或心理专业帮助。</span>
               </aside>
             )}
-            <div className="recommendations">
+            <div className="recommendations" aria-label={`为你选出的 ${recommendations.length} 篇文章`}>
               {recommendations.map((item, index) => (
                 <button key={item.id} type="button" onClick={() => openArticle(item)}>
                   <span>0{index + 1}</span>
-                  <div><small>{index === 0 ? '最贴近' : '换一个角度看看'}</small><strong>{item.title}</strong><small>{item.quote}</small></div>
+                  <div><small>{index === 0 ? (hasCloseMatch ? '最贴近' : '先从这一篇读起') : searchResult.reasons[item.id]}</small><strong>{item.title}</strong><small>{item.quote}</small></div>
                   <CaretRight size={17} />
                 </button>
               ))}
             </div>
           </section>
-        )}
-
-        {dailyVisible && view === 'home' && (
-          <aside className="daily-zen-modal" role="dialog" aria-modal="true" aria-label="每日禅语">
-            <button className="modal-close" type="button" onClick={() => setDailyVisible(false)} aria-label="关闭每日禅语"><X size={18} /></button>
-            <p>每日禅语</p>
-            <strong>心安处，便是归处。</strong>
-            <span>愿您于今日，慢一点。</span>
-          </aside>
         )}
 
         {askOpen && view === 'home' && (

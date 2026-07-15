@@ -130,22 +130,34 @@ function SolarTermCalendar({ onBack, onOpenWellness }) {
   const today = useMemo(() => new Date(), [])
   const [selectedDate, setSelectedDate] = useState(today)
   const [monthDate, setMonthDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1))
+  const [monthDirection, setMonthDirection] = useState('next')
   const monthDays = useMemo(() => buildMonthDays(monthDate), [monthDate])
   const selectedData = useMemo(() => getLunarData(selectedDate), [selectedDate])
+  const todayData = useMemo(() => getLunarData(today), [today])
   const dayLookup = useMemo(() => new Map(monthDays.map((date) => [dateKey(date), getLunarData(date)])), [monthDays])
   const activeTermName = selectedData.solarTerm || selectedData.previousTerm.name
+  const todayTermName = todayData.solarTerm || todayData.previousTerm.name
   const daysUntilTerm = Math.max(0, Math.ceil((selectedData.nextTerm.date - selectedDate) / 86400000))
   const wellnessAvailable = hasSolarTermWellness(activeTermName)
+  const showingCurrentTerm = activeTermName === todayTermName
+
+  const setCalendarMonth = (nextMonth) => {
+    const currentValue = monthDate.getFullYear() * 12 + monthDate.getMonth()
+    const nextValue = nextMonth.getFullYear() * 12 + nextMonth.getMonth()
+    if (currentValue !== nextValue) setMonthDirection(nextValue > currentValue ? 'next' : 'previous')
+    setMonthDate(nextMonth)
+  }
 
   const moveMonth = (offset) => {
     const next = new Date(monthDate.getFullYear(), monthDate.getMonth() + offset, 1)
+    setMonthDirection(offset > 0 ? 'next' : 'previous')
     setMonthDate(next)
     setSelectedDate(next)
   }
 
   const returnToday = () => {
     setSelectedDate(today)
-    setMonthDate(new Date(today.getFullYear(), today.getMonth(), 1))
+    setCalendarMonth(new Date(today.getFullYear(), today.getMonth(), 1))
   }
 
   return (
@@ -169,7 +181,7 @@ function SolarTermCalendar({ onBack, onOpenWellness }) {
           <section className="month-panel" aria-label={`${monthDate.getFullYear()}年${monthDate.getMonth() + 1}月日历`}>
             <div className="month-toolbar">
               <button type="button" onClick={() => moveMonth(-1)} aria-label="上个月"><CaretLeft size={20} /></button>
-              <div>
+              <div className={`month-toolbar__label month-toolbar__label--${monthDirection}`} key={`${monthDate.getFullYear()}-${monthDate.getMonth()}`}>
                 <strong>{monthDate.getMonth() + 1}月</strong>
                 <span>{monthDate.getFullYear()}</span>
               </div>
@@ -180,8 +192,9 @@ function SolarTermCalendar({ onBack, onOpenWellness }) {
               {weekLabels.map((label) => <span key={label}>{label}</span>)}
             </div>
 
-            <div className="calendar-grid" key={`${monthDate.getFullYear()}-${monthDate.getMonth()}`}>
-              {monthDays.map((date) => {
+            <div className="calendar-grid-viewport">
+              <div className={`calendar-grid calendar-grid--${monthDirection}`} key={`${monthDate.getFullYear()}-${monthDate.getMonth()}`}>
+                {monthDays.map((date) => {
                 const dayData = dayLookup.get(dateKey(date))
                 const inMonth = date.getMonth() === monthDate.getMonth()
                 const isToday = sameDay(date, today)
@@ -199,7 +212,7 @@ function SolarTermCalendar({ onBack, onOpenWellness }) {
                     type="button"
                     onClick={() => {
                       setSelectedDate(date)
-                      if (!inMonth) setMonthDate(new Date(date.getFullYear(), date.getMonth(), 1))
+                      if (!inMonth) setCalendarMonth(new Date(date.getFullYear(), date.getMonth(), 1))
                     }}
                     aria-pressed={selected}
                     aria-label={`${formatDate(date)}，农历${dayData.lunarMonth}${dayData.lunarDay}${dayData.solarTerm ? `，${dayData.solarTerm}` : ''}`}
@@ -208,7 +221,8 @@ function SolarTermCalendar({ onBack, onOpenWellness }) {
                     <span className="calendar-day__lunar">{dayData.solarTerm || (dayData.lunarDay === '初一' ? dayData.lunarMonth : dayData.lunarDay)}</span>
                   </button>
                 )
-              })}
+                })}
+              </div>
             </div>
           </section>
 
@@ -225,7 +239,7 @@ function SolarTermCalendar({ onBack, onOpenWellness }) {
               </div>
             </div>
 
-            <section className="solar-term-focus">
+            <section className={`solar-term-focus ${showingCurrentTerm ? 'solar-term-focus--current' : ''}`}>
               <div className="solar-term-focus__icon"><CalendarBlank size={23} weight="light" /></div>
               <div>
                 <span>{selectedData.solarTerm ? '今日节气' : '当前节气'}</span>

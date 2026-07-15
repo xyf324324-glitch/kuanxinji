@@ -11,9 +11,31 @@ export async function loadArticle(articleId) {
   return module.default
 }
 
+const SEARCH_RESULT_LIMIT = 4
+
+function describeMatch(article, query) {
+  const matchedConcern = article.userConcerns.find((concern) => query.includes(concern.toLowerCase()) || concern.toLowerCase().includes(query))
+  if (matchedConcern) return `回应了“${matchedConcern}”`
+
+  const matchedKeyword = article.keywords.find((keyword) => query.includes(keyword.toLowerCase()) || keyword.toLowerCase().includes(query))
+  if (matchedKeyword) return `与你提到的“${matchedKeyword}”有关`
+
+  const matchedTheme = article.themes.find((theme) => query.includes(theme.toLowerCase()))
+  if (matchedTheme) return `从“${matchedTheme}”的角度梳理`
+
+  return `从“${article.theme}”的角度陪你看看`
+}
+
 export function rankArticles(question) {
   const query = question.trim().toLowerCase()
-  if (!query) return { items: articles, hasCloseMatch: false }
+  if (!query) {
+    const items = articles.slice(0, SEARCH_RESULT_LIMIT)
+    return {
+      items,
+      reasons: Object.fromEntries(items.map((article) => [article.id, `从“${article.theme}”的角度陪你看看`])),
+      hasCloseMatch: false,
+    }
+  }
 
   const ranked = articles
     .map((article) => {
@@ -31,18 +53,29 @@ export function rankArticles(question) {
       })
 
       article.keywords.forEach((keyword) => {
-        if (query.includes(keyword) || keyword.includes(query)) score += 8
+        const normalizedKeyword = keyword.toLowerCase()
+        if (query.includes(normalizedKeyword) || normalizedKeyword.includes(query)) {
+          score += 8
+          if (article.title.toLowerCase().includes(normalizedKeyword)) score += 6
+          if (article.quote.toLowerCase().includes(normalizedKeyword)) score += 2
+        }
       })
       article.userConcerns.forEach((concern) => {
         if (query.includes(concern) || concern.includes(query)) score += 5
+      })
+      article.themes.forEach((theme) => {
+        if (query.includes(theme.toLowerCase())) score += 4
       })
 
       return { article, score }
     })
     .sort((a, b) => b.score - a.score || a.article.order - b.article.order)
 
+  const items = ranked.slice(0, SEARCH_RESULT_LIMIT).map(({ article }) => article)
+
   return {
-    items: ranked.map(({ article }) => article),
+    items,
+    reasons: Object.fromEntries(items.map((article) => [article.id, describeMatch(article, query)])),
     hasCloseMatch: ranked[0]?.score >= 8,
   }
 }

@@ -17,6 +17,8 @@ function ClassicsReader({ classicId, onBack, onNavigate, onOpenCalendar, onOpenM
   const navRef = useRef(null)
   const item = getClassic(classicId)
   const itemIndex = classicsItems.findIndex((entry) => entry.id === item.id)
+  const previousItemIndexRef = useRef(itemIndex)
+  const pageDirection = itemIndex < previousItemIndexRef.current ? 'previous' : 'next'
   const previousItem = classicsItems[itemIndex - 1]
   const nextItem = classicsItems[itemIndex + 1]
 
@@ -26,7 +28,8 @@ function ClassicsReader({ classicId, onBack, onNavigate, onOpenCalendar, onOpenM
       block: 'nearest',
       inline: 'center',
     })
-  }, [item.id])
+    previousItemIndexRef.current = itemIndex
+  }, [item.id, itemIndex])
 
   return (
     <section className="classics-screen">
@@ -74,7 +77,7 @@ function ClassicsReader({ classicId, onBack, onNavigate, onOpenCalendar, onOpenM
             ))}
           </aside>
 
-          <article className="classics-article">
+          <article className={`classics-article classics-article--${pageDirection}`} key={item.id}>
             <header className="classics-title">
               <p>第 {item.sequence} 笺 · {item.theme}</p>
               <h2>{item.title}</h2>
@@ -84,7 +87,7 @@ function ClassicsReader({ classicId, onBack, onNavigate, onOpenCalendar, onOpenM
             <section className="classics-quote" aria-labelledby="classic-quote-title">
               <span>原典</span>
               <blockquote id="classic-quote-title">“{item.quote}”</blockquote>
-              <cite>—— {item.source}</cite>
+              <cite>- {item.source}</cite>
             </section>
 
             <section className="classics-phrases" aria-labelledby="classic-phrases-title">
