@@ -1143,7 +1143,8 @@ button:active { transform: scale(.975); }
   .coming-paths section:nth-child(1) { animation: content-path-enter 420ms 130ms var(--ease-out-quint) both; }
   .coming-paths section:nth-child(2) { animation: content-path-enter 420ms 180ms var(--ease-out-quint) both; }
   .coming-paths section:nth-child(3) { animation: content-path-enter 420ms 230ms var(--ease-out-quint) both; }
-  .content-library-entry { animation: content-shelf-enter 430ms 285ms var(--ease-out-quint) both; }
+  .coming-paths section:nth-child(4) { animation: content-path-enter 420ms 280ms var(--ease-out-quint) both; }
+  .content-library-entry { animation: content-shelf-enter 430ms 335ms var(--ease-out-quint) both; }
 }
 
 @keyframes content-heading-enter {

@@ -14,6 +14,7 @@ import {
   Leaf,
   MagnifyingGlass,
   PaperPlaneTilt,
+  Quotes,
   ShareNetwork,
   WifiSlash,
   X,
@@ -39,6 +40,7 @@ const SolarTermCalendar = lazy(() => import('./components/SolarTermCalendar'))
 const SolarTermWellness = lazy(() => import('./components/SolarTermWellness'))
 const MeridianAtlas = lazy(() => import('./components/MeridianAtlas'))
 const ClassicsReader = lazy(() => import('./components/ClassicsReader'))
+const SayingsCard = lazy(() => import('./components/SayingsCard'))
 
 const prompts = [
   '我放不下一段关系，怎么办？',
@@ -172,6 +174,8 @@ function App() {
       } else if (section === 'classics') {
         setClassicId(id || 'daily-rhythm')
         setView('classics')
+      } else if (section === 'sayings') {
+        setView('sayings')
       } else if (section === 'breathing') {
         setView('breathing')
       } else {
@@ -195,6 +199,7 @@ function App() {
       wellness: '四时养生｜宽心纪',
       meridians: '十二经络｜宽心纪',
       classics: '内经小笺｜宽心纪',
+      sayings: '上师一言｜宽心纪',
       article: `${article.title}｜宽心纪`,
       library: '离线书架｜宽心纪',
       search: '寻文结果｜宽心纪',
@@ -411,6 +416,17 @@ function App() {
     window.location.hash = '/content'
   }
 
+  const openSayings = () => {
+    setMenuOpen(false)
+    setView('sayings')
+    window.location.hash = '/sayings'
+  }
+
+  const returnFromSayings = () => {
+    setView('content')
+    window.location.hash = '/content'
+  }
+
   const toggleSavedArticle = async (targetArticle = article) => {
     const isSaved = savedArticleIds.includes(targetArticle.id)
     if (isSaved) {
@@ -555,6 +571,7 @@ function App() {
               <nav className="menu-panel" aria-label="主导航">
                 <button type="button" onClick={openContent}>慢慢阅读 · 内容总览</button>
                 <button type="button" onClick={begin}>答案之书</button>
+                <button type="button" onClick={openSayings}>每日宽心 · 上师一言</button>
                 <button type="button" onClick={() => setAskOpen(true)}>此刻有什么想问？</button>
                 <button type="button" onClick={openLibrary}>离线书架 · {savedArticleIds.length}篇</button>
                 <button type="button" onClick={openCalendar}>节气日历 · 今日农历</button>
@@ -653,7 +670,12 @@ function App() {
                 <button className="path-action" type="button" onClick={openArticles}>进入老师文章库 <ArrowRight size={16} /></button>
               </section>
 
-              <div className="coming-paths" aria-label="时令与传统知识">
+              <div className="coming-paths" aria-label="上师一言、时令与传统知识">
+                <section>
+                  <Quotes size={22} weight="light" />
+                  <div><span>上师一言</span><h2>每日静读一句</h2><p>日期、农历与节气相伴，把触动留成一张宽心卡。</p></div>
+                  <button className="coming-path-action" type="button" onClick={openSayings}>打开今日一言 <ArrowRight size={15} /></button>
+                </section>
                 <section>
                   <Leaf size={22} weight="light" />
                   <div><span>二十四节气</span><h2>顺四时，养身心</h2><p>节气物候、日常起居与一般养生科普。</p></div>
@@ -758,6 +780,12 @@ function App() {
               onOpenCalendar={openCalendar}
               onOpenMeridians={() => openMeridians()}
             />
+          </Suspense>
+        )}
+
+        {view === 'sayings' && (
+          <Suspense fallback={<div className="calendar-loading" role="status">正在展开今日一言…</div>}>
+            <SayingsCard onBack={returnFromSayings} />
           </Suspense>
         )}
 

@@ -1,0 +1,264 @@
+.saying-screen {
+  position: relative;
+  min-height: 100svh;
+  overflow-x: hidden;
+  padding-bottom: max(44px, env(safe-area-inset-bottom));
+  background: #f8f6f1;
+}
+
+.saying-screen::before,
+.saying-screen::after {
+  position: fixed;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+}
+
+.saying-screen::before {
+  background: var(--mist-image) center / cover no-repeat;
+  filter: brightness(1.08) saturate(.56);
+}
+
+.saying-screen::after { background: rgba(250, 248, 243, .58); }
+
+.saying-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100%, 920px);
+  margin-inline: auto;
+  padding-right: 22px;
+}
+
+.saying-header > span {
+  color: #756b5d;
+  font-size: 11px;
+  letter-spacing: .16em;
+}
+
+.saying-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  width: min(100% - 32px, 920px);
+  margin: 15px auto 0;
+}
+
+.saying-card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: min(100%, 520px);
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  padding: clamp(24px, 6vw, 42px);
+  border: 1px solid rgba(157, 110, 52, .42);
+  background: var(--mist-image) center / cover no-repeat;
+  color: #292722;
+}
+
+.saying-card::before {
+  position: absolute;
+  inset: 0;
+  background: rgba(250, 248, 243, .77);
+  content: "";
+}
+
+.saying-card > * { position: relative; z-index: 1; }
+
+.saying-card__topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.saying-card__topline > img {
+  width: clamp(104px, 27vw, 142px);
+  height: clamp(50px, 13vw, 68px);
+  object-fit: cover;
+  object-position: center;
+}
+
+.saying-card__date {
+  display: grid;
+  justify-items: end;
+  gap: 7px;
+  padding-top: 3px;
+  text-align: right;
+}
+
+.saying-card__date time {
+  color: #34312c;
+  font-size: clamp(14px, 4vw, 18px);
+  font-weight: 500;
+  letter-spacing: .08em;
+}
+
+.saying-card__date span {
+  color: #726b61;
+  font-size: clamp(9px, 2.5vw, 12px);
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
+.saying-card__body {
+  container-type: inline-size;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  min-height: 0;
+  padding: 4% 1% 1%;
+  text-align: center;
+}
+
+.saying-card__body > p {
+  position: relative;
+  margin: 0 0 clamp(28px, 7vw, 48px);
+  color: #a66b2b;
+  font-family: STKaiti, "Kaiti SC", KaiTi, serif;
+  font-size: clamp(15px, 4vw, 19px);
+  font-weight: 400;
+  letter-spacing: .14em;
+  text-indent: .14em;
+}
+
+.saying-card__body > p::after {
+  position: absolute;
+  top: calc(100% + 13px);
+  left: 50%;
+  width: 38px;
+  height: 1px;
+  background: rgba(166, 107, 43, .72);
+  content: "";
+  transform: translateX(-50%);
+}
+
+.saying-card__body h1 {
+  width: 82%;
+  margin: 0;
+  color: #292722;
+  font-family: STKaiti, "Kaiti SC", KaiTi, serif;
+  font-size: min(clamp(var(--quote-min), var(--quote-fluid), var(--quote-max)), var(--quote-fit));
+  font-weight: 400;
+  font-kerning: normal;
+  letter-spacing: .055em;
+  line-height: 1.76;
+}
+
+.saying-card__body h1 span {
+  display: block;
+  width: 100%;
+  margin-inline: auto;
+  white-space: nowrap;
+}
+
+.saying-card__body h1 .saying-card__line--punctuated { width: calc(100% - 1.4em); }
+
+.saying-card__footer {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  justify-self: start;
+  gap: clamp(15px, 4vw, 24px);
+  width: 100%;
+  padding-inline: 1%;
+}
+
+.saying-card__footer > img,
+.saying-card__qr-loading {
+  display: block;
+  width: clamp(64px, 17vw, 84px);
+  aspect-ratio: 1;
+  background: transparent;
+  mix-blend-mode: multiply;
+  opacity: .9;
+}
+
+.saying-card__qr-loading { opacity: .55; }
+
+.saying-card__footer > div { display: grid; justify-items: start; gap: 5px; }
+
+.saying-card__footer span {
+  color: #766c5e;
+  font-size: clamp(9px, 2.5vw, 12px);
+  letter-spacing: .14em;
+}
+
+.saying-card__footer strong {
+  color: #3b3731;
+  font-size: clamp(13px, 3.4vw, 17px);
+  font-weight: 500;
+  letter-spacing: .045em;
+  line-height: 1.45;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.saying-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 11px;
+  margin-top: 24px;
+}
+
+.saying-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 42px;
+  padding: 8px 15px;
+  border: 1px solid rgba(116, 96, 65, .34);
+  background: rgba(251, 249, 244, .72);
+  color: #48423a;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.saying-actions button:nth-child(2) {
+  border-color: #35322d;
+  background: #35322d;
+  color: #fffaf0;
+}
+
+.saying-actions button:disabled { cursor: wait; opacity: .52; }
+
+.saying-notice {
+  min-height: 1.8em;
+  margin: 13px 0 0;
+  color: #716a60;
+  font-size: 11px;
+  line-height: 1.8;
+  text-align: center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .saying-actions button:not(:disabled):hover { transform: translateY(-2px); }
+}
+
+@media (max-width: 380px) {
+  .saying-layout { width: min(100% - 22px, 920px); margin-top: 8px; }
+  .saying-card { padding: 20px; }
+  .saying-card__footer { gap: 10px; }
+  .saying-actions { gap: 7px; }
+  .saying-actions button { padding-inline: 10px; }
+}
+
+@media (min-width: 760px) {
+  .saying-layout { margin-top: 28px; }
+  .saying-screen::before { background-size: min(100%, 960px) 100%; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .saying-card { animation: saying-card-enter 440ms var(--ease-out-quint) both; }
+}
+
+@keyframes saying-card-enter {
+  from { opacity: .65; transform: translateY(8px) scale(.995); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}

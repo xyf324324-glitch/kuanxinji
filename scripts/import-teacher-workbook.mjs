@@ -1,6 +1,6 @@
 import ExcelJS from 'exceljs'
 import { createHash } from 'node:crypto'
-import { mkdir, readdir, rm, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 
 const workbookPath = process.argv[2]
@@ -8,6 +8,25 @@ if (!workbookPath) throw new Error('请在命令后提供 xlsx 文件路径')
 
 const articleDirectory = fileURLToPath(new URL('../src/content/articles/', import.meta.url))
 const reportDirectory = fileURLToPath(new URL('../reports/', import.meta.url))
+const catalogUrl = new URL('../src/content/article-catalog.generated.json', import.meta.url)
+
+let existingCatalog = []
+try {
+  existingCatalog = JSON.parse(await readFile(catalogUrl, 'utf8'))
+} catch {
+  // The first import has no catalog to preserve.
+}
+
+const existingIdByUrl = new Map(existingCatalog
+  .filter((article) => article.sourceUrl)
+  .map((article) => [article.sourceUrl, article.id]))
+const existingTitleCounts = existingCatalog.reduce((counts, article) => {
+  counts.set(article.title, (counts.get(article.title) || 0) + 1)
+  return counts
+}, new Map())
+const existingIdByUniqueTitle = new Map(existingCatalog
+  .filter((article) => existingTitleCounts.get(article.title) === 1)
+  .map((article) => [article.title, article.id]))
 
 const categoryRules = [
   { theme: '关系', words: ['关系', '前任', '婚姻', '伴侣', '爱人', '家人', '父母', '亲子', '孩子', '感情'] },
@@ -113,6 +132,12 @@ function stableId(title, url) {
   return `lai-${hash}`
 }
 
+function articleId(title, sourceUrl) {
+  return existingIdByUrl.get(sourceUrl)
+    || existingIdByUniqueTitle.get(title)
+    || stableId(title, `${sourceUrl}|${title}`)
+}
+
 const workbook = new ExcelJS.Workbook()
 await workbook.xlsx.readFile(workbookPath)
 const sheet = workbook.worksheets[0]
@@ -151,7 +176,7 @@ for (let rowNumber = 2; rowNumber <= sheet.rowCount; rowNumber += 1) {
   const paragraphs = paragraphsFrom(body)
   const { themes, keywords, userConcerns } = classify(title, body)
   articles.push({
-    id: stableId(title, `${sourceUrl}|${title}`),
+    id: articleId(title, sourceUrl),
     order: articles.length + 1,
     title,
     quote: quoteFrom(paragraphs),
