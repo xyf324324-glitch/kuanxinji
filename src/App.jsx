@@ -13,7 +13,6 @@ import {
   List,
   Leaf,
   MagnifyingGlass,
-  PaperPlaneTilt,
   Quotes,
   ShareNetwork,
   WifiSlash,
@@ -24,8 +23,9 @@ import kuanxinLogo from './assets/kuanxin-logo-transparent.png'
 import answerButtonReference from './assets/answer-button-reference.png'
 import brandCloud from './assets/brand-cloud.png'
 import footerDot from './assets/footer-dot.png'
-import { articles, loadArticle, rankArticles } from './content'
+import { articles, loadArticle } from './content'
 import contentVersion from './content/content-version.json'
+import ChatScreen from './components/ChatScreen'
 import {
   listSavedArticles,
   loadReadingProgress,
@@ -49,6 +49,23 @@ const prompts = [
   '面对家人，我总是很疲惫。',
   '最近发生的一切，到底在提醒我什么？',
 ]
+
+const chatGreeting = '您好，我是宽心纪的 AI 助手"觉"。我会陪您把眼前的事情看清，也一起看看心里正在发生什么。您想从哪件事说起？'
+
+function initialChatMessages() {
+  try {
+    const stored = JSON.parse(window.sessionStorage.getItem('kuanxin-chat') || 'null')
+    if (Array.isArray(stored) && stored.length > 0 && stored.every((message) => (
+      message && ['assistant', 'user'].includes(message.role) && typeof message.content === 'string'
+    ))) {
+      return stored.slice(-16)
+    }
+  } catch {
+    // A malformed local session should never block a new conversation.
+  }
+
+  return [{ id: 'welcome', role: 'assistant', content: chatGreeting }]
+}
 
 const homeLines = [
   '给忙碌的心，留一处可以停靠的地方。',
@@ -110,8 +127,10 @@ function App() {
   const [article, setArticle] = useState(articles[0])
   const [articleOrigin, setArticleOrigin] = useState('result')
   const [menuOpen, setMenuOpen] = useState(false)
-  const [askOpen, setAskOpen] = useState(false)
-  const [question, setQuestion] = useState(() => window.sessionStorage.getItem('kuanxin-question') || '')
+  const [chatMessages, setChatMessages] = useState(initialChatMessages)
+  const [chatDraft, setChatDraft] = useState('')
+  const [chatStatus, setChatStatus] = useState('idle')
+  const [chatError, setChatError] = useState('')
   const [shared, setShared] = useState(false)
   const [saved, setSaved] = useState(false)
   const [homeLineIndex, setHomeLineIndex] = useState(0)
@@ -156,7 +175,9 @@ function App() {
         setArticle(matchedArticle)
         setView('result')
       } else if (section === 'search') {
-        setView('search')
+        setView('chat')
+      } else if (section === 'chat') {
+        setView('chat')
       } else if (section === 'library') {
         setView('library')
       } else if (section === 'content') {
@@ -202,7 +223,7 @@ function App() {
       sayings: '上师一言｜宽心纪',
       article: `${article.title}｜宽心纪`,
       library: '离线书架｜宽心纪',
-      search: '寻文结果｜宽心纪',
+      chat: '与觉聊聊｜宽心纪',
     }
     document.title = titles[view] || '宽心纪｜愿您宽心'
 
@@ -211,6 +232,10 @@ function App() {
     })
     return () => window.cancelAnimationFrame(focusFrame)
   }, [view, article.id, article.title])
+
+  useEffect(() => {
+    window.sessionStorage.setItem('kuanxin-chat', JSON.stringify(chatMessages.slice(-16)))
+  }, [chatMessages])
 
   useEffect(() => {
     if (view !== 'breathing') return undefined
@@ -270,16 +295,11 @@ function App() {
     const closeOverlays = (event) => {
       if (event.key !== 'Escape') return
       setMenuOpen(false)
-      setAskOpen(false)
     }
     window.addEventListener('keydown', closeOverlays)
     return () => window.removeEventListener('keydown', closeOverlays)
   }, [])
 
-  const searchResult = useMemo(() => rankArticles(question), [question])
-  const recommendations = searchResult.items
-  const hasCloseMatch = searchResult.hasCloseMatch
-  const isHighRisk = /自杀|自伤|不想活|活不下去|结束生命|极度绝望|严重疾病|重病/.test(question)
   const savedArticleIds = useMemo(() => savedArticleEntries.map((entry) => entry.id), [savedArticleEntries])
   const savedArticles = useMemo(() => [...savedArticleEntries]
     .sort((a, b) => Date.parse(b.savedAt || 0) - Date.parse(a.savedAt || 0))
@@ -323,7 +343,6 @@ function App() {
 
   const begin = () => {
     setMenuOpen(false)
-    setAskOpen(false)
     setView('breathing')
     window.location.hash = '/breathing'
   }
@@ -333,13 +352,11 @@ function App() {
     const fullArticle = nextArticle.paragraphs ? nextArticle : await loadArticle(nextArticle.id)
     setArticle(fullArticle)
     setArticleOrigin(normalizedOrigin)
-    setAskOpen(false)
     setView('article')
     window.location.hash = `/article/${fullArticle.id}?from=${normalizedOrigin}`
   }
 
   const goHome = () => {
-    setAskOpen(false)
     setMenuOpen(false)
     setView('home')
     window.location.hash = '/'
@@ -460,19 +477,56 @@ function App() {
     window.open(article.sourceUrl, '_blank', 'noopener,noreferrer')
   }
 
-  const submitQuestion = (event) => {
-    event.preventDefault()
-    if (!question.trim()) return
-    window.sessionStorage.setItem('kuanxin-question', question.trim())
-    setView('search')
-    window.location.hash = '/search'
+  const openChat = () => {
+    setMenuOpen(false)
+    setView('chat')
+    window.location.hash = '/chat'
   }
 
-  const reviseQuestion = () => {
-    setMenuOpen(false)
-    setView('home')
-    setAskOpen(true)
-    window.location.hash = '/'
+  const restartChat = () => {
+    setChatMessages([{ id: `welcome-${Date.now()}`, role: 'assistant', content: chatGreeting }])
+    setChatDraft('')
+    setChatError('')
+    setChatStatus('idle')
+  }
+
+  const sendChatMessage = async (event) => {
+    event.preventDefault()
+    const content = chatDraft.trim()
+    if (!content || chatStatus === 'sending') return
+
+    if (!isOnline) {
+      setChatError('网络连接后，觉才能收到您的话。')
+      return
+    }
+
+    const userMessage = { id: `user-${Date.now()}`, role: 'user', content }
+    const nextMessages = [...chatMessages, userMessage].slice(-16)
+    setChatMessages(nextMessages)
+    setChatDraft('')
+    setChatError('')
+    setChatStatus('sending')
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: nextMessages.map(({ role, content: messageContent }) => ({ role, content: messageContent })),
+        }),
+      })
+      const payload = await response.json().catch(() => ({}))
+      if (!response.ok || !payload.answer) throw new Error(payload.error || '觉暂时没有收到回应。')
+      setChatMessages((current) => [...current, {
+        id: `assistant-${Date.now()}`,
+        role: 'assistant',
+        content: payload.answer,
+      }].slice(-16))
+    } catch (error) {
+      setChatError(error instanceof Error ? error.message : '暂时无法连接，请稍后再试。')
+    } finally {
+      setChatStatus('idle')
+    }
   }
 
   const switchHomeLine = () => {
@@ -572,7 +626,7 @@ function App() {
                 <button type="button" onClick={openContent}>慢慢阅读 · 内容总览</button>
                 <button type="button" onClick={begin}>答案之书</button>
                 <button type="button" onClick={openSayings}>每日宽心 · 上师一言</button>
-                <button type="button" onClick={() => setAskOpen(true)}>此刻有什么想问？</button>
+                <button type="button" onClick={openChat}>此刻有什么想问？</button>
                 <button type="button" onClick={openLibrary}>离线书架 · {savedArticleIds.length}篇</button>
                 <button type="button" onClick={openCalendar}>节气日历 · 今日农历</button>
                 <button type="button" onClick={() => openMeridians()}>传统知识 · 十二经络</button>
@@ -589,7 +643,7 @@ function App() {
               </button>
             </div>
 
-            <button className="ask-entry" type="button" onClick={() => setAskOpen(true)}>
+            <button className="ask-entry" type="button" onClick={openChat}>
               此刻有什么想问？ <ArrowRight size={17} weight="light" />
             </button>
 
@@ -866,59 +920,19 @@ function App() {
           </section>
         )}
 
-        {view === 'search' && (
-          <section className="search-screen" data-view="search" style={{ '--mist-image': `url(${mistLake})` }}>
-            <header className="result-header">
-              <button className="back-button" type="button" onClick={goHome}><ArrowLeft size={18} /> 首页</button>
-              <img src={kuanxinLogo} alt="宽心纪" />
-            </header>
-            <div className="search-result-copy">
-              <div className="search-kicker"><img src={brandCloud} alt="" /><span>为此刻的心事寻文</span></div>
-              <p>宽心提示 · 摘自推荐文章</p>
-              <h1 data-route-heading tabIndex="-1">{recommendations[0].quote}</h1>
-              <span>{hasCloseMatch ? '以下是与此刻心事相近的宽心纪文章，供你慢慢读。' : '暂未找到非常接近的内容，你可以先参考这些相近主题。'}</span>
-            </div>
-            {question.trim() && (
-              <div className="search-query-context">
-                <span>你问：{question.trim()}</span>
-                <button type="button" onClick={reviseQuestion}>换个说法</button>
-              </div>
-            )}
-            {isHighRisk && (
-              <aside className="safety-note" role="alert">
-                <strong>请先照顾好此刻的安全。</strong>
-                <span>如果你正准备伤害自己、感到无法保证安全，或身体处于紧急状况，请立即联系身边可信任的人，并联系当地紧急服务或专业机构。以下内容不能替代医疗或心理专业帮助。</span>
-              </aside>
-            )}
-            <div className="recommendations" aria-label={`为你选出的 ${recommendations.length} 篇文章`}>
-              {recommendations.map((item, index) => (
-                <button key={item.id} type="button" onClick={() => openArticle(item)}>
-                  <span>0{index + 1}</span>
-                  <div><small>{index === 0 ? (hasCloseMatch ? '最贴近' : '先从这一篇读起') : searchResult.reasons[item.id]}</small><strong>{item.title}</strong><small>{item.quote}</small></div>
-                  <CaretRight size={17} />
-                </button>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {askOpen && view === 'home' && (
-          <aside className="ask-sheet" role="dialog" aria-modal="true" aria-label="提问检索">
-            <button className="modal-close" type="button" onClick={() => setAskOpen(false)} aria-label="关闭提问"><X size={19} /></button>
-            <p>此刻有什么想问？</p>
-            <h2>不必说得很完整。</h2>
-            <div className="prompt-list">
-              {prompts.map((prompt) => <button key={prompt} type="button" onClick={() => setQuestion(prompt)}>{prompt}</button>)}
-            </div>
-            <form onSubmit={submitQuestion}>
-              <label>
-                <MagnifyingGlass size={17} />
-                <input value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="写下此刻的困惑" />
-              </label>
-              <button type="submit" aria-label="寻找相关文章"><PaperPlaneTilt size={19} /></button>
-            </form>
-            <small>内容仅供学习与自我觉察，不替代医疗或心理专业意见。</small>
-          </aside>
+        {view === 'chat' && (
+          <ChatScreen
+            messages={chatMessages}
+            draft={chatDraft}
+            status={chatStatus}
+            error={chatError}
+            prompts={prompts}
+            onBack={goHome}
+            onRestart={restartChat}
+            onDraftChange={setChatDraft}
+            onSubmit={sendChatMessage}
+            onPrompt={(prompt) => setChatDraft(prompt)}
+          />
         )}
 
         {!isOnline && (
