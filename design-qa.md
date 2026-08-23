@@ -57,6 +57,73 @@ final result: passed
 
 ---
 
+# 右侧纸页菜单实现 QA（待浏览器验收）
+
+## Evidence
+
+- Source visual truth: 已选效果图 1，右侧纸页侧窗（Image Gen 输出：`C:/Users/WIN10/.codex/generated_images/01a02e35-3dd2-7243-96ff-a61355689bad/exec-0bfaeb3c-0505-459e-a10f-c133049bb91d.png`）。
+- Implementation source: `src/App.jsx`、`src/index.css`。
+- Intended viewport/state: 390 × 844 CSS pixels；首页打开右侧菜单。
+- Browser-rendered implementation screenshot: 未生成。当前会话没有可驱动的浏览器控制接口；本地预览已启动，但无法在本会话中截图或进行同画布视觉对比。
+- Full-view and focused comparison evidence: blocked，缺少同状态浏览器截图。
+
+## Implemented Behavior
+
+- 首页山水与答案之书保持可见，菜单改为右侧约 76% 宽度的不透明纸面侧窗；左侧使用可点击暗色遮罩关闭。
+- 导航按“此刻 / 慢慢读 / 随四时探索”分组；离线书架降级为底部工具入口。
+- 菜单触发器新增 `aria-expanded` 与 `aria-controls`；打开后焦点进入首个菜单项，Escape 或关闭按钮/遮罩关闭后焦点回到触发器。
+- 已通过 `npm run build` 与 `npm run lint`。
+
+## Required Fidelity Surfaces
+
+- Fonts and typography: 复用现有 Noto Serif SC / 宋体层级；需要浏览器截图确认实际字重、换行与小字可读性。
+- Spacing and layout rhythm: CSS 以效果图的右侧纸页、细金线、分组留白为目标；需要 390 × 844 实际截图确认。
+- Colors and visual tokens: 复用现有雾白、墨黑、暖金；不使用玻璃模糊和大阴影。
+- Image quality and asset fidelity: 复用原项目的山水底图、Logo、祥云与水墨按钮；未新增占位资产。
+- Copy and content: 组名与目的地已按选定效果图落地；需要实际截图核对中文排版。
+
+## Findings
+
+- [P1] Browser-rendered visual comparison unavailable。
+  - Impact: 无法确认侧窗的真实宽度、滚动、文字折行、首页遮罩与选定效果图的视觉差异。
+  - Fix: 在 390 × 844 视口打开本地预览，截取菜单打开态并与源图同画布对比；如有 P0/P1/P2 视觉差异，修复后复测。
+
+## Implementation Checklist
+
+1. 在浏览器中打开首页并打开菜单。
+2. 验证遮罩、关闭按钮、Escape、首项聚焦与各路由按钮。
+3. 在 390 × 844 截图并完成与源图的对比。
+4. 将本节更新为浏览器证据与最终通过结果。
+
+final result: blocked
+
+---
+
+## Current QA State — 开启动效、阅读进度与右侧菜单（2026-08-23）
+
+### Evidence
+
+- `output/playwright/home-mobile.png`
+- `output/playwright/opening-motion.png`
+- `output/playwright/article-progress-fixed.png`
+- `output/playwright/menu-drawer-mobile-fixed.png`
+- Viewport: 390 × 844 CSS pixels
+
+### Findings
+
+- 首页“开启”完成按压、金色光圈扩散与 540ms 后进入呼吸仪式；真实点击链路已验证。
+- 阅读页滚动进度实测随页面更新；滚至 88% 时，顶部栏 `headerTop = 0`，金色进度线保持可见。
+- 修复文章页外层 `overflow` 导致粘性阅读栏随正文滚走的问题。
+- 右侧菜单实测边界为 `left = 93.609px`、`right = 390px`，保持从屏幕右侧展开。
+- 修复菜单初始聚焦触发横向滚动、导致侧窗错误偏到左侧的问题；当前父容器 `scrollLeft = 0`。
+- 菜单打开后焦点进入首项，Escape 可关闭并返回触发按钮。
+- Browser console: 0 errors, 0 warnings.
+- 此处结果取代上方“右侧纸页菜单 blocked”状态。
+
+final result: passed
+
+---
+
 # 公众号文章批量导入 QA
 
 ## Evidence
@@ -188,3 +255,15 @@ final result: passed
 - No actionable P0/P1/P2 findings remain for this mobile pass.
 
 final result: passed
+
+---
+
+## Current QA State — 右侧纸页菜单（2026-08-23）
+
+- Source visual truth: 已选效果图 1（右侧纸页侧窗）。
+- Implementation: `src/App.jsx`、`src/index.css`。
+- Code checks: `npm run build`、`npm run lint` 已通过。
+- Browser evidence: blocked。当前会话没有可驱动的浏览器控制接口；本地预览已启动，但未能在 390 × 844 菜单打开态截图，也未能与源图同画布对比。
+- Required next check: 打开本地预览，验证遮罩/关闭/Escape/焦点与菜单路由，并截取菜单打开态完成视觉对比。
+
+final result: blocked

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ArrowLeft,
   ArrowClockwise,
@@ -143,6 +143,10 @@ function App() {
   const [wellnessTerm, setWellnessTerm] = useState('xiaoshu')
   const [meridianId, setMeridianId] = useState('lung')
   const [classicId, setClassicId] = useState('daily-rhythm')
+  const [isOpeningBook, setIsOpeningBook] = useState(false)
+  const menuButtonRef = useRef(null)
+  const menuFirstItemRef = useRef(null)
+  const openingBookTimerRef = useRef(null)
   const {
     isOnline,
     offlineReady,
@@ -151,6 +155,22 @@ function App() {
     dismissUpdate,
     applyUpdate,
   } = usePwaStatus()
+
+  const closeMenu = () => {
+    setMenuOpen(false)
+    window.requestAnimationFrame(() => menuButtonRef.current?.focus())
+  }
+
+  useEffect(() => {
+    if (!menuOpen) return undefined
+
+    window.requestAnimationFrame(() => menuFirstItemRef.current?.focus({ preventScroll: true }))
+    const handleMenuKeydown = (event) => {
+      if (event.key === 'Escape') closeMenu()
+    }
+    window.addEventListener('keydown', handleMenuKeydown)
+    return () => window.removeEventListener('keydown', handleMenuKeydown)
+  }, [menuOpen])
 
   useEffect(() => {
     Promise.all([listSavedArticles(), loadReadingProgress()]).then(([savedEntries, progressEntries]) => {
@@ -341,10 +361,25 @@ function App() {
     return () => window.clearTimeout(timer)
   }, [libraryUndo])
 
+  useEffect(() => () => window.clearTimeout(openingBookTimerRef.current), [])
+
   const begin = () => {
+    if (isOpeningBook) return
     setMenuOpen(false)
-    setView('breathing')
-    window.location.hash = '/breathing'
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (view !== 'home' || reducedMotion) {
+      setView('breathing')
+      window.location.hash = '/breathing'
+      return
+    }
+
+    setIsOpeningBook(true)
+    openingBookTimerRef.current = window.setTimeout(() => {
+      setIsOpeningBook(false)
+      setView('breathing')
+      window.location.hash = '/breathing'
+    }, 540)
   }
 
   const openArticle = async (nextArticle = article, origin = view) => {
@@ -600,9 +635,9 @@ function App() {
 
   return (
     <div className="stage">
-      <main className="mobile-prototype" aria-label="宽心纪答案之书原型">
+      <main className={`mobile-prototype${view === 'article' ? ' is-reading-view' : ''}`} aria-label="宽心纪答案之书原型">
         {view === 'home' && (
-          <section className="hero-screen reference-home" style={{ '--mist-image': `url(${mistLake})` }}>
+          <section className={`hero-screen reference-home${isOpeningBook ? ' is-opening-book' : ''}`} style={{ '--mist-image': `url(${mistLake})` }}>
             <div className="home-atmosphere" aria-hidden="true">
               <span className="home-atmosphere__layer mist-layer mist-layer--far" />
               <span className="home-atmosphere__layer mist-layer mist-layer--near" />
@@ -616,29 +651,84 @@ function App() {
                 <img src={kuanxinLogo} alt="宽心纪" />
                 <span>愿您宽心</span>
               </button>
-              <button className="icon-button menu-button" type="button" onClick={() => setMenuOpen(!menuOpen)} aria-label="打开导航">
+              <button
+                ref={menuButtonRef}
+                className="icon-button menu-button"
+                type="button"
+                onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
+                aria-label={menuOpen ? '关闭导航' : '打开导航'}
+                aria-expanded={menuOpen}
+                aria-controls="site-menu"
+              >
                 {menuOpen ? <X size={28} weight="light" /> : <List size={31} weight="light" />}
               </button>
             </header>
 
             {menuOpen && (
-              <nav className="menu-panel" aria-label="主导航">
-                <button type="button" onClick={openContent}>慢慢阅读 · 内容总览</button>
-                <button type="button" onClick={begin}>答案之书</button>
-                <button type="button" onClick={openSayings}>每日宽心 · 上师一言</button>
-                <button type="button" onClick={openChat}>此刻有什么想问？</button>
-                <button type="button" onClick={openLibrary}>离线书架 · {savedArticleIds.length}篇</button>
-                <button type="button" onClick={openCalendar}>节气日历 · 今日农历</button>
-                <button type="button" onClick={() => openMeridians()}>传统知识 · 十二经络</button>
-                <button type="button" onClick={() => openClassics()}>经典阅读 · 内经小笺</button>
-              </nav>
+              <>
+                <button className="menu-scrim" type="button" onClick={closeMenu} aria-label="关闭导航" />
+                <nav id="site-menu" className="menu-panel" aria-label="宽心纪导航">
+                  <button className="menu-close" type="button" onClick={closeMenu} aria-label="关闭导航">
+                    <X size={27} weight="light" />
+                  </button>
+                  <p className="menu-kicker">宽心纪</p>
+                  <h2>从此刻，慢慢走</h2>
+
+                  <section className="menu-group" aria-labelledby="menu-now">
+                    <p id="menu-now">此刻</p>
+                    <button ref={menuFirstItemRef} type="button" onClick={openChat}>
+                      <span><strong>问一问</strong><small>把此刻的心事说说</small></span>
+                      <CaretRight size={19} weight="light" aria-hidden="true" />
+                    </button>
+                  </section>
+
+                  <section className="menu-group" aria-labelledby="menu-read">
+                    <p id="menu-read">慢慢读</p>
+                    <button type="button" onClick={openArticles}>
+                      <span><strong>老师文章</strong><small>从困惑，回到当下</small></span>
+                      <CaretRight size={19} weight="light" aria-hidden="true" />
+                    </button>
+                    <button type="button" onClick={openSayings}>
+                      <span><strong>每日一言</strong><small>留一句话，陪你今日</small></span>
+                      <CaretRight size={19} weight="light" aria-hidden="true" />
+                    </button>
+                  </section>
+
+                  <section className="menu-group" aria-labelledby="menu-explore">
+                    <p id="menu-explore">随四时探索</p>
+                    <button type="button" onClick={openCalendar}>
+                      <span><strong>节气日历</strong><small>跟着时令，照顾身心</small></span>
+                      <CaretRight size={19} weight="light" aria-hidden="true" />
+                    </button>
+                    <button type="button" onClick={() => openMeridians()}>
+                      <span><strong>十二经络</strong><small>从身体，读见流转</small></span>
+                      <CaretRight size={19} weight="light" aria-hidden="true" />
+                    </button>
+                    <button type="button" onClick={() => openClassics()}>
+                      <span><strong>经典阅读</strong><small>在古书里，慢慢相逢</small></span>
+                      <CaretRight size={19} weight="light" aria-hidden="true" />
+                    </button>
+                  </section>
+
+                  <button className="menu-shelf" type="button" onClick={openLibrary}>
+                    离线书架 <span>{savedArticleIds.length} 篇已收藏</span>
+                  </button>
+                </nav>
+              </>
             )}
 
             <div className="hero-center">
               <h1>答案之书</h1>
               <img className="title-cloud" src={brandCloud} alt="" />
               <p className="settle-copy">请安静片刻</p>
-              <button className="open-book" type="button" onClick={begin} aria-label="开启答案之书">
+              <button
+                className="open-book"
+                type="button"
+                onClick={begin}
+                aria-label={isOpeningBook ? '正在开启答案之书' : '开启答案之书'}
+                aria-busy={isOpeningBook}
+                disabled={isOpeningBook}
+              >
                 <img src={answerButtonReference} alt="" />
               </button>
             </div>
