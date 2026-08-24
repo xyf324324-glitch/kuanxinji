@@ -99,6 +99,52 @@ final result: blocked
 
 ---
 
+## 对话页重构 QA（2026-08-23）
+
+### Evidence
+
+- Source visual truth: `design/source-chat-selected.png`，1506 × 1045 px。
+- Browser-rendered implementation: `output/playwright/chat-redesign/chat-desktop-1506x1045-final.png`，1506 × 1045 CSS px / 1506 × 1045 px，`deviceScaleFactor: 1`。
+- Full-view same-canvas comparison: `output/playwright/chat-redesign/chat-desktop-comparison-final.png`。
+- Focused content comparison: `output/playwright/chat-redesign/chat-focus-content-comparison-final.png`。
+- Focused composer comparison: `output/playwright/chat-redesign/chat-focus-composer-comparison-final.png`。
+- Mobile welcome states: `output/playwright/chat-redesign/chat-mobile-430x932-final.png`、`output/playwright/chat-redesign/chat-mobile-390x844-final.png`、`output/playwright/chat-redesign/chat-mobile-360x800-final.png`、`output/playwright/chat-redesign/chat-mobile-320x568-final.png`。
+- Short-phone scrolled state: `output/playwright/chat-redesign/chat-mobile-320x568-bottom-final.png`。
+- Long-conversation state: `output/playwright/chat-redesign/chat-mobile-390x844-long-conversation-final.png`。
+- Interaction evidence: `output/playwright/chat-redesign/chat-mobile-390x844-prompt-filled.png`、`output/playwright/chat-redesign/chat-mobile-390x844-send-response.png`。
+
+### Required Fidelity Surfaces
+
+- Fonts and typography: Song-style display/body hierarchy, three-line welcome copy, heading scale, label scale and prompt row typography align with the source. The remaining platform Song rasterization difference is P3 only.
+- Spacing and layout rhythm: 102 px desktop header, 760 px content frame, 670 px prompt frame, 910 × 82 px composer, separators, gold left rule and circular send control align in the same-size comparison.
+- Colors and visual tokens: warm ivory paper, ink text, restrained warm gold and translucent composer match the selected direction; the empty-state send button stays gold as shown in the source.
+- Image quality and asset fidelity: official logo/cloud assets are retained. The lake artwork uses the real source raster and a derived transparent fade asset; no CSS/div placeholder art remains and the former rectangular image edge is removed.
+- Copy and content: “慢慢说，我在听。”、the exact requested greeting, three prompt rows and the local-storage/professional-care notice are present.
+
+### Comparison History
+
+- Pass 1: [P1] composer exposed both the visually hidden label and placeholder; [P1] the disabled send button was gray instead of source gold; [P2] welcome text and prompt frame were too wide. Fixed the accessible hidden label, gold disabled state, greeting width/line wrap and frame measurements.
+- Pass 2: [P2] desktop greeting/prompt typography and vertical rhythm drifted; [P2] the mist image had a hard rectangle edge. Corrected optical type scale, prompt spacing, composer position and added the derived transparent fade raster.
+- Pass 3: [P1] long mobile conversations scrolled the header away; [P1] the final reply could sit behind the fixed composer. Replaced the chat overflow scroll container with clipping and added an active-thread end spacer; post-fix evidence keeps the header at `y=0` and the final reply above the composer.
+- Pass 4: [P2] 320 × 568 initially allowed the fixed disclaimer to cover prompt text. The short-height rule now places the notice in document flow; all three 53 px prompt targets become fully visible after normal scrolling.
+
+### Interaction And Responsive Checks
+
+- Viewports checked: 1506 × 1045, 430 × 932, 390 × 844, 360 × 800 and 320 × 568.
+- No horizontal overflow at the tested widths.
+- Mobile tap targets: prompt rows 53 px high, send 46 × 46 px, header actions at least 44 px high.
+- Prompt selection fills the textarea and enables send. A mocked 200 response verified submit → user message → assistant message. Restart restores the exact greeting. Long conversation and short-phone scrolling remain usable.
+- Browser console: 0 errors, 0 warnings.
+- Code checks: `git diff --check`、`npm run lint`、`npm run content:check`、`npm run build` passed.
+
+### Follow-up Polish
+
+- [P3] Replace system Song fallbacks with a licensed brand webfont once the formal font is approved; this will remove small cross-platform glyph-weight differences.
+
+final result: passed
+
+---
+
 ## Current QA State — 开启动效、阅读进度与右侧菜单（2026-08-23）
 
 ### Evidence
@@ -267,3 +313,61 @@ final result: passed
 - Required next check: 打开本地预览，验证遮罩/关闭/Escape/焦点与菜单路由，并截取菜单打开态完成视觉对比。
 
 final result: blocked
+
+---
+
+## Current Build Gate — 对话页重构
+
+- Detailed report: “对话页重构 QA（2026-08-23）” above.
+- Source and final browser render were compared at identical 1506 × 1045 dimensions, with focused content/composer comparisons and four mobile widths.
+- No actionable P0/P1/P2 findings remain for the chat redesign.
+
+final result: passed
+
+---
+
+# 文章展示页重构 QA（2026-08-23）
+
+## Evidence
+
+- Source visual truth: `design/source-articles-selected.png`，1148 × 1372 px。
+- Browser-rendered implementation: `output/playwright/articles-reference-size-1148x1372-final.png`，1148 × 1372 CSS px / 1148 × 1372 px，`deviceScaleFactor: 1`。
+- Same-canvas comparison: `output/playwright/articles-design-comparison-final.png`；源图在左，实现图在右，两侧未经密度缩放。
+- Mobile implementation: `output/playwright/articles-mobile-390x844-final.png`，390 × 844 CSS px。
+- State: `#/articles`；“全部”筛选；搜索框为空；页面位于顶部。
+- Focused evidence: 同尺寸全视图已能清晰读取标题、搜索、筛选、首篇精选与右侧阅读位置；手机适配另以 390 × 844 全视图复核，无需额外局部裁切。
+
+## Required Fidelity Surfaces
+
+- Fonts and typography: 沿用项目宋体 / Noto Serif SC 层级，并按源图调整标题、正文、小标签、行高与换行；系统宋体栅格差异仅属 P3。
+- Spacing and layout rhythm: 顶栏、引导区、搜索线、主题筛选、结果状态、精选文章和普通文章的纵向节奏已在 1148 × 1372 同尺寸画布中对齐。
+- Colors and visual tokens: 背景使用暖雾白 `#f8f5ef`，文字为墨色，交互和分隔为克制的暖金 / 铜色。
+- Image quality and asset fidelity: 复用项目已有的品牌雾湖荷花实图并以低透明度融入背景，没有使用占位图或临时 CSS 插画。源图中更浓的水墨山体与现有品牌素材存在轻微 P3 风格差异。
+- Copy and content: 标题为用户指定的“想读些什么？”，原副标题已删除；主题显示为“全部 / 情绪 / 困惑 / 修行 / 关系 / 生活”，“困惑”正确映射现有“因缘”文章数据。
+
+## Comparison History
+
+- Pass 1: [P1] 右侧阅读提示被通用按钮样式覆盖为普通文档流元素，导致首屏出现大块空白；增加页面级选择器后恢复固定侧轨。
+- Pass 1: [P1] 顶栏未保持粘性；修复为带轻微纸面玻璃感的 sticky header。
+- Pass 2: [P2] 手机精选标题被行数截断；取消精选标题钳制，完整显示标题。
+- Pass 2: [P2] 桌面标题、筛选与精选文章的纵向间距偏离源图；在 1148 × 1372 视口逐段校准。
+- Pass 3: [P2] 主题原显示数据标签“因缘”；改为用户确认的“困惑”，同时保留筛选功能。
+- Pass 3: 旧 5173 开发会话发生样式 HMR 缓存异常；最终浏览器证据全部改用干净的 4173 本地会话复核。
+
+## Primary Interactions And Responsive Checks
+
+- 搜索输入“空性”可更新匹配数量；清空后恢复 211 篇。
+- “困惑”筛选可用，实测返回 70 篇；“全部”可恢复完整文章集。
+- 离线保存按钮可在保存 / 移除状态之间切换，`aria-pressed` 与可访问名称同步更新。
+- 首篇文章可进入 `#/article/lai-888ee0bf3d58?from=articles`，浏览器返回后保持文章目录来源。
+- 右侧阅读位置按钮实测平滑滚动至 `scrollY = 608`；进度点与页面滚动联动，且尊重 `prefers-reduced-motion`。
+- 390 × 844 与 1148 × 1372 均无横向溢出；手机标题、筛选、精选全文和收藏按钮均未越界。
+- Browser console: 0 errors, 0 warnings。
+- Code checks: `git diff --check`、`npm run lint`、`npm run content:check`、`npm run build` passed。
+
+## Findings
+
+- No actionable P0/P1/P2 findings remain for the selected articles redesign.
+- [P3] 若后续确定独立的山水品牌插画，可替换目前较淡的既有雾湖荷花背景，使右半部的水墨层次更接近效果图。
+
+final result: passed

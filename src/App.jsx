@@ -7,6 +7,7 @@ import {
   BookmarkSimple,
   BookOpenText,
   Books,
+  CaretDown,
   CaretRight,
   CheckCircle,
   Copy,
@@ -45,8 +46,6 @@ const SayingsCard = lazy(() => import('./components/SayingsCard'))
 const prompts = [
   '我放不下一段关系，怎么办？',
   '为什么我总在情绪里反复？',
-  '修行时感到迷茫，该如何看待？',
-  '面对家人，我总是很疲惫。',
   '最近发生的一切，到底在提醒我什么？',
 ]
 
@@ -343,17 +342,75 @@ function App() {
       .slice(0, 3)
       .map(({ item }) => item)
   }, [article.id, article.keywords, article.themes, article.userConcerns])
-  const articleThemes = ['全部', ...new Set(articles.flatMap((item) => item.themes))]
+  const articleThemes = ['全部', '情绪', '困惑', '修行', '关系', '生活']
   const filteredArticles = useMemo(() => {
     const query = articleQuery.trim().toLowerCase()
+    const selectedTheme = activeTheme === '困惑' ? '因缘' : activeTheme
     return articles.filter((item) => {
-      const matchesTheme = activeTheme === '全部' || item.themes.includes(activeTheme)
+      const matchesTheme = selectedTheme === '全部' || item.themes.includes(selectedTheme)
       const searchable = [item.title, item.quote, ...item.keywords, ...item.userConcerns].join(' ').toLowerCase()
       return matchesTheme && (!query || searchable.includes(query))
     })
   }, [activeTheme, articleQuery])
 
   useEffect(() => setVisibleArticleCount(20), [activeTheme, articleQuery])
+
+  useEffect(() => {
+    if (view !== 'articles') return undefined
+
+    const screen = document.querySelector('.articles-screen')
+    if (!screen) return undefined
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const revealItems = [...screen.querySelectorAll('[data-scroll-reveal]')]
+    let scrollFrame
+    let revealObserver
+
+    const updateScrollEffects = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight
+      const progress = scrollable > 0 ? window.scrollY / scrollable : 0
+      const normalized = Math.max(0, Math.min(1, progress))
+      const mistShift = reducedMotion ? 0 : Math.max(-56, window.scrollY * -0.045)
+      const scrollTrack = screen.querySelector('.articles-scroll-track')
+      const thumbOffset = normalized * Math.max(0, (scrollTrack?.clientHeight || 108) - 8)
+
+      screen.style.setProperty('--articles-scroll-progress', normalized.toFixed(4))
+      screen.style.setProperty('--articles-scroll-thumb-offset', `${thumbOffset}px`)
+      screen.style.setProperty('--articles-mist-shift', `${mistShift}px`)
+    }
+
+    const scheduleScrollEffects = () => {
+      if (scrollFrame) return
+      scrollFrame = window.requestAnimationFrame(() => {
+        scrollFrame = undefined
+        updateScrollEffects()
+      })
+    }
+
+    if (reducedMotion || !('IntersectionObserver' in window)) {
+      revealItems.forEach((item) => item.classList.add('is-visible'))
+    } else {
+      revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          entry.target.classList.add('is-visible')
+          revealObserver.unobserve(entry.target)
+        })
+      }, { rootMargin: '0px 0px -7% 0px', threshold: 0.08 })
+      revealItems.forEach((item) => revealObserver.observe(item))
+    }
+
+    window.addEventListener('scroll', scheduleScrollEffects, { passive: true })
+    window.addEventListener('resize', scheduleScrollEffects)
+    updateScrollEffects()
+
+    return () => {
+      window.removeEventListener('scroll', scheduleScrollEffects)
+      window.removeEventListener('resize', scheduleScrollEffects)
+      revealObserver?.disconnect()
+      if (scrollFrame) window.cancelAnimationFrame(scrollFrame)
+    }
+  }, [view, activeTheme, articleQuery, visibleArticleCount, filteredArticles.length])
 
   useEffect(() => {
     if (!libraryUndo) return undefined
@@ -425,6 +482,13 @@ function App() {
     setMenuOpen(false)
     setView('articles')
     window.location.hash = '/articles'
+  }
+
+  const scrollArticlesForward = () => {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight
+    const nextPosition = Math.min(scrollable, window.scrollY + Math.max(420, window.innerHeight * 0.72))
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: nextPosition, behavior: reducedMotion ? 'auto' : 'smooth' })
   }
 
   const openCalendar = () => {
@@ -635,7 +699,7 @@ function App() {
 
   return (
     <div className="stage">
-      <main className={`mobile-prototype${view === 'article' ? ' is-reading-view' : ''}`} aria-label="宽心纪答案之书原型">
+      <main className={`mobile-prototype${view === 'article' ? ' is-reading-view' : ''}${view === 'chat' ? ' is-chat-view' : ''}${view === 'articles' ? ' is-articles-view' : ''}`} aria-label="宽心纪答案之书原型">
         {view === 'home' && (
           <section className={`hero-screen reference-home${isOpeningBook ? ' is-opening-book' : ''}`} style={{ '--mist-image': `url(${mistLake})` }}>
             <div className="home-atmosphere" aria-hidden="true">
@@ -848,14 +912,14 @@ function App() {
 
         {view === 'articles' && (
           <section className="articles-screen" data-view="articles">
+            <img className="articles-atmosphere" src={mistLake} alt="" aria-hidden="true" />
             <header className="article-header">
               <button className="back-button" type="button" onClick={openContent}><ArrowLeft size={18} /> 内容</button>
               <img src={kuanxinLogo} alt="宽心纪" />
             </header>
             <div className="articles-intro">
-              <div><img src={brandCloud} alt="" /><span>老师文章</span></div>
-              <h1 data-route-heading tabIndex="-1">此刻，想读些什么？</h1>
-              <p>可以按主题慢慢翻，也可以写下一个词。搜索只在这台设备上进行。</p>
+              <div><img src={brandCloud} alt="" /><span>在册文章</span></div>
+              <h1 data-route-heading tabIndex="-1">想读些什么？</h1>
               <label className="article-search">
                 <MagnifyingGlass size={18} />
                 <input value={articleQuery} onChange={(event) => setArticleQuery(event.target.value)} placeholder="搜索标题、主题或困惑" aria-label="搜索文章标题、主题或困惑" />
@@ -867,17 +931,27 @@ function App() {
                 ))}
               </div>
             </div>
+            <button className="articles-scroll-cue" type="button" onClick={scrollArticlesForward} aria-label="向下浏览文章">
+              <span className="articles-scroll-label">阅读位置</span>
+              <span className="articles-scroll-track" aria-hidden="true"><span /></span>
+              <span className="articles-scroll-chevrons" aria-hidden="true">
+                <CaretDown size={16} weight="light" />
+                <CaretDown size={16} weight="light" />
+                <CaretDown size={16} weight="light" />
+              </span>
+            </button>
             <p className="catalog-status" role="status" aria-live="polite">
               找到 {filteredArticles.length} 篇{filteredArticles.length > 0 ? `，当前显示 ${Math.min(visibleArticleCount, filteredArticles.length)} 篇` : ''}
             </p>
             <div className="article-catalog" key={`${activeTheme}-${articleQuery}`}>
-              {filteredArticles.length > 0 ? filteredArticles.slice(0, visibleArticleCount).map((item) => (
-                <article key={item.id}>
+              {filteredArticles.length > 0 ? filteredArticles.slice(0, visibleArticleCount).map((item, index) => (
+                <article className={`catalog-entry${index === 0 ? ' is-featured' : ''}`} data-scroll-reveal key={item.id} style={{ '--reveal-delay': `${Math.min(index, 5) * 55}ms` }}>
+                  {index === 0 && <div className="catalog-featured-kicker"><img src={brandCloud} alt="" /><span>今日慢读</span></div>}
                   <button className="catalog-open" type="button" onClick={() => openArticle(item, 'articles')}>
-                    <span>{item.theme}</span>
+                    {index > 0 && <span className="catalog-theme">{item.theme}</span>}
                     <h2>{item.title}</h2>
                     <p>{item.quote}</p>
-                    <small>{readingProgress[item.id] ? `上次读到 ${readingProgress[item.id]}%` : '开始阅读'}</small>
+                    <small>{readingProgress[item.id] ? `上次读到 ${readingProgress[item.id]}%` : '开始阅读'} <ArrowRight size={14} /></small>
                     <CaretRight size={18} />
                   </button>
                   <button className="catalog-save" type="button" onClick={() => toggleSavedArticle(item)} aria-pressed={savedArticleIds.includes(item.id)} aria-label={savedArticleIds.includes(item.id) ? `从离线书架移除《${item.title}》` : `离线保存《${item.title}》`}>
