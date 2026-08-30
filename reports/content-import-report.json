@@ -1,36 +1,36 @@
 {
-  "source": "D:\\蒸馏空间\\老师文档\\公众号赖老师文案链接.xlsx",
+  "source": "公众号赖老师文案链接.xlsx",
   "sheet": "Sheet1",
-  "importedAt": "2026-08-26T07:51:08.846Z",
-  "imported": 214,
+  "importedAt": "2026-08-30T13:06:12.570Z",
+  "imported": 216,
   "skipped": [
     {
-      "rowNumber": 98,
-      "reason": "与第 97 行完全重复"
+      "rowNumber": 100,
+      "reason": "与第 99 行完全重复"
     },
     {
-      "rowNumber": 177,
-      "reason": "与第 174 行完全重复"
+      "rowNumber": 179,
+      "reason": "与第 176 行完全重复"
     }
   ],
   "duplicateLinks": [
     {
-      "rowNumber": 98,
-      "firstRow": 97,
+      "rowNumber": 100,
+      "firstRow": 99,
       "sourceUrl": "https://mp.weixin.qq.com/s/Bo-CaIp_Xn0bMsptKGkb2w",
       "exactDuplicate": true
     },
     {
-      "rowNumber": 177,
-      "firstRow": 174,
+      "rowNumber": 179,
+      "firstRow": 176,
       "sourceUrl": "https://mp.weixin.qq.com/s/mcMZFKvKeVPMImVNxI2_Ug",
       "exactDuplicate": true
     }
   ],
   "duplicateTitles": [
     {
-      "rowNumber": 90,
-      "firstRow": 84,
+      "rowNumber": 92,
+      "firstRow": 86,
       "title": "随笔文字"
     }
   ],
@@ -38,13 +38,13 @@
   "paragraphStats": {
     "min": 1,
     "max": 175,
-    "average": 28.8
+    "average": 28.6
   },
   "themeCounts": {
-    "情绪": 126,
+    "修行": 121,
+    "情绪": 128,
+    "因缘": 72,
     "生活": 57,
-    "因缘": 71,
-    "关系": 47,
-    "修行": 120
+    "关系": 47
   }
 }
