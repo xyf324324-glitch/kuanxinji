@@ -1,36 +1,36 @@
 {
   "source": "C:\\Users\\WIN10\\Downloads\\公众号赖老师文案链接(1).xlsx",
   "sheet": "Sheet1",
-  "importedAt": "2026-09-04T06:57:42.647Z",
-  "imported": 219,
+  "importedAt": "2026-09-08T08:41:35.682Z",
+  "imported": 221,
   "skipped": [
     {
-      "rowNumber": 103,
-      "reason": "与第 102 行完全重复"
+      "rowNumber": 105,
+      "reason": "与第 104 行完全重复"
     },
     {
-      "rowNumber": 182,
-      "reason": "与第 179 行完全重复"
+      "rowNumber": 184,
+      "reason": "与第 181 行完全重复"
     }
   ],
   "duplicateLinks": [
     {
-      "rowNumber": 103,
-      "firstRow": 102,
+      "rowNumber": 105,
+      "firstRow": 104,
       "sourceUrl": "https://mp.weixin.qq.com/s/Bo-CaIp_Xn0bMsptKGkb2w",
       "exactDuplicate": true
     },
     {
-      "rowNumber": 182,
-      "firstRow": 179,
+      "rowNumber": 184,
+      "firstRow": 181,
       "sourceUrl": "https://mp.weixin.qq.com/s/mcMZFKvKeVPMImVNxI2_Ug",
       "exactDuplicate": true
     }
   ],
   "duplicateTitles": [
     {
-      "rowNumber": 95,
-      "firstRow": 89,
+      "rowNumber": 97,
+      "firstRow": 91,
       "title": "随笔文字"
     }
   ],
@@ -41,8 +41,8 @@
     "average": 28.6
   },
   "themeCounts": {
-    "修行": 123,
-    "情绪": 130,
+    "修行": 125,
+    "情绪": 132,
     "生活": 59,
     "因缘": 72,
     "关系": 47
