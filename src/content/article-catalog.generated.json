@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 46766)
-Total output lines: 7047
-
 [
   {
     "id": "lai-7a28bbc3f4f5",
@@ -2214,7 +2211,2564 @@ Total output lines: 7047
     "id": "lai-f9dad72c95d6",
     "order": 69,
     "title": "很多人发心和品质不稳定，是因为太多地方在打结",
-    "quote": "很多人其实有很好的品质和发心，但你会发现他…16766 tokens truncated…烦恼",
+    "quote": "很多人其实有很好的品质和发心，但你会发现他们的品质会不稳定，他们面对生活的态度会不稳定。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "佛法",
+      "觉悟",
+      "解脱",
+      "空性",
+      "情绪",
+      "恐惧",
+      "生活",
+      "品质",
+      "业力"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/pvKR-WKibqee39EIIn8uLA"
+  },
+  {
+    "id": "lai-9d011c029629",
+    "order": 70,
+    "title": "有对应的能量才会显现对应的形，长相背后是对应的气，通过形气心的一体，回到空性正见，邀请您看到，所有长相都彰显着空性的庄严",
+    "quote": "每个人的长相都不一样，因为不同的心念显化出来的能量是不一样的。",
+    "theme": "生活 · 因缘",
+    "themes": [
+      "生活",
+      "因缘"
+    ],
+    "keywords": [
+      "生活",
+      "身体",
+      "健康",
+      "品质",
+      "因果",
+      "因缘",
+      "功德",
+      "修行",
+      "空性",
+      "关系"
+    ],
+    "userConcerns": [
+      "面对生活变化",
+      "日常选择",
+      "身心状态",
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/rLjYGsMPGb3FLH_xniI7xg"
+  },
+  {
+    "id": "lai-10d7d51dfedd",
+    "order": 71,
+    "title": "修行人应当如何解开对贫富的枷锁，安贫安富是重要的生命才能",
+    "quote": "富人在他该有的阶级，在他该有的轨迹里面去行走，有的时候还不会去抢夺更低阶级的资源呢。",
+    "theme": "关系 · 因缘",
+    "themes": [
+      "关系",
+      "因缘"
+    ],
+    "keywords": [
+      "关系",
+      "家人",
+      "父母",
+      "孩子",
+      "因果",
+      "因缘",
+      "业力",
+      "福报",
+      "生活",
+      "工作"
+    ],
+    "userConcerns": [
+      "关系变化",
+      "家人相处",
+      "放不下一段关系",
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/cFOnfJ4eB0b4fz_jyavlhg"
+  },
+  {
+    "id": "lai-31f1e5bab9b3",
+    "order": 72,
+    "title": "我们和解脱自在之间隔着的是虚构的自我",
+    "quote": "每个当下可以多去检查自己，问问自己：这个当下我自在吗？",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "恐惧",
+      "痛苦",
+      "纠缠",
+      "解脱",
+      "生活"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/35teoSDGcZdyev8N-veV7Q"
+  },
+  {
+    "id": "lai-146479d9aa10",
+    "order": 73,
+    "title": "造作是因为没有回到平衡，回到平衡便叫“中”",
+    "quote": "为什么一个人总想妄动、总想造作？",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "烦恼",
+      "情绪",
+      "痛苦",
+      "菩萨",
+      "解脱",
+      "空性",
+      "生活",
+      "身体",
+      "品质",
+      "关系"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/KEo6kUqiHfGF8bJ18Kj8eg"
+  },
+  {
+    "id": "lai-089d511c2b1f",
+    "order": 74,
+    "title": "六祖和卧轮禅师的例子，真正的禅宗是直指大圆满",
+    "quote": "有一个偈子非常有名，大家应该都听过，是六祖和卧轮禅师他们各自作的。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "禅宗",
+      "解脱",
+      "本来面目",
+      "空性",
+      "烦恼",
+      "情绪",
+      "纠缠",
+      "关系"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/ej_P88K5YIMezCHgL31AHA"
+  },
+  {
+    "id": "lai-bc577acc2117",
+    "order": 75,
+    "title": "一切都是条件因缘成熟的一种呈现，一切一直在变，注重体验权，放弃占有欲",
+    "quote": "人一辈子玩的就是个因缘和合的游戏，就是个条件排列组合的游戏。",
+    "theme": "生活 · 因缘",
+    "themes": [
+      "生活",
+      "因缘"
+    ],
+    "keywords": [
+      "生活",
+      "财富",
+      "身体",
+      "健康",
+      "因果",
+      "因缘",
+      "福报",
+      "修行",
+      "解脱",
+      "本来面目"
+    ],
+    "userConcerns": [
+      "面对生活变化",
+      "日常选择",
+      "身心状态",
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/nVNA2Vs8IbGWv9l3dqfYUA"
+  },
+  {
+    "id": "lai-4a93fff830ec",
+    "order": 76,
+    "title": "学会通过对生活的各种批判看到自我的运作，彻底看穿自我，自然超越自我，无我不是要消灭什么，只是彻底看穿幻觉",
+    "quote": "很多人对于生活当中发生的很多事情，都习惯性的去下意见、给批判，把自己的情绪搅和在里面。",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "烦恼",
+      "情绪",
+      "痛苦",
+      "纠缠",
+      "佛法",
+      "解脱",
+      "本来面目",
+      "空性",
+      "因果",
+      "因缘"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/6Y5lHHuS5uN4i8BHURz5Wg"
+  },
+  {
+    "id": "lai-c4175ea5517f",
+    "order": 77,
+    "title": "你下什么指令，就自动编织对应的故事，你一直在寻找空性和大圆满，正是你的寻找，让你一直在忽略空性和大圆满",
+    "quote": "包括很多人都会觉得，一旦进入修行，其实并不是越来越轻松，而是越来越沉重。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "修行",
+      "解脱",
+      "本来面目",
+      "空性",
+      "烦恼",
+      "痛苦",
+      "纠缠",
+      "生活",
+      "工作"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/x2jrQmR1sdYaNVRsvSPVrg"
+  },
+  {
+    "id": "lai-af80c3967323",
+    "order": 78,
+    "title": "修行是看穿我相我执是彻头彻尾的幻觉",
+    "quote": "发现生命的本来面目，发现生命功德的本圆满，发现自我的虚幻。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "修行",
+      "佛陀",
+      "菩萨",
+      "解脱",
+      "本来面目",
+      "烦恼",
+      "情绪",
+      "痛苦",
+      "执着",
+      "身体"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/DJgHRwf3XHnTNgC0etczpg"
+  },
+  {
+    "id": "lai-382344d7dbfc",
+    "order": 79,
+    "title": "你一直在相信念头，所以你一直沉迷在自我的编织和大梦",
+    "quote": "就是我们平时每天的能量、精力怎么耗散掉的，我们是怎么样作茧自缚的。",
+    "theme": "修行",
+    "themes": [
+      "修行"
+    ],
+    "keywords": [
+      "修行",
+      "佛法",
+      "解脱",
+      "本来面目",
+      "空性"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/6N3kbZEPyVjIMf1kqCclxw"
+  },
+  {
+    "id": "lai-726dad591003",
+    "order": 80,
+    "title": "情感里的幻想和误认",
+    "quote": "当我们以为自己多爱别人，以为别人多么爱我们，其实都是误会，都是自欺欺人。",
+    "theme": "关系 · 修行",
+    "themes": [
+      "关系",
+      "修行"
+    ],
+    "keywords": [
+      "关系",
+      "婚姻",
+      "解脱",
+      "空性",
+      "生活",
+      "品质",
+      "痛苦"
+    ],
+    "userConcerns": [
+      "关系变化",
+      "家人相处",
+      "放不下一段关系",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/JJIU6BFeZlYFf600bTf6SA"
+  },
+  {
+    "id": "lai-5129d10a14cd",
+    "order": 81,
+    "title": "请看到自我各种各样的运作方式，当自我息下，就很容易认出本来面目",
+    "quote": "那我需要提醒一下，有一个比较隐秘的自我的造作藏在哪里呢？",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "情绪",
+      "痛苦",
+      "执着",
+      "解脱",
+      "本来面目",
+      "生活"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/egYXWIXt_fi5BMFpWVLFbw"
+  },
+  {
+    "id": "lai-feb0aae91dd1",
+    "order": 82,
+    "title": "为什么生命真相叫一体和不二？为什么说一切都是空性的化身和游戏？",
+    "quote": "看穿个体的幻觉，认证到整体一体的运作，才是认证到彻底的生命真相。",
+    "theme": "因缘 · 修行",
+    "themes": [
+      "因缘",
+      "修行"
+    ],
+    "keywords": [
+      "因果",
+      "因缘",
+      "业力",
+      "功德",
+      "佛法",
+      "菩萨",
+      "本来面目",
+      "空性",
+      "烦恼"
+    ],
+    "userConcerns": [
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/9_7brWrFKufm2C3GQxvxMw"
+  },
+  {
+    "id": "lai-7f44a72529eb",
+    "order": 83,
+    "title": "看到自我的运作，才会发现问题，才会容易被答案接引，大圆满是超越所有的问题和答案，大圆满是超越空和有回到圆满的中道",
+    "quote": "要慢慢能看到自我的运作，看到自己的心，看到自己的需求，看到自己贪陷的觉受。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "修行",
+      "佛法",
+      "觉悟",
+      "解脱",
+      "本来面目",
+      "空性",
+      "烦恼",
+      "情绪",
+      "恐惧",
+      "痛苦"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/iLBGV9_aqrZPLMye9QH-Yg"
+  },
+  {
+    "id": "lai-c8739c1cfb1b",
+    "order": 84,
+    "title": "要像对待药物一样慎重对待食物",
+    "quote": "我们吃东西，我们进食要有一个认知跟态度是：我们要像吃药物一样去吃食物。",
+    "theme": "生活 · 情绪",
+    "themes": [
+      "生活",
+      "情绪"
+    ],
+    "keywords": [
+      "生活",
+      "身体",
+      "健康",
+      "焦虑",
+      "内耗"
+    ],
+    "userConcerns": [
+      "面对生活变化",
+      "日常选择",
+      "身心状态",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/C4bhNuoLNlHIkXNtRCUWAQ"
+  },
+  {
+    "id": "lai-5ce86eeb4dad",
+    "order": 85,
+    "title": "一切都没有问题，如果你觉得世界有问题，是因为你还没有认证到圆满的规律",
+    "quote": "一切都按照圆满的规律在运转，一切都按照缜密的因果在绽放。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "菩萨",
+      "解脱",
+      "本来面目",
+      "空性",
+      "烦恼",
+      "痛苦",
+      "纠缠",
+      "因果",
+      "因缘",
+      "功德"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/zYBrkepnqvT-AksGwnJcgw"
+  },
+  {
+    "id": "lai-2fdbefdfd330",
+    "order": 86,
+    "title": "莲花生大士对证悟的开示",
+    "quote": "赖老师：来继续分享莲花生大士开示的关于证悟，莲花生大士回复他的弟子什么是证悟。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "修行",
+      "佛法",
+      "解脱",
+      "本来面目",
+      "空性",
+      "烦恼",
+      "执着",
+      "因果",
+      "因缘"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/FjFDxlNzqMjBFM5qlSScDg"
+  },
+  {
+    "id": "lai-c9355c510c8f",
+    "order": 87,
+    "title": "一切都没有关系，请回光返照从故事和角色里面认证本解脱，你再也不需要担忧什么",
+    "quote": "即使是更糟糕、更灰暗、更阴沉的生命状态，也都没有关系；",
+    "theme": "因缘 · 修行",
+    "themes": [
+      "因缘",
+      "修行"
+    ],
+    "keywords": [
+      "因果",
+      "因缘",
+      "解脱",
+      "本来面目",
+      "关系",
+      "痛苦",
+      "身体"
+    ],
+    "userConcerns": [
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/3Wzwh5E5EgmNmpx7Zlp29g"
+  },
+  {
+    "id": "lai-b4187e2507a5",
+    "order": 88,
+    "title": "通过情感、婚姻等生活中各种的变数，见证到生命的规律",
+    "quote": "很多人会痛苦于恋人或配偶的变心和出轨问题。",
+    "theme": "情绪 · 因缘",
+    "themes": [
+      "情绪",
+      "因缘"
+    ],
+    "keywords": [
+      "烦恼",
+      "情绪",
+      "痛苦",
+      "纠缠",
+      "执着",
+      "因果",
+      "因缘",
+      "业力",
+      "功德",
+      "关系"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/2Li-xhUz7IpmoV1jMbcLHg"
+  },
+  {
+    "id": "lai-d5acc801b2bc",
+    "order": 89,
+    "title": "随笔文字",
+    "quote": "业力，是你没有看到的自己，和惯性。",
+    "theme": "情绪 · 因缘",
+    "themes": [
+      "情绪",
+      "因缘"
+    ],
+    "keywords": [
+      "纠缠",
+      "业力"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/f5YOxMkBYbe4Yb7JcAp89w"
+  },
+  {
+    "id": "lai-31deb8ce8870",
+    "order": 90,
+    "title": "是觉受在呈现而不是真实的故事在呈现。自我想要的是被爱感、价值感，自我一直在玩的是关于\"感\"的游戏，自我一直在编造自己想要的故事情节",
+    "quote": "对于大家来讲，爱情的体验、亲情的体验，很多各种情感的体验都很重要，这些东西组成了大家重要的生命的意义。",
+    "theme": "情绪 · 关系",
+    "themes": [
+      "情绪",
+      "关系"
+    ],
+    "keywords": [
+      "情绪",
+      "恐惧",
+      "痛苦",
+      "纠缠",
+      "执着",
+      "关系",
+      "婚姻",
+      "父母",
+      "孩子",
+      "因果"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "关系变化",
+      "家人相处",
+      "放不下一段关系"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/Xj47AGwqHxu8yLlBzff7Uw"
+  },
+  {
+    "id": "lai-f1bd37aadf46",
+    "order": 91,
+    "title": "认出真正的自己，才是最重要的实践实修",
+    "quote": "关于实践、实修，之前有分享莲花生大士开示的“一念回光”这个方法。",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "情绪",
+      "痛苦",
+      "执着",
+      "禅宗",
+      "本来面目",
+      "空性"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/Oqxc-Go0YR47mhGLthCvWg"
+  },
+  {
+    "id": "lai-75fbb7dfbd43",
+    "order": 92,
+    "title": "生命力何其丰富，生命何其精彩，是我们自己在用观念切割生活，用观念阉割生命的精彩",
+    "quote": "大家觉得生命力就是向上的、积极的。",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "痛苦",
+      "解脱",
+      "生活"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/Gi2hwxozG6qCZaCiqkBaGQ"
+  },
+  {
+    "id": "lai-11616ce6fe3f",
+    "order": 93,
+    "title": "去勇敢做你想做的事，不要再压抑和批判你呈现的所有状态，让一切自由流通过去，生命只是流经你这个角色",
+    "quote": "生命只是流经你这个角色，而不是流向你这个角色。",
+    "theme": "修行 · 关系",
+    "themes": [
+      "修行",
+      "关系"
+    ],
+    "keywords": [
+      "本来面目",
+      "空性",
+      "关系",
+      "功德"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "关系变化",
+      "家人相处",
+      "放不下一段关系"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/IRADpX550oSVmlvvFEDj8Q"
+  },
+  {
+    "id": "lai-03bca70e67d7",
+    "order": 94,
+    "title": "小心自我的游戏和修行的游戏",
+    "quote": "人一直活在自我狭隘的妄想和解读里面。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "修行",
+      "解脱",
+      "本来面目",
+      "空性",
+      "烦恼",
+      "执着"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/bxli7a1LWGrIpI6oaHa8ng"
+  },
+  {
+    "id": "lai-36b6bbb408bf",
+    "order": 95,
+    "title": "随笔文字",
+    "quote": "大家都是酬业而来，每个人身边都有许多缘分，因缘因果的绽放各不一样，因此构成生命的精彩和丰富。",
+    "theme": "因缘 · 生活",
+    "themes": [
+      "因缘",
+      "生活"
+    ],
+    "keywords": [
+      "因果",
+      "因缘",
+      "品质"
+    ],
+    "userConcerns": [
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律",
+      "面对生活变化",
+      "日常选择",
+      "身心状态"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/UThTEYR3nimT6xf8VBMFTA"
+  },
+  {
+    "id": "lai-0f39ed47276d",
+    "order": 96,
+    "title": "伤害你的是观念，而不是事件，我们要改变的是对生活的认知，而不是生活",
+    "quote": "我们生活当中的很多人，包括我们的小伙伴，包括读者，大家都每天忙着在解决问题，想要去改正问题、改善生活状况、扭转生活状况。",
+    "theme": "关系 · 因缘",
+    "themes": [
+      "关系",
+      "因缘"
+    ],
+    "keywords": [
+      "关系",
+      "前任",
+      "婚姻",
+      "伴侣",
+      "父母",
+      "孩子",
+      "因果",
+      "因缘",
+      "生活",
+      "工作"
+    ],
+    "userConcerns": [
+      "关系变化",
+      "家人相处",
+      "放不下一段关系",
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/RB3VGwQn2CAHm4a-bsgE_g"
+  },
+  {
+    "id": "lai-430585e15a34",
+    "order": 97,
+    "title": "对生活的期待和张望会遮蔽你的慧眼，使你忽略当下的安稳，邀请你看到空性正在当下显化怎样的生命盛宴",
+    "quote": "小心我们藏在生活当中的期待，请看到我们在生活当中的各种张望。",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "烦恼",
+      "痛苦",
+      "愤怒",
+      "解脱",
+      "本来面目",
+      "空性",
+      "生活"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/VMUjfCbFey2_qfmijcdBug"
+  },
+  {
+    "id": "lai-8d6335c88c1c",
+    "order": 98,
+    "title": "社交和职场的提醒，学会清醒打自己的牌，不要轻易和别人的状态搅合在一起",
+    "quote": "真正的生命威严怎么建立起来的？",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "烦恼",
+      "情绪",
+      "痛苦",
+      "修行",
+      "菩萨",
+      "解脱",
+      "生活",
+      "工作",
+      "品质",
+      "因果"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/bp_ZnthvWbCRmgbw5Wy-HA"
+  },
+  {
+    "id": "lai-966722c175ea",
+    "order": 99,
+    "title": "外面没有别人，只有你自己的心念，显化的一切都是心念的舞蹈",
+    "quote": "你的心念就是频率，你是怎样的心念，就是怎样的频率，就会现出怎样的维度境界。",
+    "theme": "情绪 · 因缘",
+    "themes": [
+      "情绪",
+      "因缘"
+    ],
+    "keywords": [
+      "烦恼",
+      "情绪",
+      "痛苦",
+      "纠缠",
+      "因果",
+      "因缘",
+      "业力",
+      "解脱",
+      "本来面目",
+      "空性"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/KlkDLFavdtyXWY_E4Tn1IA"
+  },
+  {
+    "id": "lai-eeb239a74cd5",
+    "order": 100,
+    "title": "其实我们不需要通过外界来放松自己、证明自己，学会接纳每一个真实的自己，学会跟每一个自己好好相处",
+    "quote": "比如说你看不到自己的情绪，你看不到自己的误知误见。",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "烦恼",
+      "情绪",
+      "痛苦",
+      "本来面目",
+      "空性",
+      "生活",
+      "健康",
+      "关系"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/2KgWczQMVAg6aRbz1LhinA"
+  },
+  {
+    "id": "lai-566c62ecbc59",
+    "order": 101,
+    "title": "谨慎陷在修行迷梦里面，大圆满不是靠到达，而是发现和认证",
+    "quote": "很多人修行，其实是困在了修行的梦里面，他又迷在了修行梦里面。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "修行",
+      "佛法",
+      "解脱",
+      "本来面目",
+      "空性",
+      "情绪",
+      "痛苦",
+      "执着",
+      "因果",
+      "因缘"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/keBarEMtGh9EjRgzT9Zlog"
+  },
+  {
+    "id": "lai-2995c3657d54",
+    "order": 102,
+    "title": "在财富和情感方面对大家的提醒，以及其中的大乘菩萨行",
+    "quote": "你身上有很多钱，代表你是一块很肥的肉。",
+    "theme": "生活 · 关系",
+    "themes": [
+      "生活",
+      "关系"
+    ],
+    "keywords": [
+      "生活",
+      "工作",
+      "财富",
+      "身体",
+      "健康",
+      "品质",
+      "关系",
+      "婚姻",
+      "家人",
+      "孩子"
+    ],
+    "userConcerns": [
+      "面对生活变化",
+      "日常选择",
+      "身心状态",
+      "关系变化",
+      "家人相处",
+      "放不下一段关系"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/Bo-CaIp_Xn0bMsptKGkb2w"
+  },
+  {
+    "id": "lai-339fd2f39d95",
+    "order": 103,
+    "title": "生命文明的升级其实是认知的升级，烦恼是病，认知是药，当你发现，病不存在，药也不复存在",
+    "quote": "所有听了以后会让你更狭隘、更纠结的东西，大家都谨慎去听从。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "修行",
+      "佛陀",
+      "解脱",
+      "本来面目",
+      "空性",
+      "烦恼",
+      "焦虑",
+      "恐惧",
+      "痛苦",
+      "因果"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/z0rqKd8EOaQlBbGKqBRQPA"
+  },
+  {
+    "id": "lai-8ff2ae7f22c6",
+    "order": 104,
+    "title": "有关于元音老人和体佛法师",
+    "quote": "很多人说元音老人和体佛法师不够圆满，其实不是的，也很圆满的。",
+    "theme": "修行 · 因缘",
+    "themes": [
+      "修行",
+      "因缘"
+    ],
+    "keywords": [
+      "佛法",
+      "解脱",
+      "本来面目",
+      "因缘",
+      "福报",
+      "生活",
+      "品质",
+      "关系",
+      "纠缠"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/SiUCvX-zwUZsqnXWkA8MXQ"
+  },
+  {
+    "id": "lai-419b35ac52f2",
+    "order": 105,
+    "title": "注意不要陷入修行迷梦，而要认出真正的家乡",
+    "quote": "上次我们聊了关于修行迷梦的话题，提醒诸位不要执着于修行，不要困在修行迷梦里面，大家可能体会得不是那么深，所以再增加一个例子协助大家理解。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "修行",
+      "佛法",
+      "菩萨",
+      "解脱",
+      "本来面目",
+      "烦恼",
+      "痛苦",
+      "执着",
+      "生活"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/8mWccyuQRX99Li0CgDS-7Q"
+  },
+  {
+    "id": "lai-d0b4994a4546",
+    "order": 106,
+    "title": "什么是正、邪、淫、色",
+    "quote": "其实关于正和邪，在《六祖坛经》里面，六祖讲得非常清楚。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "佛法",
+      "佛陀",
+      "菩萨",
+      "本来面目",
+      "空性",
+      "痛苦",
+      "执着",
+      "生活",
+      "品质"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/PnXdvLprR98S7Edv9qK4wQ"
+  },
+  {
+    "id": "lai-52698bebc42c",
+    "order": 107,
+    "title": "佛陀讲法的五阶段，权法与实法，以及最重要的法华经",
+    "quote": "fo陀以前讲法大概分为五个阶段。",
+    "theme": "修行 · 因缘",
+    "themes": [
+      "修行",
+      "因缘"
+    ],
+    "keywords": [
+      "修行",
+      "佛陀",
+      "解脱",
+      "本来面目",
+      "空性",
+      "因缘",
+      "功德",
+      "执着",
+      "品质"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/DVMefkOEBAD2VMWsi3aFYw"
+  },
+  {
+    "id": "lai-e406baa8ee07",
+    "order": 108,
+    "title": "小心你对外界的反应，不要轻易被别人的场带走，通过与外界的冲突反省到生命智慧",
+    "quote": "当别人在跟你很生气的时候，大家切记，大家要观照到里面的规律，心的规律、能量的规律、因果的规律。",
+    "theme": "情绪 · 关系",
+    "themes": [
+      "情绪",
+      "关系"
+    ],
+    "keywords": [
+      "情绪",
+      "愤怒",
+      "纠缠",
+      "关系",
+      "因果",
+      "明觉",
+      "生活"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "关系变化",
+      "家人相处",
+      "放不下一段关系"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/qFy5zMIKUM_4m24pDuV_Cw"
+  },
+  {
+    "id": "lai-2ce046e59bd6",
+    "order": 109,
+    "title": "莲花生大士开示：如何入定",
+    "quote": "一旦需要大家反思自己，来去看到生命真相、生命本质的时候，其实没有很多人愿意接这个招。",
+    "theme": "修行 · 生活",
+    "themes": [
+      "修行",
+      "生活"
+    ],
+    "keywords": [
+      "修行",
+      "禅宗",
+      "佛法",
+      "佛陀",
+      "菩萨",
+      "觉悟",
+      "本来面目",
+      "空性",
+      "生活",
+      "工作"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "面对生活变化",
+      "日常选择",
+      "身心状态"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/DyLrieigrxT49Wv8W-wsBA"
+  },
+  {
+    "id": "lai-2d9f7223d78b",
+    "order": 110,
+    "title": "是我们在用观念切割生命和生活，是我们在用观念阉割生命的精彩，是观念在带来矛盾和痛苦，但一切其实都是可以共存的",
+    "quote": "生命状态的呈现是非常丰富的，我相信大家都有这样的感受。",
+    "theme": "情绪 · 因缘",
+    "themes": [
+      "情绪",
+      "因缘"
+    ],
+    "keywords": [
+      "烦恼",
+      "痛苦",
+      "功德",
+      "生活"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/hvOd9m749_vZfYgVdrWedA"
+  },
+  {
+    "id": "lai-040fb33e66be",
+    "order": 111,
+    "title": "生命最重要的是发现自己的本来面目，我们终其一生都在学会接纳真实的自己，学会跟每一个自己好好相处",
+    "quote": "一切都是绚烂的生命景色，不仅仅我们的优点和亮点值得被看到和被接纳，我们的阴影和矛盾同样值得被看到和被接纳。",
+    "theme": "修行 · 生活",
+    "themes": [
+      "修行",
+      "生活"
+    ],
+    "keywords": [
+      "解脱",
+      "本来面目",
+      "空性",
+      "生活"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "面对生活变化",
+      "日常选择",
+      "身心状态"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/iJJjf3qYg4fhYOlE-poQ9g"
+  },
+  {
+    "id": "lai-79fbf0a723fa",
+    "order": 112,
+    "title": "我们对外界的所有反应都是自己内心状况的对应——我们的情感反应在照见我们什么？（下）",
+    "quote": "比如说呼呼这几年一直跟她的前男友一直纠缠着，分分合合、分分合合，其实可以投射出呼呼一个怎样的状况呢？",
+    "theme": "关系 · 情绪",
+    "themes": [
+      "关系",
+      "情绪"
+    ],
+    "keywords": [
+      "关系",
+      "伴侣",
+      "父母",
+      "亲子",
+      "孩子",
+      "恐惧",
+      "痛苦",
+      "纠缠",
+      "执着",
+      "生活"
+    ],
+    "userConcerns": [
+      "关系变化",
+      "家人相处",
+      "放不下一段关系",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/Z7LWtUD7rvGDSSEWCva24Q"
+  },
+  {
+    "id": "lai-6208ecdebb10",
+    "order": 113,
+    "title": "一切都是绚烂的生命景色，不仅我们的优点和亮点值得被看到和接纳，我们的阴影和暗沉同样值得被看到和接纳",
+    "quote": "就是大家都很喜欢在人前表达各种体面，想把自我伪装得比较坚强、比较强大，是不是？",
+    "theme": "修行 · 生活",
+    "themes": [
+      "修行",
+      "生活"
+    ],
+    "keywords": [
+      "菩萨",
+      "解脱",
+      "空性",
+      "生活",
+      "身体",
+      "成长",
+      "痛苦",
+      "委屈",
+      "孩子",
+      "功德"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "面对生活变化",
+      "日常选择",
+      "身心状态"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/7vU0W7CYvj0Zt_FwMxNtjg"
+  },
+  {
+    "id": "lai-50d5e0af0efc",
+    "order": 114,
+    "title": "我们对外界的所有反应都是自己内心状况的对应——学会借此看到内在的障碍（上）",
+    "quote": "其实我们每个人对外界的反应，投射的都是我们整个内在的认知跟内在的状况，投射的都是我们内在的力量、内在的品质，暴露无遗。",
+    "theme": "关系 · 情绪",
+    "themes": [
+      "关系",
+      "情绪"
+    ],
+    "keywords": [
+      "关系",
+      "婚姻",
+      "伴侣",
+      "父母",
+      "亲子",
+      "孩子",
+      "烦恼",
+      "情绪",
+      "痛苦",
+      "纠缠"
+    ],
+    "userConcerns": [
+      "关系变化",
+      "家人相处",
+      "放不下一段关系",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/r0T9sV2AlLPZQhMYjaYYaQ"
+  },
+  {
+    "id": "lai-2d987785b6d6",
+    "order": 115,
+    "title": "心境一体，一切都是对应和投射。不要再轻易责怪外界，是外界在暴露我们的品质",
+    "quote": "一切是对应，心境是对应，心境是一体的。",
+    "theme": "情绪 · 因缘",
+    "themes": [
+      "情绪",
+      "因缘"
+    ],
+    "keywords": [
+      "烦恼",
+      "情绪",
+      "恐惧",
+      "痛苦",
+      "愤怒",
+      "纠缠",
+      "因果",
+      "因缘",
+      "生活",
+      "品质"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/K03VBgzVyqzyzMLEJcPStg"
+  },
+  {
+    "id": "lai-4e003a98d8a5",
+    "order": 116,
+    "title": "你可以想象和假设，但注意不要陷在想象和假设里面，痛苦和焦虑正是因为沉陷在想象的故事情节中",
+    "quote": "大家会一直陷在焦躁、烦躁、愤怒的某些情绪跟状态里面，是因为大家的头脑一直在动。",
+    "theme": "情绪 · 关系",
+    "themes": [
+      "情绪",
+      "关系"
+    ],
+    "keywords": [
+      "情绪",
+      "焦虑",
+      "痛苦",
+      "愤怒",
+      "伴侣",
+      "本来面目"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "关系变化",
+      "家人相处",
+      "放不下一段关系"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/bIZbtGYAEHUfJeBU_4OCZw"
+  },
+  {
+    "id": "lai-b1b2f984b436",
+    "order": 117,
+    "title": "莲花生大士开示真正的忏悔，以及指示生命的本来面目",
+    "quote": "密宗有本书叫《中阴闻教得度》，就是莲花生大士留给世人的教导。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "修行",
+      "佛法",
+      "佛陀",
+      "菩萨",
+      "解脱",
+      "本来面目",
+      "明觉",
+      "烦恼",
+      "情绪",
+      "痛苦"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/C68HYq4-SdJl3ILt2oZPqw"
+  },
+  {
+    "id": "lai-36ed20cf5423",
+    "order": 118,
+    "title": "人一定要结婚生子吗，人们进行不同的活法是为了什么？",
+    "quote": "我们团队有很多的女孩子就没有结婚嘛，也没有生孩子的打算嘛。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "修行",
+      "佛法",
+      "佛陀",
+      "本来面目",
+      "空性",
+      "焦虑",
+      "恐惧",
+      "纠缠",
+      "执着",
+      "生活"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/kZ9x3v8kAWr0ufdOFNBHkw"
+  },
+  {
+    "id": "lai-3e5f169cb462",
+    "order": 119,
+    "title": "没有人会来，以及，你的监狱其实并不真实存在",
+    "quote": "呼呼：这两天我脑子里面，经常有一句话，就是《悉达多》那本书里面那句话“没有人会来”，这句话看起来很绝望，但其实很清醒，就没有人会来。",
+    "theme": "关系 · 生活",
+    "themes": [
+      "关系",
+      "生活"
+    ],
+    "keywords": [
+      "婚姻",
+      "伴侣",
+      "父母",
+      "孩子",
+      "感情",
+      "生活",
+      "财富",
+      "健康",
+      "成长",
+      "烦恼"
+    ],
+    "userConcerns": [
+      "关系变化",
+      "家人相处",
+      "放不下一段关系",
+      "面对生活变化",
+      "日常选择",
+      "身心状态"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/NGkykGFgU8axLTX-hC_8MA"
+  },
+  {
+    "id": "lai-45ee0e5350c1",
+    "order": 120,
+    "title": "活的不安稳是因为没有发现本来面目的安稳",
+    "quote": "很多人总是会觉得无聊，总是会想逛街、想购物、想去找各种娱乐游戏进行消遣。",
+    "theme": "关系 · 情绪",
+    "themes": [
+      "关系",
+      "情绪"
+    ],
+    "keywords": [
+      "孩子",
+      "情绪",
+      "本来面目",
+      "生活"
+    ],
+    "userConcerns": [
+      "关系变化",
+      "家人相处",
+      "放不下一段关系",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/KwVmhLJygaPm_pzQiNtBRw"
+  },
+  {
+    "id": "lai-c9a8de0f031a",
+    "order": 121,
+    "title": "不同高僧大德的示现是为了带给我们不一样的提醒",
+    "quote": "你们知道宗萨仁波切怎么说门措上师吗？",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "修行",
+      "佛法",
+      "菩萨",
+      "解脱",
+      "空性",
+      "烦恼",
+      "执着",
+      "福报"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/9fIGRm_a1ZVlmHFMlyGWfA"
+  },
+  {
+    "id": "lai-3a4e976858cc",
+    "order": 122,
+    "title": "当生命面目的伟大和神圣袒露前，你真的敢相认和承担吗？",
+    "quote": "人们发明那么多的娱乐和消遣，人们在各种现象活动里上蹿下跳，都是因为人们无法享受沉静，因为人们没有发现本来面目的安稳。",
+    "theme": "关系 · 修行",
+    "themes": [
+      "关系",
+      "修行"
+    ],
+    "keywords": [
+      "关系",
+      "本来面目",
+      "品质"
+    ],
+    "userConcerns": [
+      "关系变化",
+      "家人相处",
+      "放不下一段关系",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/RHxhDEdY5JUw2B9iSLmamg"
+  },
+  {
+    "id": "lai-387036c38226",
+    "order": 123,
+    "title": "邀请您跨过现代科学的矛盾与局限，直接审视生命的真相",
+    "quote": "现代科学有一个非常滑稽的事情。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "佛法",
+      "解脱",
+      "本来面目",
+      "空性",
+      "情绪",
+      "恐惧",
+      "执着",
+      "因果",
+      "因缘",
+      "功德"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/Z_O06Mu9dKmOZ4kUA4GkRg"
+  },
+  {
+    "id": "lai-031d6180987f",
+    "order": 124,
+    "title": "身后事",
+    "quote": "康太是简单朴实的妇人，没有深沉的情感隐忍，也没有修饰情感的技巧，只有痛哭，康太的情绪和感受通过泪水发出，濒临崩溃的内心在慌张的神情显露。",
+    "theme": "关系 · 情绪",
+    "themes": [
+      "关系",
+      "情绪"
+    ],
+    "keywords": [
+      "关系",
+      "伴侣",
+      "爱人",
+      "家人",
+      "父母",
+      "孩子",
+      "情绪",
+      "痛苦",
+      "执着",
+      "生活"
+    ],
+    "userConcerns": [
+      "关系变化",
+      "家人相处",
+      "放不下一段关系",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/45fyPBNMoyBhy0Z9x3kuvg"
+  },
+  {
+    "id": "lai-301be9871a87",
+    "order": 125,
+    "title": "生命的意义—为什么大家会有很懒很想躺平的阶段",
+    "quote": "我之前听很多人很排斥“废物”这个词，好像别人说你是废物就在骂人一样。",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "烦恼",
+      "痛苦",
+      "内耗",
+      "纠缠",
+      "解脱",
+      "空性",
+      "工作",
+      "品质"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/IxFYN8EZsMCYT3e55LKd-Q"
+  },
+  {
+    "id": "lai-89e22165c218",
+    "order": 126,
+    "title": "如何用心对待别人或者说怎样是更好的利益别人",
+    "quote": "下午的时候，呼呼问我：\"怎么样可以更用心的对待别人？",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "痛苦",
+      "执着",
+      "解脱",
+      "空性",
+      "父母"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/WCgY39WisGRIKL593UyjGQ"
+  },
+  {
+    "id": "lai-cda7032c57d7",
+    "order": 127,
+    "title": "生命有意义吗？",
+    "quote": "一个人最辛苦的一件事情是什么呢？",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "烦恼",
+      "焦虑",
+      "痛苦",
+      "纠缠",
+      "执着",
+      "修行",
+      "解脱",
+      "本来面目",
+      "空性",
+      "生活"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/RcgXS-hrMx8XiAHhI1nWPQ"
+  },
+  {
+    "id": "lai-d9b49a779886",
+    "order": 128,
+    "title": "六祖坛经带给我们的实践指导",
+    "quote": "《六祖坛经》是非常究竟的一本经书，是直接的法脉传承，值得大家反反复复去看、去领悟。",
+    "theme": "修行 · 因缘",
+    "themes": [
+      "修行",
+      "因缘"
+    ],
+    "keywords": [
+      "菩萨",
+      "本来面目",
+      "空性",
+      "因缘",
+      "功德",
+      "生活",
+      "品质"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/iLpBrmCDeGroxxP6ln4tog"
+  },
+  {
+    "id": "lai-61f7591cbe38",
+    "order": 129,
+    "title": "我们要怎样看待“龙吟”这样的奇异现象",
+    "quote": "问：老师有读者在直播间问，他听到龙鸣的声音。",
+    "theme": "修行 · 关系",
+    "themes": [
+      "修行",
+      "关系"
+    ],
+    "keywords": [
+      "解脱",
+      "本来面目",
+      "空性",
+      "关系",
+      "父母",
+      "烦恼",
+      "执着",
+      "因缘",
+      "品质"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "关系变化",
+      "家人相处",
+      "放不下一段关系"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/DQV4l_5BnYqYI1WbsEQJMA"
+  },
+  {
+    "id": "lai-2e7211a48439",
+    "order": 130,
+    "title": "如何看一个人的证量",
+    "quote": "告诉别人承担“本成佛”的最高知见，这个叫“高高知见立”。",
+    "theme": "修行 · 关系",
+    "themes": [
+      "修行",
+      "关系"
+    ],
+    "keywords": [
+      "修行",
+      "禅宗",
+      "佛法",
+      "佛陀",
+      "菩萨",
+      "本来面目",
+      "空性",
+      "关系",
+      "烦恼",
+      "因缘"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "关系变化",
+      "家人相处",
+      "放不下一段关系"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/LXQa_Aa8j0oEeeR-_P7zcw"
+  },
+  {
+    "id": "lai-380035d20bd6",
+    "order": 131,
+    "title": "因缘因果的运作下如何用正知见去看清冤亲债主的伪装",
+    "quote": "大家在人间，大家做人都会特别的希望，别人关注我们、别人爱我们、别人善待我们、别人对我们好，是吧？",
+    "theme": "关系 · 修行",
+    "themes": [
+      "关系",
+      "修行"
+    ],
+    "keywords": [
+      "关系",
+      "婚姻",
+      "伴侣",
+      "爱人",
+      "父母",
+      "孩子",
+      "修行",
+      "佛法",
+      "解脱",
+      "本来面目"
+    ],
+    "userConcerns": [
+      "关系变化",
+      "家人相处",
+      "放不下一段关系",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/2CEhGoUMy8foQ04kpwFkEg"
+  },
+  {
+    "id": "lai-2711fe38b253",
+    "order": 132,
+    "title": "你知道这辈子的功课和使命吗",
+    "quote": "我们在人间遇到的所有的事情、所有的遭遇、所有的经历，都有之前的因果，没有冤枉。",
+    "theme": "修行 · 因缘",
+    "themes": [
+      "修行",
+      "因缘"
+    ],
+    "keywords": [
+      "修行",
+      "佛陀",
+      "菩萨",
+      "解脱",
+      "本来面目",
+      "空性",
+      "因果",
+      "因缘",
+      "业力",
+      "功德"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/NAzxjZf8MGw600xPBWwONw"
+  },
+  {
+    "id": "lai-6805d026b640",
+    "order": 133,
+    "title": "请观照到我们那一直在蓄势待发的自我",
+    "quote": "其实很多人内心都憋着一股劲，跟外界对立、对抗的劲，自我其实一直在蓄势待发，而这是很多人忽略的，我们都可以自己检查一下。",
+    "theme": "因缘 · 生活",
+    "themes": [
+      "因缘",
+      "生活"
+    ],
+    "keywords": [
+      "因果",
+      "因缘",
+      "生活",
+      "工作",
+      "烦恼",
+      "本来面目"
+    ],
+    "userConcerns": [
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律",
+      "面对生活变化",
+      "日常选择",
+      "身心状态"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/Tz9xaU7kQffWTgvPLrNacQ"
+  },
+  {
+    "id": "lai-f11237234b41",
+    "order": 134,
+    "title": "如何看穿对父母、子女的执念",
+    "quote": "老师今天直播间有读者让我们帮忙提问说：如何放下对父母亲的执念？",
+    "theme": "修行 · 关系",
+    "themes": [
+      "修行",
+      "关系"
+    ],
+    "keywords": [
+      "解脱",
+      "本来面目",
+      "空性",
+      "父母",
+      "孩子",
+      "因缘",
+      "生活"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "关系变化",
+      "家人相处",
+      "放不下一段关系"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/-GqEPNz0S7B-Zap78YgHmw"
+  },
+  {
+    "id": "lai-6e64772b2cb7",
+    "order": 135,
+    "title": "你不需要再追逐什么，你一直活在爱里面",
+    "quote": "关于生命真相的分享是没有国界的，因为诸fo菩sa一定是慈悲的，不会说只在东方示现，不会只在西方示现，哪里的万物生灵都是平等的。",
+    "theme": "因缘 · 修行",
+    "themes": [
+      "因缘",
+      "修行"
+    ],
+    "keywords": [
+      "因果",
+      "因缘",
+      "功德",
+      "修行",
+      "本来面目",
+      "空性",
+      "痛苦",
+      "身体"
+    ],
+    "userConcerns": [
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/RLda54z8bbI8P9zKhAJ6uA"
+  },
+  {
+    "id": "lai-c3f371ddecc4",
+    "order": 136,
+    "title": "如何做到把生活当游戏去玩",
+    "quote": "有一个我自己感触很深的生命态度，它也变成了宽心纪的主要文化，我一定要分享给大家，那就是什么？",
+    "theme": "情绪 · 生活",
+    "themes": [
+      "情绪",
+      "生活"
+    ],
+    "keywords": [
+      "烦恼",
+      "恐惧",
+      "痛苦",
+      "愤怒",
+      "生活",
+      "工作",
+      "身体",
+      "健康",
+      "因缘",
+      "福报"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "面对生活变化",
+      "日常选择",
+      "身心状态"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/dCLd4EtlzcslhAEg2OBDcQ"
+  },
+  {
+    "id": "lai-425e6ed2a7a1",
+    "order": 137,
+    "title": "为什么接触善知识多年生活状态还是不好",
+    "quote": "赖老师：您的状态确实看得出来，您把自己折磨的蛮辛苦的，就是您的眼神没什么光，然后您的眼神里面也透露着很多的惶恐、悲伤。",
+    "theme": "情绪 · 生活",
+    "themes": [
+      "情绪",
+      "生活"
+    ],
+    "keywords": [
+      "烦恼",
+      "恐惧",
+      "痛苦",
+      "委屈",
+      "纠缠",
+      "生活",
+      "身体",
+      "品质",
+      "修行",
+      "空性"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "面对生活变化",
+      "日常选择",
+      "身心状态"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/PyGJd8Gw9XzyXFX6FWNqzQ"
+  },
+  {
+    "id": "lai-7bbe5164f3bb",
+    "order": 138,
+    "title": "在生活中情绪的起起伏伏该如何面对",
+    "quote": "大家在生活当中不是都会有很多起起伏伏的情绪状态吗？",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "情绪",
+      "焦虑",
+      "内耗",
+      "纠缠",
+      "本来面目",
+      "空性",
+      "生活"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/GmjlXjk5giE8xqCcs8cZGw"
+  },
+  {
+    "id": "lai-cefbbd0344e1",
+    "order": 139,
+    "title": "不要让分享空性正见成为执念，学会尊重万物生灵每个阶段的状态",
+    "quote": "在座大家应该都是fo法的受益者，随着生命认知的回正，大家是不是活得越来越自在，是不是？",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "焦虑",
+      "恐惧",
+      "菩萨",
+      "空性",
+      "家人",
+      "功德",
+      "品质"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/Ozi2E2HCzeOaaG2SWefTig"
+  },
+  {
+    "id": "lai-95d78ddabbc8",
+    "order": 140,
+    "title": "吃蜂蜜的因果及伤害万物生灵揭示的能量规律和生命真相",
+    "quote": "我一直也不建议大家特意去买蜂蜜吃，我这么多年都是这样跟你们讲，也是跟读者这样建议的。",
+    "theme": "因缘 · 关系",
+    "themes": [
+      "因缘",
+      "关系"
+    ],
+    "keywords": [
+      "因果",
+      "因缘",
+      "业力",
+      "福报",
+      "关系",
+      "婚姻",
+      "孩子",
+      "生活",
+      "身体",
+      "健康"
+    ],
+    "userConcerns": [
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律",
+      "关系变化",
+      "家人相处",
+      "放不下一段关系"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/spGD9ruhJarm9dvURqtiOA"
+  },
+  {
+    "id": "lai-4e6d40c0dad2",
+    "order": 141,
+    "title": "其实根本没有所谓的渣男和渣女，伤害你的是自我的妄想，一切都是因缘因果的演绎",
+    "quote": "其实压根就没有所谓的渣男和渣女，这个话题大家感兴趣是不是，看到我一说这个词的时候，你们的眼睛啊。",
+    "theme": "因缘 · 关系",
+    "themes": [
+      "因缘",
+      "关系"
+    ],
+    "keywords": [
+      "因果",
+      "因缘",
+      "父母",
+      "执着",
+      "解脱"
+    ],
+    "userConcerns": [
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律",
+      "关系变化",
+      "家人相处",
+      "放不下一段关系"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/N23VKqw7iN93OB3cwnOqTA"
+  },
+  {
+    "id": "lai-3e8c7e270f62",
+    "order": 142,
+    "title": "如何提升自身的觉照力",
+    "quote": "净某问：赖老师请教一下如何提升自身的觉照力，有什么方法或建议？",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "情绪",
+      "纠缠",
+      "本来面目"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/sJEkN_9t_xgscCfHqpBCEQ"
+  },
+  {
+    "id": "lai-440f321a31fb",
+    "order": 143,
+    "title": "不用急着去成为更好的自己，不用执着于一个更好的自己，这已经陷在障碍和幻想中了，而是去接纳当下呈现的一切，去发现当下已经是圆满",
+    "quote": "有一句话是有问题的，那就是很多人都想成为更好的自己。",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "焦虑",
+      "恐惧",
+      "痛苦",
+      "执着",
+      "修行",
+      "解脱",
+      "本来面目",
+      "空性",
+      "因果",
+      "因缘"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/b5lygosbVBlm1_wj7_OyKA"
+  },
+  {
+    "id": "lai-829aa42a7193",
+    "order": 144,
+    "title": "我们真的需要情感疗愈、创伤疗愈吗？",
+    "quote": "之前有很多读者分享过，他们去做了很多什么情感疗愈、创伤疗愈的这种项目。",
+    "theme": "修行 · 情绪",
+    "themes": [
+      "修行",
+      "情绪"
+    ],
+    "keywords": [
+      "解脱",
+      "本来面目",
+      "空性",
+      "烦恼",
+      "功德"
+    ],
+    "userConcerns": [
+      "修行迷茫",
+      "如何回到当下",
+      "认识生命本质",
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/yTP0zadK8tc79VrR2RQnEg"
+  },
+  {
+    "id": "lai-a2d9d30d0428",
+    "order": 145,
+    "title": "女性流产的背后是为了提醒你更重要的事",
+    "quote": "以下是文字版，希望对大家的修证有助益。",
+    "theme": "情绪 · 因缘",
+    "themes": [
+      "情绪",
+      "因缘"
+    ],
+    "keywords": [
+      "痛苦",
+      "委屈",
+      "纠缠",
+      "执着",
+      "因果",
+      "因缘",
+      "业力",
+      "生活",
+      "身体",
+      "品质"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
+      "焦虑与恐惧",
+      "如何理解因果",
+      "面对已经发生的事",
+      "看见生命规律"
+    ],
+    "author": "赖宽心",
+    "sourceStatus": "published-source",
+    "reviewStatus": "pending",
+    "sourceUrl": "https://mp.weixin.qq.com/s/UH_gaa9DYg46DNO9z0j2Ww"
+  },
+  {
+    "id": "lai-6366c0c1924f",
+    "order": 146,
+    "title": "为什么我们会经常感觉自己缺乏力量、状态不好等等，以及，什么叫我们认错自己的本来面目",
+    "quote": "有人问：我观察自己以及身边的很多人，为什么感觉大家都没有什么力量，或者说力量出不来？",
+    "theme": "情绪 · 修行",
+    "themes": [
+      "情绪",
+      "修行"
+    ],
+    "keywords": [
+      "烦恼",
+      "情绪",
+      "痛苦",
+      "愤怒",
+      "纠缠",
+      "修行",
+      "解脱",
+      "本来面目",
+      "生活"
+    ],
+    "userConcerns": [
+      "情绪反复",
+      "内心烦恼",
       "焦虑与恐惧",
       "修行迷茫",
       "如何回到当下",

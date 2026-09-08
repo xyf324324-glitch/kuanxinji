@@ -191,6 +191,11 @@ function canvasToBlob(canvas) {
   })
 }
 
+function isMobileShareDevice() {
+  if (navigator.userAgentData?.mobile) return true
+  return navigator.maxTouchPoints > 0 && window.matchMedia?.('(max-width: 1024px)').matches
+}
+
 export default function SayingsCard({ onBack }) {
   const today = useMemo(() => getTodayInfo(), [])
   const [sayingIndex, setSayingIndex] = useState(today.dailyIndex)
@@ -301,13 +306,37 @@ export default function SayingsCard({ onBack }) {
     try {
       const canvas = await renderCard()
       const blob = await canvasToBlob(canvas)
+      const filename = `宽心纪-上师一言-${today.dateKey}-${saying.id}.png`
+      const file = new File([blob], filename, { type: 'image/png' })
+      let systemShareFailed = false
+
+      if (
+        isMobileShareDevice()
+        && typeof navigator.share === 'function'
+        && navigator.canShare?.({ files: [file] })
+      ) {
+        try {
+          await navigator.share({ files: [file], title: '宽心纪｜上师一言' })
+          setNotice('图片已交给手机系统。选择“存储图像”即可保存到相册。')
+          return
+        } catch (error) {
+          if (error?.name === 'AbortError') {
+            setNotice('保存已取消，图片没有下载。')
+            return
+          }
+          systemShareFailed = true
+        }
+      }
+
       const objectUrl = URL.createObjectURL(blob)
       const link = document.createElement('a')
-      link.download = `宽心纪-上师一言-${today.dateKey}-${saying.id}.png`
+      link.download = filename
       link.href = objectUrl
       link.click()
       window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000)
-      setNotice('图片已经生成，可以保存或转发给有缘的人。')
+      setNotice(systemShareFailed
+        ? '系统保存面板未能打开，已改用浏览器下载。'
+        : '图片已经生成，可以保存或转发给有缘的人。')
     } catch (error) {
       setNotice(error.message || '图片暂时未能生成，请稍后再试。')
     } finally {
