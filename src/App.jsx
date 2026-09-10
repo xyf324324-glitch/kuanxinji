@@ -1,32 +1,27 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import {
   ArrowLeft,
   ArrowClockwise,
   ArrowRight,
-  Article,
   BookmarkSimple,
   BookOpenText,
   Books,
-  CaretDown,
   CaretRight,
   CheckCircle,
   Copy,
-  List,
-  Leaf,
   MagnifyingGlass,
-  Quotes,
   ShareNetwork,
   WifiSlash,
   X,
 } from '@phosphor-icons/react'
 import mistLake from './assets/mist-lake-lotus.jpg'
 import kuanxinLogo from './assets/kuanxin-logo-transparent.png'
-import answerButtonReference from './assets/answer-button-reference.png'
 import brandCloud from './assets/brand-cloud.png'
-import footerDot from './assets/footer-dot.png'
 import { articles, loadArticle } from './content'
 import contentVersion from './content/content-version.json'
-import ChatScreen from './components/ChatScreen'
+import HomeScreen from './components/HomeScreen'
+import ReadingScreen from './components/ReadingScreen'
+import PracticeScreen from './components/PracticeScreen'
 import {
   listSavedArticles,
   loadReadingProgress,
@@ -42,56 +37,7 @@ const SolarTermWellness = lazy(() => import('./components/SolarTermWellness'))
 const MeridianAtlas = lazy(() => import('./components/MeridianAtlas'))
 const ClassicsReader = lazy(() => import('./components/ClassicsReader'))
 const SayingsCard = lazy(() => import('./components/SayingsCard'))
-
-const prompts = [
-  '我放不下一段关系，怎么办？',
-  '为什么我总在情绪里反复？',
-  '最近发生的一切，到底在提醒我什么？',
-]
-
-const chatGreeting = '您好，我是宽心纪的 AI 助手"觉"。我会陪您把眼前的事情看清，也一起看看心里正在发生什么。您想从哪件事说起？'
-
-function initialChatMessages() {
-  try {
-    const stored = JSON.parse(window.sessionStorage.getItem('kuanxin-chat') || 'null')
-    if (Array.isArray(stored) && stored.length > 0 && stored.every((message) => (
-      message && ['assistant', 'user'].includes(message.role) && typeof message.content === 'string'
-    ))) {
-      return stored.slice(-16)
-    }
-  } catch {
-    // A malformed local session should never block a new conversation.
-  }
-
-  return [{ id: 'welcome', role: 'assistant', content: chatGreeting }]
-}
-
-const homeLines = [
-  '给忙碌的心，留一处可以停靠的地方。',
-  '慢一点，也是在好好生活。',
-  '先安住此刻，再看清前路。',
-  '风来有时，心静自明。',
-  '不必急着回答，先听一听内心。',
-  '愿你在一段文字里，遇见片刻安宁。',
-  '把纷扰放轻一些，把自己照顾好一些。',
-  '今日所遇，也可以慢慢体会。',
-  '心有余地，生活便有转身之处。',
-  '在来去之间，给自己一点从容。',
-  '不追赶答案，先回到当下。',
-  '愿这一刻，清明而柔软。',
-  '一念放轻，天地便宽。',
-  '看见情绪，也看见情绪之外的自己。',
-  '允许万事经过，也允许自己歇一歇。',
-  '读一段文字，听一听心里的回声。',
-  '山水有静意，日常亦有光。',
-  '有些答案，会在安静里慢慢出现。',
-  '愿你不慌不忙，走好此刻这一程。',
-  '让念头来去，不必事事握紧。',
-  '心若清明，寻常日子也有深意。',
-  '给今日一点留白，也给自己一点空间。',
-  '读到触动处，不妨停一停。',
-  '于方寸之间，愿你慢慢宽心。',
-]
+const ProfileScreen = lazy(() => import('./components/ProfileScreen'))
 
 function drawWrappedText(context, text, centerX, startY, maxWidth, lineHeight) {
   const characters = Array.from(text)
@@ -125,14 +71,8 @@ function App() {
   const [view, setView] = useState('home')
   const [article, setArticle] = useState(articles[0])
   const [articleOrigin, setArticleOrigin] = useState('result')
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [chatMessages, setChatMessages] = useState(initialChatMessages)
-  const [chatDraft, setChatDraft] = useState('')
-  const [chatStatus, setChatStatus] = useState('idle')
-  const [chatError, setChatError] = useState('')
   const [shared, setShared] = useState(false)
   const [saved, setSaved] = useState(false)
-  const [homeLineIndex, setHomeLineIndex] = useState(0)
   const [savedArticleEntries, setSavedArticleEntries] = useState([])
   const [libraryUndo, setLibraryUndo] = useState(null)
   const [readingProgress, setReadingProgress] = useState({})
@@ -142,34 +82,17 @@ function App() {
   const [wellnessTerm, setWellnessTerm] = useState('xiaoshu')
   const [meridianId, setMeridianId] = useState('lung')
   const [classicId, setClassicId] = useState('daily-rhythm')
-  const [isOpeningBook, setIsOpeningBook] = useState(false)
-  const menuButtonRef = useRef(null)
-  const menuFirstItemRef = useRef(null)
-  const openingBookTimerRef = useRef(null)
+  const [sayingsOrigin, setSayingsOrigin] = useState('content')
   const {
     isOnline,
     offlineReady,
     updateAvailable,
+    targetVersion,
+    isApplyingUpdate,
     dismissOfflineReady,
     dismissUpdate,
     applyUpdate,
   } = usePwaStatus()
-
-  const closeMenu = () => {
-    setMenuOpen(false)
-    window.requestAnimationFrame(() => menuButtonRef.current?.focus())
-  }
-
-  useEffect(() => {
-    if (!menuOpen) return undefined
-
-    window.requestAnimationFrame(() => menuFirstItemRef.current?.focus({ preventScroll: true }))
-    const handleMenuKeydown = (event) => {
-      if (event.key === 'Escape') closeMenu()
-    }
-    window.addEventListener('keydown', handleMenuKeydown)
-    return () => window.removeEventListener('keydown', handleMenuKeydown)
-  }, [menuOpen])
 
   useEffect(() => {
     Promise.all([listSavedArticles(), loadReadingProgress()]).then(([savedEntries, progressEntries]) => {
@@ -188,19 +111,19 @@ function App() {
       if (section === 'article' && matchedArticle) {
         setArticle(await loadArticle(matchedArticle.id))
         const origin = new URLSearchParams(query).get('from')
-        setArticleOrigin(['search', 'library', 'articles'].includes(origin) ? origin : 'result')
+        setArticleOrigin(['content', 'library', 'articles'].includes(origin) ? origin : 'result')
         setView('article')
       } else if (section === 'answer' && matchedArticle) {
         setArticle(matchedArticle)
         setView('result')
-      } else if (section === 'search') {
-        setView('chat')
-      } else if (section === 'chat') {
-        setView('chat')
       } else if (section === 'library') {
         setView('library')
+      } else if (section === 'profile') {
+        setView('profile')
       } else if (section === 'content') {
         setView('content')
+      } else if (section === 'practice') {
+        setView('practice')
       } else if (section === 'articles') {
         setView('articles')
       } else if (section === 'calendar') {
@@ -234,6 +157,7 @@ function App() {
       breathing: '片刻安住｜宽心纪',
       result: `${article.title}｜宽心纪`,
       content: '内容导航｜宽心纪',
+      practice: '每日功课｜宽心纪',
       articles: '老师文章库｜宽心纪',
       calendar: '二十四节气｜宽心纪',
       wellness: '四时养生｜宽心纪',
@@ -242,7 +166,7 @@ function App() {
       sayings: '上师一言｜宽心纪',
       article: `${article.title}｜宽心纪`,
       library: '离线书架｜宽心纪',
-      chat: '与觉聊聊｜宽心纪',
+      profile: '我的记录｜宽心纪',
     }
     document.title = titles[view] || '宽心纪｜愿您宽心'
 
@@ -251,10 +175,6 @@ function App() {
     })
     return () => window.cancelAnimationFrame(focusFrame)
   }, [view, article.id, article.title])
-
-  useEffect(() => {
-    window.sessionStorage.setItem('kuanxin-chat', JSON.stringify(chatMessages.slice(-16)))
-  }, [chatMessages])
 
   useEffect(() => {
     if (view !== 'breathing') return undefined
@@ -287,7 +207,7 @@ function App() {
       const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 100
       const normalized = Math.max(0, Math.min(100, Math.round(progress)))
       latestProgress = normalized
-      document.querySelector('.reading-progress')?.style.setProperty('--reading-progress', `${normalized}%`)
+      document.querySelector('.reading-progress')?.style.setProperty('--reading-progress', String(normalized / 100))
       window.clearTimeout(saveTimer)
       saveTimer = window.setTimeout(persistProgress, 250)
     }
@@ -309,15 +229,6 @@ function App() {
       persistProgress()
     }
   }, [view, article.id])
-
-  useEffect(() => {
-    const closeOverlays = (event) => {
-      if (event.key !== 'Escape') return
-      setMenuOpen(false)
-    }
-    window.addEventListener('keydown', closeOverlays)
-    return () => window.removeEventListener('keydown', closeOverlays)
-  }, [])
 
   const savedArticleIds = useMemo(() => savedArticleEntries.map((entry) => entry.id), [savedArticleEntries])
   const savedArticles = useMemo(() => [...savedArticleEntries]
@@ -342,12 +253,11 @@ function App() {
       .slice(0, 3)
       .map(({ item }) => item)
   }, [article.id, article.keywords, article.themes, article.userConcerns])
-  const articleThemes = ['全部', '情绪', '困惑', '修行', '关系', '生活']
+  const articleThemes = ['全部', ...new Set(articles.flatMap((item) => item.themes))]
   const filteredArticles = useMemo(() => {
     const query = articleQuery.trim().toLowerCase()
-    const selectedTheme = activeTheme === '困惑' ? '因缘' : activeTheme
     return articles.filter((item) => {
-      const matchesTheme = selectedTheme === '全部' || item.themes.includes(selectedTheme)
+      const matchesTheme = activeTheme === '全部' || item.themes.includes(activeTheme)
       const searchable = [item.title, item.quote, ...item.keywords, ...item.userConcerns].join(' ').toLowerCase()
       return matchesTheme && (!query || searchable.includes(query))
     })
@@ -356,91 +266,18 @@ function App() {
   useEffect(() => setVisibleArticleCount(20), [activeTheme, articleQuery])
 
   useEffect(() => {
-    if (view !== 'articles') return undefined
-
-    const screen = document.querySelector('.articles-screen')
-    if (!screen) return undefined
-
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const revealItems = [...screen.querySelectorAll('[data-scroll-reveal]')]
-    let scrollFrame
-    let revealObserver
-
-    const updateScrollEffects = () => {
-      const scrollable = document.documentElement.scrollHeight - window.innerHeight
-      const progress = scrollable > 0 ? window.scrollY / scrollable : 0
-      const normalized = Math.max(0, Math.min(1, progress))
-      const mistShift = reducedMotion ? 0 : Math.max(-56, window.scrollY * -0.045)
-      const scrollTrack = screen.querySelector('.articles-scroll-track')
-      const thumbOffset = normalized * Math.max(0, (scrollTrack?.clientHeight || 108) - 8)
-
-      screen.style.setProperty('--articles-scroll-progress', normalized.toFixed(4))
-      screen.style.setProperty('--articles-scroll-thumb-offset', `${thumbOffset}px`)
-      screen.style.setProperty('--articles-mist-shift', `${mistShift}px`)
-    }
-
-    const scheduleScrollEffects = () => {
-      if (scrollFrame) return
-      scrollFrame = window.requestAnimationFrame(() => {
-        scrollFrame = undefined
-        updateScrollEffects()
-      })
-    }
-
-    if (reducedMotion || !('IntersectionObserver' in window)) {
-      revealItems.forEach((item) => item.classList.add('is-visible'))
-    } else {
-      revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return
-          entry.target.classList.add('is-visible')
-          revealObserver.unobserve(entry.target)
-        })
-      }, { rootMargin: '0px 0px -7% 0px', threshold: 0.08 })
-      revealItems.forEach((item) => revealObserver.observe(item))
-    }
-
-    window.addEventListener('scroll', scheduleScrollEffects, { passive: true })
-    window.addEventListener('resize', scheduleScrollEffects)
-    updateScrollEffects()
-
-    return () => {
-      window.removeEventListener('scroll', scheduleScrollEffects)
-      window.removeEventListener('resize', scheduleScrollEffects)
-      revealObserver?.disconnect()
-      if (scrollFrame) window.cancelAnimationFrame(scrollFrame)
-    }
-  }, [view, activeTheme, articleQuery, visibleArticleCount, filteredArticles.length])
-
-  useEffect(() => {
     if (!libraryUndo) return undefined
     const timer = window.setTimeout(() => setLibraryUndo(null), 10000)
     return () => window.clearTimeout(timer)
   }, [libraryUndo])
 
-  useEffect(() => () => window.clearTimeout(openingBookTimerRef.current), [])
-
   const begin = () => {
-    if (isOpeningBook) return
-    setMenuOpen(false)
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-    if (view !== 'home' || reducedMotion) {
-      setView('breathing')
-      window.location.hash = '/breathing'
-      return
-    }
-
-    setIsOpeningBook(true)
-    openingBookTimerRef.current = window.setTimeout(() => {
-      setIsOpeningBook(false)
-      setView('breathing')
-      window.location.hash = '/breathing'
-    }, 540)
+    setView('breathing')
+    window.location.hash = '/breathing'
   }
 
   const openArticle = async (nextArticle = article, origin = view) => {
-    const normalizedOrigin = ['search', 'library', 'articles'].includes(origin) ? origin : 'result'
+    const normalizedOrigin = ['content', 'library', 'articles'].includes(origin) ? origin : 'result'
     const fullArticle = nextArticle.paragraphs ? nextArticle : await loadArticle(nextArticle.id)
     setArticle(fullArticle)
     setArticleOrigin(normalizedOrigin)
@@ -449,15 +286,14 @@ function App() {
   }
 
   const goHome = () => {
-    setMenuOpen(false)
     setView('home')
     window.location.hash = '/'
   }
 
   const returnFromArticle = () => {
     setView(articleOrigin)
-    const returnRoute = articleOrigin === 'search'
-      ? '/search'
+    const returnRoute = articleOrigin === 'content'
+      ? '/content'
       : articleOrigin === 'library'
         ? '/library'
         : articleOrigin === 'articles'
@@ -467,32 +303,31 @@ function App() {
   }
 
   const openLibrary = () => {
-    setMenuOpen(false)
     setView('library')
     window.location.hash = '/library'
   }
 
+  const openProfile = () => {
+    setView('profile')
+    window.location.hash = '/profile'
+  }
+
   const openContent = () => {
-    setMenuOpen(false)
     setView('content')
     window.location.hash = '/content'
   }
 
+  const openPractice = () => {
+    setView('practice')
+    window.location.hash = '/practice'
+  }
+
   const openArticles = () => {
-    setMenuOpen(false)
     setView('articles')
     window.location.hash = '/articles'
   }
 
-  const scrollArticlesForward = () => {
-    const scrollable = document.documentElement.scrollHeight - window.innerHeight
-    const nextPosition = Math.min(scrollable, window.scrollY + Math.max(420, window.innerHeight * 0.72))
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    window.scrollTo({ top: nextPosition, behavior: reducedMotion ? 'auto' : 'smooth' })
-  }
-
   const openCalendar = () => {
-    setMenuOpen(false)
     setView('calendar')
     window.location.hash = '/calendar'
   }
@@ -509,7 +344,6 @@ function App() {
   }
 
   const openMeridians = (id = 'lung') => {
-    setMenuOpen(false)
     setMeridianId(id)
     setView('meridians')
     window.location.hash = `/meridians/${id}`
@@ -521,7 +355,6 @@ function App() {
   }
 
   const openClassics = (id = 'daily-rhythm') => {
-    setMenuOpen(false)
     setClassicId(id)
     setView('classics')
     window.location.hash = `/classics/${id}`
@@ -532,13 +365,17 @@ function App() {
     window.location.hash = '/content'
   }
 
-  const openSayings = () => {
-    setMenuOpen(false)
+  const openSayings = (origin = view) => {
+    setSayingsOrigin(typeof origin === 'string' ? origin : view)
     setView('sayings')
     window.location.hash = '/sayings'
   }
 
   const returnFromSayings = () => {
+    if (sayingsOrigin === 'home') {
+      goHome()
+      return
+    }
     setView('content')
     window.location.hash = '/content'
   }
@@ -574,62 +411,6 @@ function App() {
   const openOriginalArticle = () => {
     if (!article.sourceUrl) return
     window.open(article.sourceUrl, '_blank', 'noopener,noreferrer')
-  }
-
-  const openChat = () => {
-    setMenuOpen(false)
-    setView('chat')
-    window.location.hash = '/chat'
-  }
-
-  const restartChat = () => {
-    setChatMessages([{ id: `welcome-${Date.now()}`, role: 'assistant', content: chatGreeting }])
-    setChatDraft('')
-    setChatError('')
-    setChatStatus('idle')
-  }
-
-  const sendChatMessage = async (event) => {
-    event.preventDefault()
-    const content = chatDraft.trim()
-    if (!content || chatStatus === 'sending') return
-
-    if (!isOnline) {
-      setChatError('网络连接后，觉才能收到您的话。')
-      return
-    }
-
-    const userMessage = { id: `user-${Date.now()}`, role: 'user', content }
-    const nextMessages = [...chatMessages, userMessage].slice(-16)
-    setChatMessages(nextMessages)
-    setChatDraft('')
-    setChatError('')
-    setChatStatus('sending')
-
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: nextMessages.map(({ role, content: messageContent }) => ({ role, content: messageContent })),
-        }),
-      })
-      const payload = await response.json().catch(() => ({}))
-      if (!response.ok || !payload.answer) throw new Error(payload.error || '觉暂时没有收到回应。')
-      setChatMessages((current) => [...current, {
-        id: `assistant-${Date.now()}`,
-        role: 'assistant',
-        content: payload.answer,
-      }].slice(-16))
-    } catch (error) {
-      setChatError(error instanceof Error ? error.message : '暂时无法连接，请稍后再试。')
-    } finally {
-      setChatStatus('idle')
-    }
-  }
-
-  const switchHomeLine = () => {
-    setHomeLineIndex((current) => (current + 1 + Math.floor(Math.random() * (homeLines.length - 1))) % homeLines.length)
   }
 
   const saveQuoteCard = async () => {
@@ -699,115 +480,15 @@ function App() {
 
   return (
     <div className="stage">
-      <main className={`mobile-prototype${view === 'article' ? ' is-reading-view' : ''}${view === 'chat' ? ' is-chat-view' : ''}${view === 'articles' ? ' is-articles-view' : ''}`} aria-label="宽心纪答案之书原型">
+      <main className="mobile-prototype" aria-label="宽心纪">
         {view === 'home' && (
-          <section className={`hero-screen reference-home${isOpeningBook ? ' is-opening-book' : ''}`} style={{ '--mist-image': `url(${mistLake})` }}>
-            <div className="home-atmosphere" aria-hidden="true">
-              <span className="home-atmosphere__layer mist-layer mist-layer--far" />
-              <span className="home-atmosphere__layer mist-layer mist-layer--near" />
-              <span className="home-atmosphere__layer water-ripple" />
-              <span className="sun-shimmer" />
-              <span className="home-atmosphere__layer lotus-motion" />
-              <span className="home-atmosphere__layer lotus-reflection" />
-            </div>
-            <header className="topbar">
-              <button className="brand" type="button" onClick={goHome} aria-label="回到宽心纪首页">
-                <img src={kuanxinLogo} alt="宽心纪" />
-                <span>愿您宽心</span>
-              </button>
-              <button
-                ref={menuButtonRef}
-                className="icon-button menu-button"
-                type="button"
-                onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
-                aria-label={menuOpen ? '关闭导航' : '打开导航'}
-                aria-expanded={menuOpen}
-                aria-controls="site-menu"
-              >
-                {menuOpen ? <X size={28} weight="light" /> : <List size={31} weight="light" />}
-              </button>
-            </header>
-
-            {menuOpen && (
-              <>
-                <button className="menu-scrim" type="button" onClick={closeMenu} aria-label="关闭导航" />
-                <nav id="site-menu" className="menu-panel" aria-label="宽心纪导航">
-                  <button className="menu-close" type="button" onClick={closeMenu} aria-label="关闭导航">
-                    <X size={27} weight="light" />
-                  </button>
-                  <p className="menu-kicker">宽心纪</p>
-                  <h2>从此刻，慢慢走</h2>
-
-                  <section className="menu-group" aria-labelledby="menu-now">
-                    <p id="menu-now">此刻</p>
-                    <button ref={menuFirstItemRef} type="button" onClick={openChat}>
-                      <span><strong>问一问</strong><small>把此刻的心事说说</small></span>
-                      <CaretRight size={19} weight="light" aria-hidden="true" />
-                    </button>
-                  </section>
-
-                  <section className="menu-group" aria-labelledby="menu-read">
-                    <p id="menu-read">慢慢读</p>
-                    <button type="button" onClick={openArticles}>
-                      <span><strong>老师文章</strong><small>从困惑，回到当下</small></span>
-                      <CaretRight size={19} weight="light" aria-hidden="true" />
-                    </button>
-                    <button type="button" onClick={openSayings}>
-                      <span><strong>每日一言</strong><small>留一句话，陪你今日</small></span>
-                      <CaretRight size={19} weight="light" aria-hidden="true" />
-                    </button>
-                  </section>
-
-                  <section className="menu-group" aria-labelledby="menu-explore">
-                    <p id="menu-explore">随四时探索</p>
-                    <button type="button" onClick={openCalendar}>
-                      <span><strong>节气日历</strong><small>跟着时令，照顾身心</small></span>
-                      <CaretRight size={19} weight="light" aria-hidden="true" />
-                    </button>
-                    <button type="button" onClick={() => openMeridians()}>
-                      <span><strong>十二经络</strong><small>从身体，读见流转</small></span>
-                      <CaretRight size={19} weight="light" aria-hidden="true" />
-                    </button>
-                    <button type="button" onClick={() => openClassics()}>
-                      <span><strong>经典阅读</strong><small>在古书里，慢慢相逢</small></span>
-                      <CaretRight size={19} weight="light" aria-hidden="true" />
-                    </button>
-                  </section>
-
-                  <button className="menu-shelf" type="button" onClick={openLibrary}>
-                    离线书架 <span>{savedArticleIds.length} 篇已收藏</span>
-                  </button>
-                </nav>
-              </>
-            )}
-
-            <div className="hero-center">
-              <h1>答案之书</h1>
-              <img className="title-cloud" src={brandCloud} alt="" />
-              <p className="settle-copy">请安静片刻</p>
-              <button
-                className="open-book"
-                type="button"
-                onClick={begin}
-                aria-label={isOpeningBook ? '正在开启答案之书' : '开启答案之书'}
-                aria-busy={isOpeningBook}
-                disabled={isOpeningBook}
-              >
-                <img src={answerButtonReference} alt="" />
-              </button>
-            </div>
-
-            <button className="ask-entry" type="button" onClick={openChat}>
-              此刻有什么想问？ <ArrowRight size={17} weight="light" />
-            </button>
-
-            <div className="home-footer-arc">
-              <img className="footer-dot" src={footerDot} alt="" />
-              <button className="home-note" type="button" onClick={switchHomeLine} aria-label="换一句首页文案">
-                {homeLines[homeLineIndex]}
-              </button>
-            </div>
-          </section>
+          <HomeScreen
+            onOpenAnswer={begin}
+            onOpenReading={openContent}
+            onOpenPractice={openPractice}
+            onOpenSayings={() => openSayings('home')}
+            onOpenProfile={openProfile}
+          />
         )}
 
         {view === 'breathing' && (
@@ -843,83 +524,58 @@ function App() {
             <div className="result-actions">
               <button type="button" onClick={saveQuoteCard}><Copy size={17} /> {saved ? '已保存图片' : '保存图片'}</button>
               <button type="button" onClick={shareQuote}><ShareNetwork size={17} /> {shared ? '已准备分享' : '分享引文'}</button>
-              <button type="button" onClick={begin}>再抽一次</button>
             </div>
-            <p className="result-caution">若心里仍很乱，不妨先读完这一篇，再决定是否重抽。</p>
+            <p className="result-caution">若心里仍很乱，不妨先读完这一篇，让答案慢慢落下。</p>
             <p className="result-signature">宽心纪 · 愿您宽心</p>
           </section>
         )}
 
         {view === 'content' && (
-          <section className="content-screen" style={{ '--mist-image': `url(${mistLake})` }}>
-            <header className="result-header">
-              <button className="back-button" type="button" onClick={goHome}><ArrowLeft size={18} /> 首页</button>
-              <img src={kuanxinLogo} alt="宽心纪" />
-            </header>
-            <div className="content-intro">
-              <img src={brandCloud} alt="" />
-              <h1>在文字里，慢慢宽心</h1>
-              <p>读老师的文章，也读四时与经典。无需赶路，从此刻最想读的一页开始。</p>
-            </div>
-            <div className="content-paths">
-              <section className="teacher-path">
-                <div className="path-heading">
-                  <Article size={23} weight="light" />
-                  <div><span>老师文章</span><h2>从困惑，回到当下</h2></div>
-                </div>
-                <p>按主题、关键词和此刻的困惑寻找文章。当前已整理 {articles.length} 篇公众号文章。</p>
-                <div className="teacher-preview">
-                  {articles.slice(0, 3).map((item) => (
-                    <button key={item.id} type="button" onClick={() => openArticle(item, 'articles')}>
-                      <span>{item.theme}</span><strong>{item.title}</strong><CaretRight size={16} />
-                    </button>
-                  ))}
-                </div>
-                <button className="path-action" type="button" onClick={openArticles}>进入老师文章库 <ArrowRight size={16} /></button>
-              </section>
+          <ReadingScreen
+            articles={articles}
+            onOpenHome={goHome}
+            onOpenArticles={openArticles}
+            onOpenArticle={(item) => openArticle(item, 'content')}
+            onOpenSayings={() => openSayings('content')}
+            onOpenCalendar={openCalendar}
+            onOpenMeridians={() => openMeridians()}
+            onOpenClassics={() => openClassics()}
+            onOpenPractice={openPractice}
+            onOpenProfile={openProfile}
+          />
+        )}
 
-              <div className="coming-paths" aria-label="上师一言、时令与传统知识">
-                <section>
-                  <Quotes size={22} weight="light" />
-                  <div><span>上师一言</span><h2>每日静读一句</h2><p>日期、农历与节气相伴，把触动留成一张宽心卡。</p></div>
-                  <button className="coming-path-action" type="button" onClick={openSayings}>打开今日一言 <ArrowRight size={15} /></button>
-                </section>
-                <section>
-                  <Leaf size={22} weight="light" />
-                  <div><span>二十四节气</span><h2>顺四时，养身心</h2><p>节气物候、日常起居与一般养生科普。</p></div>
-                  <button className="coming-path-action" type="button" onClick={openCalendar}>打开四时日历 <ArrowRight size={15} /></button>
-                </section>
-                <section>
-                  <BookOpenText size={22} weight="light" />
-                  <div><span>十二经络</span><h2>读懂经脉的次序</h2><p>名称、表里关系与传统循行概览。</p></div>
-                  <button className="coming-path-action" type="button" onClick={() => openMeridians()}>打开经络图志 <ArrowRight size={15} /></button>
-                </section>
-                <section>
-                  <BookOpenText size={22} weight="light" />
-                  <div><span>内经小笺</span><h2>每日读一小章</h2><p>十二则原典短句、逐句提示与今日思考。</p></div>
-                  <button className="coming-path-action" type="button" onClick={() => openClassics()}>翻开内经小笺 <ArrowRight size={15} /></button>
-                </section>
-              </div>
+        {view === 'practice' && (
+          <PracticeScreen
+            onOpenHome={goHome}
+            onOpenReading={openContent}
+            onOpenProfile={openProfile}
+          />
+        )}
 
-              <button className="content-library-entry" type="button" onClick={openLibrary}>
-                <Books size={22} weight="light" />
-                <span><strong>离线书架</strong><small>{savedArticleIds.length ? `已有 ${savedArticleIds.length} 篇保存在本机` : '把想反复读的文字留在手机里'}</small></span>
-                <CaretRight size={17} />
-              </button>
-            </div>
-          </section>
+        {view === 'profile' && (
+          <Suspense fallback={<div className="calendar-loading" role="status">正在打开本地记录…</div>}>
+            <ProfileScreen
+              onOpenHome={goHome}
+              onOpenReading={openContent}
+              onOpenPractice={openPractice}
+              onOpenLibrary={openLibrary}
+              contentVersion={contentVersion.version}
+              savedCount={savedArticles.length}
+            />
+          </Suspense>
         )}
 
         {view === 'articles' && (
           <section className="articles-screen" data-view="articles">
-            <img className="articles-atmosphere" src={mistLake} alt="" aria-hidden="true" />
             <header className="article-header">
               <button className="back-button" type="button" onClick={openContent}><ArrowLeft size={18} /> 内容</button>
               <img src={kuanxinLogo} alt="宽心纪" />
             </header>
             <div className="articles-intro">
-              <div><img src={brandCloud} alt="" /><span>在册文章</span></div>
-              <h1 data-route-heading tabIndex="-1">想读些什么？</h1>
+              <div><img src={brandCloud} alt="" /><span>老师文章</span></div>
+              <h1 data-route-heading tabIndex="-1">此刻，想读些什么？</h1>
+              <p>可以按主题慢慢翻，也可以写下一个词。搜索只在这台设备上进行。</p>
               <label className="article-search">
                 <MagnifyingGlass size={18} />
                 <input value={articleQuery} onChange={(event) => setArticleQuery(event.target.value)} placeholder="搜索标题、主题或困惑" aria-label="搜索文章标题、主题或困惑" />
@@ -931,27 +587,17 @@ function App() {
                 ))}
               </div>
             </div>
-            <button className="articles-scroll-cue" type="button" onClick={scrollArticlesForward} aria-label="向下浏览文章">
-              <span className="articles-scroll-label">阅读位置</span>
-              <span className="articles-scroll-track" aria-hidden="true"><span /></span>
-              <span className="articles-scroll-chevrons" aria-hidden="true">
-                <CaretDown size={16} weight="light" />
-                <CaretDown size={16} weight="light" />
-                <CaretDown size={16} weight="light" />
-              </span>
-            </button>
             <p className="catalog-status" role="status" aria-live="polite">
               找到 {filteredArticles.length} 篇{filteredArticles.length > 0 ? `，当前显示 ${Math.min(visibleArticleCount, filteredArticles.length)} 篇` : ''}
             </p>
             <div className="article-catalog" key={`${activeTheme}-${articleQuery}`}>
-              {filteredArticles.length > 0 ? filteredArticles.slice(0, visibleArticleCount).map((item, index) => (
-                <article className={`catalog-entry${index === 0 ? ' is-featured' : ''}`} data-scroll-reveal key={item.id} style={{ '--reveal-delay': `${Math.min(index, 5) * 55}ms` }}>
-                  {index === 0 && <div className="catalog-featured-kicker"><img src={brandCloud} alt="" /><span>今日慢读</span></div>}
+              {filteredArticles.length > 0 ? filteredArticles.slice(0, visibleArticleCount).map((item) => (
+                <article key={item.id}>
                   <button className="catalog-open" type="button" onClick={() => openArticle(item, 'articles')}>
-                    {index > 0 && <span className="catalog-theme">{item.theme}</span>}
+                    <span>{item.theme}</span>
                     <h2>{item.title}</h2>
                     <p>{item.quote}</p>
-                    <small>{readingProgress[item.id] ? `上次读到 ${readingProgress[item.id]}%` : '开始阅读'} <ArrowRight size={14} /></small>
+                    <small>{readingProgress[item.id] ? `上次读到 ${readingProgress[item.id]}%` : '开始阅读'}</small>
                     <CaretRight size={18} />
                   </button>
                   <button className="catalog-save" type="button" onClick={() => toggleSavedArticle(item)} aria-pressed={savedArticleIds.includes(item.id)} aria-label={savedArticleIds.includes(item.id) ? `从离线书架移除《${item.title}》` : `离线保存《${item.title}》`}>
@@ -1003,7 +649,7 @@ function App() {
 
         {view === 'sayings' && (
           <Suspense fallback={<div className="calendar-loading" role="status">正在展开今日一言…</div>}>
-            <SayingsCard onBack={returnFromSayings} />
+            <SayingsCard onBack={returnFromSayings} backLabel={sayingsOrigin === 'home' ? '首页' : '内容'} />
           </Suspense>
         )}
 
@@ -1012,7 +658,7 @@ function App() {
             <header className="article-header">
               <button className="back-button" type="button" onClick={returnFromArticle}><ArrowLeft size={18} /> 返回</button>
               <img src={kuanxinLogo} alt="宽心纪" />
-              <span className="reading-progress" style={{ '--reading-progress': `${readingProgress[article.id] || 0}%` }} aria-hidden="true" />
+              <span className="reading-progress" style={{ '--reading-progress': (readingProgress[article.id] || 0) / 100 }} aria-hidden="true" />
             </header>
             <article className="article-body">
               <div className="article-kicker"><img src={brandCloud} alt="" /><span>宽心阅读</span></div>
@@ -1043,7 +689,7 @@ function App() {
         {view === 'library' && (
           <section className="library-screen" data-view="library" style={{ '--mist-image': `url(${mistLake})` }}>
             <header className="result-header">
-              <button className="back-button" type="button" onClick={goHome}><ArrowLeft size={18} /> 首页</button>
+              <button className="back-button" type="button" onClick={openProfile}><ArrowLeft size={18} /> 我的</button>
               <img src={kuanxinLogo} alt="宽心纪" />
             </header>
             <div className="library-heading">
@@ -1084,21 +730,6 @@ function App() {
           </section>
         )}
 
-        {view === 'chat' && (
-          <ChatScreen
-            messages={chatMessages}
-            draft={chatDraft}
-            status={chatStatus}
-            error={chatError}
-            prompts={prompts}
-            onBack={goHome}
-            onRestart={restartChat}
-            onDraftChange={setChatDraft}
-            onSubmit={sendChatMessage}
-            onPrompt={(prompt) => setChatDraft(prompt)}
-          />
-        )}
-
         {!isOnline && (
           <div className="network-status" role="status"><WifiSlash size={16} /> 当前处于离线状态，已保存内容仍可阅读</div>
         )}
@@ -1114,9 +745,14 @@ function App() {
         {updateAvailable && (
           <aside className="pwa-notice update-notice" role="status">
             <ArrowClockwise size={20} />
-            <div><strong>发现新的内容版本</strong><span>更新后可继续保留本机书架。</span></div>
-            <button type="button" onClick={applyUpdate}>立即更新</button>
-            <button type="button" onClick={dismissUpdate} aria-label="稍后更新"><X size={16} /></button>
+            <div>
+              <strong>网站内容已更新</strong>
+              <span>{targetVersion ? `新版本 ${targetVersion} 已准备好。` : '新版本已经准备好。'}收藏和阅读记录会保留。</span>
+            </div>
+            <button type="button" onClick={applyUpdate} disabled={isApplyingUpdate}>
+              {isApplyingUpdate ? '正在更新…' : '立即更新'}
+            </button>
+            <button type="button" onClick={dismissUpdate} disabled={isApplyingUpdate} aria-label="稍后更新"><X size={16} /></button>
           </aside>
         )}
       </main>
