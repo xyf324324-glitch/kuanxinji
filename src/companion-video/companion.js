@@ -6,8 +6,8 @@ class TeacherVideo extends HTMLElement{
  connectedCallback(){
  if(this.started)return;this.started=true;this.meditationTap=0;this.pending=null;this.state='stand';this.deadline=0;this.drag=null;this.pointers=new Map();this.scale=1;this.reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
  this.root=this.attachShadow({mode:'open'});
- this.root.innerHTML='<style>:host{position:fixed;z-index:9990;left:0;top:0;display:block;width:var(--actor-width,160px);height:var(--actor-height,284px);pointer-events:none;font-family:system-ui}canvas{width:100%;height:100%;display:block;pointer-events:auto;touch-action:none;cursor:grab;outline:none}canvas:focus-visible{outline:2px solid #b89664;border-radius:20px}.subtitle{position:absolute;pointer-events:none;width:188px;max-width:calc(100vw - 24px);text-align:center;font-family:Georgia,\'Songti SC\',\'SimSun\',serif;font-size:12px;line-height:1.65;letter-spacing:.035em;color:#6b5638;text-shadow:0 1px 3px #fffdf5,0 0 8px #fffdf5;opacity:0;white-space:normal;overflow-wrap:anywhere}.next{position:absolute;top:100%;margin-top:4px;left:50%;transform:translateX(-50%);pointer-events:auto;border:1px solid #ddd2bd;border-radius:16px;background:#fffdf5d9;color:#766348;font-size:11px;padding:4px 10px;white-space:nowrap;cursor:pointer}.next[hidden]{display:none}.next:disabled{opacity:.65;cursor:default}.hide{position:absolute;right:3px;top:24px;pointer-events:auto;border:1px solid #dfd3bb;border-radius:50%;background:#fffdf5dc;color:#84745e;width:24px;height:24px;cursor:pointer}</style><canvas width="288" height="512" tabindex="0" role="button" aria-label="老师小人，点击展开动作按钮，拖动调整位置"></canvas><div class="subtitle" role="status" aria-live="polite" aria-atomic="true"></div><button class="next" hidden aria-label="当前动作完成后切换">换个动作</button><button class="hide" aria-label="暂时收起人物">×</button>';
- this.canvas=this.root.querySelector('canvas');this.ctx=this.canvas.getContext('2d');this.subtitle=this.root.querySelector('.subtitle');
+ this.root.innerHTML='<style>:host{position:fixed;z-index:9990;left:0;top:0;display:block;width:var(--actor-width,160px);height:var(--actor-height,284px);pointer-events:none;font-family:system-ui}canvas{width:100%;height:100%;display:block;pointer-events:auto;touch-action:none;cursor:grab;outline:none;background:transparent!important;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}canvas:focus-visible{outline:2px solid #b89664;border-radius:20px}.subtitle{position:absolute;pointer-events:none;width:188px;max-width:calc(100vw - 24px);text-align:center;font-family:Georgia,\'Songti SC\',\'SimSun\',serif;font-size:12px;line-height:1.65;letter-spacing:.035em;color:#6b5638;text-shadow:0 1px 3px #fffdf5,0 0 8px #fffdf5;opacity:0;white-space:normal;overflow-wrap:anywhere}.next{position:absolute;top:100%;margin-top:4px;left:50%;transform:translateX(-50%);pointer-events:auto;border:1px solid #ddd2bd;border-radius:16px;background:#fffdf5d9;color:#766348;font-size:11px;padding:4px 10px;white-space:nowrap;cursor:pointer}.next[hidden],.hide[hidden],.edge-hint[hidden]{display:none}.edge-hint{position:absolute;top:45%;left:0;right:0;text-align:center;color:#766348;font:12px "Songti SC","SimSun",serif;white-space:nowrap;background:#fffdf5e8;border-radius:12px;padding:6px 0}.next:disabled{opacity:.65;cursor:default}.hide{position:absolute;right:-28px;top:8px;pointer-events:auto;border:1px solid #dfd3bb;border-radius:50%;background:#fffdf5dc;color:#84745e;width:32px;height:32px;-webkit-tap-highlight-color:transparent;cursor:pointer}</style><canvas width="288" height="512" tabindex="0" role="button" aria-label="老师小人，点击展开动作按钮，拖动调整位置"></canvas><div class="subtitle" role="status" aria-live="polite" aria-atomic="true"></div><button class="next" hidden aria-label="当前动作完成后切换">换个动作</button><button class="hide" hidden aria-label="暂时收起人物">×</button><div class="edge-hint" hidden>松手收起</div>';
+ this.canvas=this.root.querySelector('canvas');this.ctx=this.canvas.getContext('2d',{alpha:true});this.subtitle=this.root.querySelector('.subtitle');
  this.scratch=document.createElement('canvas');this.scratch.width=576;this.scratch.height=512;this.sc=this.scratch.getContext('2d',{willReadFrequently:true});this.pixels=this.ctx.createImageData(288,512);
  this.pool={};
  for(const state of ['stand','quiet','read','sit','meditate','rise','salute','breath','quiet-salute','quiet-rise','meditate-exit']){
@@ -29,7 +29,7 @@ class TeacherVideo extends HTMLElement{
  this.canvas.addEventListener('pointerdown',e=>this.down(e));this.canvas.addEventListener('pointermove',e=>this.move(e));this.canvas.addEventListener('pointerup',e=>this.up(e));this.canvas.addEventListener('pointercancel',e=>this.up(e,true));
  this.canvas.addEventListener('keydown',e=>{if(['Enter',' '].includes(e.key)){e.preventDefault();this.interact()}else if(e.key.startsWith('Arrow')){e.preventDefault();this.x+=e.key==='ArrowRight'?14:e.key==='ArrowLeft'?-14:0;this.y+=e.key==='ArrowDown'?14:e.key==='ArrowUp'?-14:0;this.userPlaced=true;this.place();this.save()}});
  this.nextButton=this.root.querySelector('.next');this.nextButton.onclick=()=>this.requestNext();
- this.root.querySelector('.hide').onclick=()=>this.hide();addEventListener('resize',()=>{this.size();if(this.userPlaced)this.place();else this.park()});
+ this.closeButton=this.root.querySelector('.hide');this.edgeHint=this.root.querySelector('.edge-hint');this.closeButton.onclick=()=>this.hide();addEventListener('resize',()=>{this.size();if(this.userPlaced)this.place();else this.park()});
  document.addEventListener('visibilitychange',()=>{if(document.hidden){this.hiddenAt=performance.now();this.video.pause();this.subtitleAnimation?.pause()}else{if(!this.contextBlocked&&this.style.display!=='none')this.subtitleAnimation?.play();this.deadline+=performance.now()-(this.hiddenAt||performance.now());if(!this.reduced&&!this.contextBlocked&&this.style.display!=='none')this.video.play().catch(()=>{});this.last=performance.now()}});
  this.play('stand');
  const tick=()=>{if(!('requestVideoFrameCallback'in this.video)&&!this.video.paused)this.draw();requestAnimationFrame(tick)};requestAnimationFrame(tick);
@@ -73,11 +73,12 @@ class TeacherVideo extends HTMLElement{
  return this.actionQueue.shift();
  }
  interact(){
- this.nextButton.hidden=!this.nextButton.hidden;this.positionSubtitle();
+ this.setControls(this.nextButton.hidden);this.positionSubtitle();
  clearTimeout(this.buttonTimer);
- if(!this.nextButton.hidden)this.buttonTimer=setTimeout(()=>{this.nextButton.hidden=true},6500);
+ if(!this.nextButton.hidden)this.buttonTimer=setTimeout(()=>this.setControls(false),6500);
  if(this.video.paused&&!this.reduced&&!this.contextBlocked&&this.style.display!=='none')this.video.play().catch(()=>{});
  }
+ setControls(visible){this.nextButton.hidden=!visible;if(this.closeButton)this.closeButton.hidden=!visible;}
  showSubtitle(text,{delay=0}={}){
  this.subtitleActive=true;this.subtitleAnimation?.cancel();this.subtitle.textContent=text;this.positionSubtitle();
  this.subtitleAnimation=this.subtitle.animate(this.reduced?
@@ -97,6 +98,7 @@ class TeacherVideo extends HTMLElement{
  else if(Math.abs(target-this.captionHead)>10)this.captionHead=target;
  const top=Math.max(8-this.y,this.captionHead/512*this.offsetHeight-height-5);
  this.subtitle.style.left=left+'px';this.subtitle.style.top=top+'px';
+ if(this.closeButton){this.closeButton.style.right=Math.max(-28,this.x+this.offsetWidth+8-innerWidth)+'px';this.closeButton.style.top=Math.max(0,(this.headTop||65)/512*this.offsetHeight-28)+'px';}
  if(this.nextButton){const feet=(this.footBottom||490)/512*this.offsetHeight;
  this.nextButton.style.top=Math.min(feet+9,innerHeight-this.y-28)+'px';this.nextButton.style.marginTop='0';}
  }
@@ -124,7 +126,7 @@ class TeacherVideo extends HTMLElement{
  this.video.pause();this.video=this.pool['meditate-exit'];this.video.currentTime=0;this.video.playbackRate=1;this.loopsDone=9;
  if(!this.contextBlocked&&!document.hidden)this.video.play().catch(()=>{});
  }
- finishRequest(){this.requested=false;if(this.nextButton){this.nextButton.hidden=true;this.nextButton.textContent='换个动作';this.nextButton.disabled=false}}
+ finishRequest(){this.requested=false;if(this.nextButton){this.setControls(false);this.nextButton.textContent='换个动作';this.nextButton.disabled=false}}
  ended(){
  if(this.reduced&&!this.requested){this.userPlay=false;this.video.pause();return}
  if(this.state==='sit'){this.play('meditate');return}
@@ -184,7 +186,7 @@ class TeacherVideo extends HTMLElement{
  if(this.pointers.size>=2){
  const [a,b]=[...this.pointers.values()];const cx=(a.x+b.x)/2,cy=(a.y+b.y)/2;
  this.pinch={distance:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),scale:this.scale,u:(cx-this.x)/this.offsetWidth,v:(cy-this.y)/this.offsetHeight};
- this.drag=null;this.gesture=true;
+ this.drag=null;this.gesture=true;this.setControls(false);this.edgeHint.hidden=true;this.edgeDismiss=false;
  }
  }
  move(e){
@@ -196,19 +198,21 @@ class TeacherVideo extends HTMLElement{
  }
  if(!this.drag)return;const dx=e.clientX-this.drag.x,dy=e.clientY-this.drag.y;
  if(Math.hypot(dx,dy)>6)this.drag.moved=true;
- if(this.drag.moved){this.x=this.drag.ox+dx;this.y=this.drag.oy+dy;this.place()}
+ if(this.drag.moved){this.setControls(false);this.x=this.drag.ox+dx;this.y=this.drag.oy+dy;this.place(!this.gesture);this.edgeDismiss=!this.gesture&&(this.x < -this.offsetWidth*.35||this.x > innerWidth-this.offsetWidth*.65);this.edgeHint.hidden=!this.edgeDismiss;}
  }
  up(e,cancelled=false){
  if(!this.pointers.has(e.pointerId))return;
  const moved=this.drag?.moved;this.pointers.delete(e.pointerId);
  if(this.canvas.hasPointerCapture(e.pointerId))this.canvas.releasePointerCapture(e.pointerId);
  if(this.pointers.size){this.pinch=null;const a=[...this.pointers.values()][0];this.drag={x:a.x,y:a.y,ox:this.x,oy:this.y,moved:true};return}
+ if(!cancelled&&moved&&this.edgeDismiss){this.edgeDismiss=false;this.edgeHint.hidden=true;this.drag=null;this.pinch=null;this.gesture=false;this.place();this.hide();return;}
+ this.edgeDismiss=false;this.edgeHint.hidden=true;this.place();
  if(!cancelled&&!this.gesture&&!moved)this.interact();
  if(moved||this.gesture){this.userPlaced=true;this.save()}this.drag=null;this.pinch=null;this.gesture=false;
  }
- place(){this.x=clamp(this.x,0,Math.max(0,innerWidth-this.offsetWidth));this.y=clamp(this.y,0,Math.max(0,innerHeight-this.offsetHeight-34));this.style.transform='translate('+this.x+'px,'+this.y+'px)';this.positionSubtitle()}
+ place(allowEdge=false){this.x=clamp(this.x,allowEdge?-this.offsetWidth*.6:0,Math.max(0,innerWidth-this.offsetWidth)+(allowEdge?this.offsetWidth*.6:0));this.y=clamp(this.y,0,Math.max(0,innerHeight-this.offsetHeight-34));this.style.transform='none';this.style.left=Math.round(this.x)+'px';this.style.top=Math.round(this.y)+'px';this.positionSubtitle()}
  save(){try{localStorage.setItem('teacher-video-position',JSON.stringify({userPlaced:this.userPlaced,scale:this.scale,x:this.x/Math.max(1,innerWidth-this.offsetWidth),y:this.y/Math.max(1,innerHeight-this.offsetHeight)}))}catch{}}
- hide(){clearTimeout(this.buttonTimer);this.nextButton.hidden=true;this.finishRequest();this.subtitleActive=false;this.waitingEnd=false;this.subtitleAnimation?.cancel();this.subtitle.textContent='';this.pending=null;this.video.pause();this.style.display='none';const b=document.createElement('button');b.textContent='请老师回来';b.style.cssText='position:fixed;bottom:20px;right:18px;z-index:9991;border:1px solid #d3bf9e;border-radius:24px;background:#fffdf5;color:#69553b;padding:10px 14px;cursor:pointer';this.restoreButton=b;b.hidden=!!this.contextBlocked;document.body.append(b);b.onclick=()=>{b.remove();this.restoreButton=null;this.style.display='block';this.play('stand')}}
+ hide(){clearTimeout(this.buttonTimer);this.nextButton.hidden=true;this.finishRequest();this.subtitleActive=false;this.waitingEnd=false;this.subtitleAnimation?.cancel();this.subtitle.textContent='';this.pending=null;this.video.pause();this.style.display='none';const b=document.createElement('button');b.textContent='请老师回来';b.style.cssText='position:fixed;bottom:20px;right:18px;z-index:9991;border:1px solid #d3bf9e;border-radius:24px;background:#fffdf5;color:#69553b;padding:9px 15px;cursor:pointer;font-family:Georgia,"Songti SC","STSong","SimSun",serif;font-size:13px;font-weight:400;letter-spacing:.12em;line-height:1.6;-webkit-tap-highlight-color:transparent';this.restoreButton=b;b.hidden=!!this.contextBlocked;document.body.append(b);b.onclick=()=>{b.remove();this.restoreButton=null;this.style.display='block';this.play('stand')}}
 }
 if(!customElements.get('teacher-video-companion'))customElements.define('teacher-video-companion',TeacherVideo);
 document.querySelectorAll('teacher-companion-3d,kuanxin-companion,teacher-companion').forEach(e=>e.remove());
