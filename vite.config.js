@@ -12,7 +12,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'prompt',
-      includeAssets: ['kuanxin-logo.png', 'favicon.svg'],
+      includeAssets: ['kuanxin-logo.png', 'favicon.svg', 'reminder-push.js'],
       manifest: {
         name: '宽心纪｜愿您宽心',
         short_name: '宽心纪',
@@ -35,6 +35,7 @@ export default defineConfig({
         ],
       },
       workbox: {
+        importScripts: ['/reminder-push.js'],
         cleanupOutdatedCaches: true,
         navigateFallback: '/index.html',
         globPatterns: ['**/*.{js,css,html,png,jpg,jpeg,svg,json,webmanifest}'],

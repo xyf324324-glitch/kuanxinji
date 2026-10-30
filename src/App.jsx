@@ -27,6 +27,7 @@ import footerDot from './assets/footer-dot.png'
 import { articles, loadArticle } from './content'
 import contentVersion from './content/content-version.json'
 import ChatScreen from './components/ChatScreen'
+import ReminderCard from './components/ReminderCard'
 import {
   listSavedArticles,
   loadReadingProgress,
@@ -126,6 +127,7 @@ function App() {
   const [article, setArticle] = useState(articles[0])
   const [articleOrigin, setArticleOrigin] = useState('result')
   const [menuOpen, setMenuOpen] = useState(false)
+  const [reminderSettingsRequest, setReminderSettingsRequest] = useState(0)
   const [chatMessages, setChatMessages] = useState(initialChatMessages)
   const [chatDraft, setChatDraft] = useState('')
   const [chatStatus, setChatStatus] = useState('idle')
@@ -774,6 +776,14 @@ function App() {
                     </button>
                   </section>
 
+                  <section className="menu-group" aria-labelledby="menu-reminders">
+                    <p id="menu-reminders">每日相伴</p>
+                    <button type="button" onClick={() => { setMenuOpen(false); setReminderSettingsRequest((current) => current + 1) }}>
+                      <span><strong>每日提醒</strong><small>念佛 · 一念回光</small></span>
+                      <CaretRight size={19} weight="light" aria-hidden="true" />
+                    </button>
+                  </section>
+
                   <button className="menu-shelf" type="button" onClick={openLibrary}>
                     离线书架 <span>{savedArticleIds.length} 篇已收藏</span>
                   </button>
@@ -1098,6 +1108,8 @@ function App() {
             onPrompt={(prompt) => setChatDraft(prompt)}
           />
         )}
+
+        <ReminderCard isHome={view === 'home' && ['', '#', '#/'].includes(window.location.hash)} settingsRequest={reminderSettingsRequest} onClose={() => window.requestAnimationFrame(() => menuButtonRef.current?.focus({ preventScroll: true }))} />
 
         {!isOnline && (
           <div className="network-status" role="status"><WifiSlash size={16} /> 当前处于离线状态，已保存内容仍可阅读</div>
