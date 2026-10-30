@@ -60,8 +60,16 @@ PWA 的 `public/reminder-push.js` 已接入生成的 worker。推送内容支持
 
 ```text
 node --test scripts/reminders.test.mjs
+npm --prefix reminder-service test
 npm run lint
 npm run build
 ```
+
+## 2026-10-30 生产验证
+
+- Worker、D1、VAPID Secret、每分钟 Cron 和正式 Pages 服务绑定已部署；线上 config 已确认 enabled:true。
+- `node scripts/reminders-production-smoke.mjs` 已通过：真实后端订阅、状态读取、修改时间、安排延后测试、取消订阅、取消后状态。测试仅使用自动删除的虚拟设备，不向真实用户发送消息。
+- 本地 6 项后台测试和 5 项客户端测试通过，Vite 构建、Worker dry-run 打包通过。
+- 尚需用户真实 iPhone 确认收到通知；接口通过不能替代锁屏、切换应用及默认时刻的收件验收。
 
 若依赖目录是只读共享链接、Vite 无法写入 `.vite-temp`，可使用 `node node_modules/vite/bin/vite.js build --configLoader native`，然后运行 `node scripts/prepare-sites-build.mjs`；预览使用 `node node_modules/vite/bin/vite.js preview --configLoader native`。
