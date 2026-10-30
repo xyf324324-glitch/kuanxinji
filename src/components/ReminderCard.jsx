@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { X, Plus, CheckCircle } from '@phosphor-icons/react'
 import brandCloud from '../assets/brand-cloud.png'
-import { disableReminders, enableReminders, getReminderStatus, loadReminderConfig, loadReminderTimes, normalizeTimes, saveReminderTimes, updateReminderTimes } from '../lib/reminders'
+import { disableReminders, enableReminders, getReminderStatus, loadReminderConfig, loadReminderTimes, normalizeTimes, saveReminderTimes, updateReminderTimes, testReminder } from '../lib/reminders'
 import './ReminderCard.css'
 
 export default function ReminderCard({ isHome, settingsRequest, onClose }) {
@@ -110,6 +110,15 @@ export default function ReminderCard({ isHome, settingsRequest, onClose }) {
     setTimes((current) => ({ ...current, [key]: current[key].map((time, i) => i === index ? value : time) }))
   }
 
+  const test = async () => {
+    setBusy(true)
+    try {
+      await testReminder(active.subscription)
+      setMessage('测试通知已安排，将在约两分钟内发送。可以锁屏或切到其他应用等待。')
+    } catch { setMessage('暂时未能安排测试通知，请一分钟后重试。') }
+    finally { setBusy(false) }
+  }
+
   return (
     <dialog ref={dialogRef} className={`reminder-card reminder-card--${mode}`} aria-labelledby="reminder-title" aria-describedby="reminder-description" onCancel={(event) => { event.preventDefault(); close() }}>
       <button className="reminder-close" type="button" aria-label="关闭每日提醒邀请" onClick={close} disabled={busy}><X size={23} weight="light" /></button>
@@ -128,6 +137,7 @@ export default function ReminderCard({ isHome, settingsRequest, onClose }) {
         <p id="reminder-description" className="reminder-description">愿每一次提醒，都能陪您安住当下。</p>
         <button className="reminder-primary" type="button" onClick={close}>好的</button>
         <button className="reminder-later" type="button" onClick={() => { setMode('settings'); setMessage('') }}>调整提醒时间</button>
+        {active && <button className="reminder-later" type="button" onClick={test} disabled={busy}>发送测试通知</button>}
       </>}
       {mode === 'settings' && <>
         <h2 id="reminder-title" tabIndex={-1}>每日提醒设置</h2>
@@ -144,6 +154,7 @@ export default function ReminderCard({ isHome, settingsRequest, onClose }) {
         </div>
         <button className="reminder-primary" type="button" onClick={save} disabled={busy || Object.values(times).some((items) => items.some((time) => !time))}>{busy ? '正在处理…' : '保存提醒时间'}</button>
         <button className="reminder-later" type="button" onClick={active ? disable : enable} disabled={busy}>{active ? '关闭每日提醒' : '开启每日提醒'}</button>
+        {active && <button className="reminder-later" type="button" onClick={test} disabled={busy}>发送测试通知</button>}
       </>}
       {message && <p className="reminder-message" role="status">{message}</p>}
     </dialog>

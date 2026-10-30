@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 .tools
+.wrangler
+.dev.vars
+.env
+.env.*
 .playwright-cli
 output
 

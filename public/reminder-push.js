@@ -2,8 +2,8 @@
 self.addEventListener('push', (event) => {
   let data = {}
   try { data = event.data?.json() || {} } catch { /* Always show a visible fallback for an empty push. */ }
-  const body = data.kind === 'nianfo' ? '念一声佛号，愿您心安。' : data.kind === 'huiguang' ? '做一次一念回光，回到当下。' : '记得念佛，也记得一念回光。'
-  event.waitUntil(self.registration.showNotification('宽心纪 · 每日提醒', {
+  const body = data.kind === 'nianfo' ? '记得念佛。' : data.kind === 'huiguang' ? '记得一念回光。' : '记得念佛，也记得一念回光。'
+  event.waitUntil(self.registration.showNotification('宽心的提醒', {
     body,
     icon: '/kuanxin-logo.png',
     tag: typeof data.tag === 'string' ? data.tag : 'kuanxin-daily-reminder',

@@ -97,3 +97,7 @@ export async function disableReminders(subscription) {
   if (data.enabled !== false) throw new Error(unavailable)
   await subscription.unsubscribe().catch(() => {})
 }
+
+export async function testReminder(subscription) {
+  return request('test', { subscription: subscription.toJSON() })
+}

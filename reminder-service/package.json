@@ -1,0 +1,8 @@
+{
+  "name": "kuanxinji-reminder-service",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test tests/*.test.mjs", "deploy": "wrangler deploy" },
+  "dependencies": { "@block65/webcrypto-web-push": "^2.0.0" },
+  "devDependencies": { "wrangler": "^4.0.0" }
+}

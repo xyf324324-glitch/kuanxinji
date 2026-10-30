@@ -38,6 +38,7 @@ export default defineConfig({
         importScripts: ['/reminder-push.js'],
         cleanupOutdatedCaches: true,
         navigateFallback: '/index.html',
+        navigateFallbackDenylist: [/^\/api\//],
         globPatterns: ['**/*.{js,css,html,png,jpg,jpeg,svg,json,webmanifest}'],
       },
     }),
