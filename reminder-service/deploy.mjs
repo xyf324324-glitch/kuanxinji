@@ -51,7 +51,10 @@ await cli(['deploy'])
 const project = await api('pages/projects/kuanxinji')
 const deployment_configs = {}
 for (const name of ['production', 'preview']) {
-  deployment_configs[name] = { service_bindings: { ...project.deployment_configs[name]?.service_bindings, REMINDER_SERVICE: { service: config.name, environment: 'production' } } }
+  deployment_configs[name] = { services: { ...project.deployment_configs[name]?.services, REMINDER_SERVICE: { service: config.name, environment: 'production' } } }
 }
 await api('pages/projects/kuanxinji', 'PATCH', { deployment_configs })
+const verified = await api('pages/projects/kuanxinji')
+if (verified.deployment_configs.production.services?.REMINDER_SERVICE?.service !== config.name) throw new Error('Pages binding was not persisted')
 console.log('Reminder service deployed; Pages binding configured. Publish the matching Pages source and verify /api/reminders/config after cron starts.')
+
