@@ -1,3 +1,5 @@
+import { androidRequest, hasAndroidReminders } from './android-reminders.js'
+export { hasAndroidReminders } from './android-reminders.js'
 const SETTINGS_KEY = 'kuanxin-reminder-times-v1'
 export const DEFAULT_REMINDER_TIMES = { nianfo: ['09:00', '21:00'], huiguang: ['09:00', '13:00', '21:00'] }
 const unavailable = '手机提醒服务暂未开放，请稍后再试。'
@@ -33,6 +35,7 @@ async function request(path, body) {
 }
 
 export async function loadReminderConfig() {
+  if (hasAndroidReminders()) return { enabled: true, native: true }
   try {
     const data = await request('config')
     return data.enabled === true && typeof data.publicKey === 'string' && /^[A-Za-z0-9_-]{87}={0,2}$/.test(data.publicKey) ? data : null
@@ -46,6 +49,10 @@ async function currentSubscription() {
 }
 
 export async function getReminderStatus() {
+  if (hasAndroidReminders()) {
+    const status = await androidRequest('status')
+    return status.enabled ? { subscription: { native: true }, times: normalizeTimes(status.times) } : null
+  }
   const subscription = await currentSubscription()
   if (!subscription) return null
   const data = await request('status', { subscription: subscription.toJSON() })
@@ -53,6 +60,11 @@ export async function getReminderStatus() {
 }
 
 export async function enableReminders(config, times) {
+  if (hasAndroidReminders()) {
+    const status = await androidRequest('enable', { times: normalizeTimes(times) })
+    if (!status.enabled) throw new Error('提醒尚未开启，请检查系统权限')
+    return { subscription: { native: true }, times: normalizeTimes(status.times) }
+  }
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
   if (isIOS && !window.matchMedia('(display-mode: standalone)').matches && !navigator.standalone) {
     throw new Error('请先将宽心纪添加到主屏幕，再从桌面打开并开启提醒。')
@@ -83,6 +95,11 @@ export async function enableReminders(config, times) {
 }
 
 export async function updateReminderTimes(subscription, times) {
+  if (subscription?.native && hasAndroidReminders()) {
+    const status = await androidRequest('schedule', { times: normalizeTimes(times) })
+    if (!status.enabled) throw new Error('提醒时间未能更新，请检查系统权限')
+    return normalizeTimes(status.times)
+  }
   const data = await request('schedule', {
     subscription: subscription.toJSON(), times: normalizeTimes(times),
     timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -92,6 +109,11 @@ export async function updateReminderTimes(subscription, times) {
 }
 
 export async function disableReminders(subscription) {
+  if (subscription?.native && hasAndroidReminders()) {
+    const status = await androidRequest('disable')
+    if (status.enabled) throw new Error('提醒尚未关闭，请重试')
+    return
+  }
   // Remove the server schedule first; a failed request must not claim success.
   const data = await request('unsubscribe', { subscription: subscription.toJSON() })
   if (data.enabled !== false) throw new Error(unavailable)
@@ -99,5 +121,8 @@ export async function disableReminders(subscription) {
 }
 
 export async function testReminder(subscription) {
+  if (subscription?.native && hasAndroidReminders()) return androidRequest('test')
   return request('test', { subscription: subscription.toJSON() })
 }
+
+export async function checkAndroidUpdate() { return androidRequest('checkUpdate') }

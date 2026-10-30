@@ -1,0 +1,54 @@
+name: Android test APK
+on:
+  push:
+    branches: ['codex/android-apk']
+    paths: ['android-test/**', 'src/lib/android-reminders.js', 'src/lib/reminders.js', 'src/components/ReminderCard.jsx', 'scripts/android-reminders.test.mjs', '.github/workflows/android-test.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: android-test-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check web to native reminder integration
+        run: node --test scripts/android-reminders.test.mjs scripts/reminders.test.mjs
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: kuanxinji-test-signing-v1
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - name: Build, test and lint Android APK
+        run: gradle -p android-test :app:testDebugUnitTest :app:lintDebug :app:assembleDebug --no-daemon
+      - name: Prepare APK and checksums
+        run: |
+          mkdir -p android-test/output
+          cp android-test/app/build/outputs/apk/debug/app-debug.apk android-test/output/kuanxinji-0.1.0-test.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs android-test/output/kuanxinji-0.1.0-test.apk > android-test/output/signature.txt
+          cd android-test/output
+          sha256sum kuanxinji-0.1.0-test.apk > SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kuanxinji-android-test
+          path: android-test/output/
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: android-check-reports
+          path: |
+            android-test/app/build/reports/
+          retention-days: 7

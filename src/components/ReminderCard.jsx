@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { X, Plus, CheckCircle } from '@phosphor-icons/react'
 import brandCloud from '../assets/brand-cloud.png'
-import { disableReminders, enableReminders, getReminderStatus, loadReminderConfig, loadReminderTimes, normalizeTimes, saveReminderTimes, updateReminderTimes, testReminder } from '../lib/reminders'
+import { disableReminders, enableReminders, getReminderStatus, loadReminderConfig, loadReminderTimes, normalizeTimes, saveReminderTimes, updateReminderTimes, testReminder, DEFAULT_REMINDER_TIMES, hasAndroidReminders, checkAndroidUpdate } from '../lib/reminders'
 import './ReminderCard.css'
 
 export default function ReminderCard({ isHome, settingsRequest, onClose }) {
@@ -11,7 +11,7 @@ export default function ReminderCard({ isHome, settingsRequest, onClose }) {
   const [times, setTimes] = useState(loadReminderTimes)
   const [active, setActive] = useState(null)
   const [config, setConfig] = useState(null)
-  const [checkingExisting, setCheckingExisting] = useState(() => 'Notification' in window && Notification.permission === 'granted')
+  const [checkingExisting, setCheckingExisting] = useState(() => hasAndroidReminders() || ('Notification' in window && Notification.permission === 'granted'))
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState('')
   const dialogRef = useRef(null)
@@ -119,6 +119,15 @@ export default function ReminderCard({ isHome, settingsRequest, onClose }) {
     finally { setBusy(false) }
   }
 
+  const checkUpdate = async () => {
+    setBusy(true)
+    try {
+      const result = await checkAndroidUpdate()
+      setMessage(result.available ? `发现新版本 ${result.versionName}，请在系统弹窗中选择是否下载。` : `当前版本 ${result.currentVersion}，暂无可用的安装包更新。`)
+    } catch (error) { setMessage(error.message) }
+    finally { setBusy(false) }
+  }
+
   return (
     <dialog ref={dialogRef} className={`reminder-card reminder-card--${mode}`} aria-labelledby="reminder-title" aria-describedby="reminder-description" onCancel={(event) => { event.preventDefault(); close() }}>
       <button className="reminder-close" type="button" aria-label="关闭每日提醒邀请" onClick={close} disabled={busy}><X size={23} weight="light" /></button>
@@ -153,8 +162,10 @@ export default function ReminderCard({ isHome, settingsRequest, onClose }) {
           </fieldset>)}
         </div>
         <button className="reminder-primary" type="button" onClick={save} disabled={busy || Object.values(times).some((items) => items.some((time) => !time))}>{busy ? '正在处理…' : '保存提醒时间'}</button>
+        <button className="reminder-later" type="button" onClick={() => { setTimes(normalizeTimes(DEFAULT_REMINDER_TIMES)); setMessage('已恢复默认时间，保存后生效。') }} disabled={busy}>恢复默认时间</button>
         <button className="reminder-later" type="button" onClick={active ? disable : enable} disabled={busy}>{active ? '关闭每日提醒' : '开启每日提醒'}</button>
         {active && <button className="reminder-later" type="button" onClick={test} disabled={busy}>发送测试通知</button>}
+        {hasAndroidReminders() && <button className="reminder-later" type="button" onClick={checkUpdate} disabled={busy}>检查安装包更新</button>}
       </>}
       {message && <p className="reminder-message" role="status">{message}</p>}
     </dialog>
