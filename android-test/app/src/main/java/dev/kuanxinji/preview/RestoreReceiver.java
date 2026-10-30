@@ -6,6 +6,6 @@ public final class RestoreReceiver extends BroadcastReceiver {
     @Override public void onReceive(Context context, Intent intent) {
         if (!ACTIONS.contains(intent.getAction())) return;
         try { new ReminderStore(context).restore(); }
-        catch (Exception error) { android.util.Log.e("KuanxinReminder", "Unable to restore reminders: " + error.getClass().getSimpleName()); }
+        catch (Exception error) { new ReminderStore(context).record("系统恢复失败 " + error.getClass().getSimpleName()); }
     }
 }

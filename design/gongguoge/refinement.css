@@ -1,0 +1,60 @@
+/* Scoped refinement of the existing page; no site-wide selectors. */
+#waterdrop-demo{max-width:540px;color:#304a3f;font-family:"PingFang SC","Microsoft YaHei",sans-serif}
+#waterdrop-demo .theme-preview,#waterdrop-demo .status{display:none}
+#waterdrop-demo .phone{border:0;border-radius:0;box-shadow:none;background:#56616b;min-height:100svh;overflow:clip}
+#waterdrop-demo .scene{background-position:58% top}
+#waterdrop-demo .veil{background:linear-gradient(180deg,#152c3424,transparent 24%,#193e3812 45%,#18363115)}
+#waterdrop-demo .page{padding: max(14px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom));}
+#waterdrop-demo .top{padding:0 3px}
+#waterdrop-demo .brand{width:72px;height:34px}
+#waterdrop-demo .brand img{width:85px;height:85px;left:-6px;top:-24px}
+#waterdrop-demo .hero{display:block;text-align:center;padding:17px 0 20px}
+#waterdrop-demo h2{color:#fffdf4;font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:clamp(34px,10vw,40px);font-weight:700;letter-spacing:.1em;text-indent:.1em;line-height:1.3;text-shadow:0 2px 5px #21363c40}
+#waterdrop-demo .hero p{margin:9px 0 0;color:#fffdf3;font-size:13px;font-weight:500;letter-spacing:.03em;line-height:1.6;text-shadow:0 1px 3px #243b4266}
+#waterdrop-demo .calendar-control{align-items:center;justify-content:space-between;gap:8px;min-height:36px;height:auto;margin:0 0 5px;color:#fffdf4}
+#waterdrop-demo .current-month{font-size:13px;letter-spacing:.05em;flex:1;text-shadow:0 1px 3px #172a3b88}
+#waterdrop-demo .today-control{color:#fffdf3;background:#fff2;border:1px solid #ffffff70;border-radius:20px;min-height:36px;padding:5px 12px;font-size:12px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+#waterdrop-demo .month-toggle{min-height:36px;min-width:30px}
+#waterdrop-demo .week{padding-bottom:15px;gap:1px}
+#waterdrop-demo .day{min-height:50px;max-width:50px;margin:auto;width:100%;color:#fffdf3}
+#waterdrop-demo .day.selected{color:#34483e;isolation:isolate;background:radial-gradient(ellipse at 18% 12%,#ffffffb0,transparent 45%),linear-gradient(145deg,#fff8e6a8,#e6c79566 65%,#fff2d991);border-color:#fff7debc;box-shadow:inset 1px 2px 2px #ffffffe6,inset -1px -2px 3px #a97e4340,0 5px 12px #52361c30;backdrop-filter:blur(8px) saturate(1.5);-webkit-backdrop-filter:blur(8px) saturate(1.5)}
+#waterdrop-demo .day.selected:before{content:"";position:absolute;inset:2px;border-radius:inherit;background:linear-gradient(125deg,#ffffff88,transparent 28%,transparent 72%,#ffefc74d);pointer-events:none;z-index:-1}
+#waterdrop-demo .day small{font-size:11px}
+#waterdrop-demo .day span{font-size:18px;font-weight:500}
+#waterdrop-demo .day.selected span{font-weight:700}
+#waterdrop-demo .journal{padding:22px 20px 21px;border-radius:24px;border:1px solid #ffffffb8;background:linear-gradient(135deg,#fffaf420,transparent 45%,#f6d39a1c),rgba(248,246,239,.70);backdrop-filter:blur(14px) saturate(1.25);-webkit-backdrop-filter:blur(14px) saturate(1.25);box-shadow:inset 0 1px 1px #ffffffcf,inset 0 -1px 1px #fff4db44,0 8px 24px #24352b1a;color:#304a3f}
+#waterdrop-demo .field+.field{border-top:1px solid #c8c5b775;padding-top:22px;margin-top:22px}
+#waterdrop-demo label{font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:18px;letter-spacing:.035em;color:#263f34;font-weight:600;gap:9px}
+#waterdrop-demo .zen-mark{display:grid;place-items:center;flex:0 0 auto;width:32px;height:32px;border-radius:50%;background:linear-gradient(145deg,#fffdf06e,#d9dfca45);box-shadow:inset 0 1px 0 #ffffff80}
+#waterdrop-demo .zen-mark img{display:block;width:23px;height:23px}
+#waterdrop-demo .field p{font-size:13px;font-weight:500;line-height:1.7;color:#536458;margin:7px 0 10px;letter-spacing:0}
+#waterdrop-demo textarea{min-height:96px;max-height:320px;height:auto;margin:0;padding:12px 13px;background:rgba(255,253,247,.36);border:1px solid #ffffff60;border-radius:13px;color:#304a3f;font-size:16px;line-height:1.8;resize:none;text-shadow:none;overflow-y:auto;overflow-wrap:anywhere;scroll-margin-top:26px;scroll-margin-bottom:120px}
+#waterdrop-demo textarea::placeholder{color:#7b827a}
+#waterdrop-demo textarea:focus-visible{outline:2px solid #6c8c7566;outline-offset:2px;background:#fffdf766}
+#waterdrop-demo .journal textarea{height:108px;min-height:108px;max-height:108px;overscroll-behavior:contain}
+#waterdrop-demo .field-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#waterdrop-demo .expand-editor{flex:0 0 auto;min-height:36px;padding:4px 0 4px 8px;border:0;background:transparent;color:#456350;font-size:12px;font-weight:500;white-space:nowrap}
+#waterdrop-demo .editor-dialog{position:fixed;inset:12px 0 auto;box-sizing:border-box;margin:0 auto;width:calc(100% - 24px);max-width:500px;height:min(720px,calc(100dvh - 24px));max-height:none;padding:22px 20px max(18px,env(safe-area-inset-bottom));border:1px solid #ffffffc0;border-radius:24px;background:rgba(248,246,239,.96);color:#304a3f;box-shadow:inset 0 1px #fff9,0 18px 55px #102c3440;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+#waterdrop-demo .editor-dialog[open]{display:flex;flex-direction:column;gap:13px}
+#waterdrop-demo .editor-dialog::backdrop{background:#142f3d73;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#waterdrop-demo .editor-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#waterdrop-demo .editor-heading h3{margin:0;font-size:20px;letter-spacing:.04em;font-weight:600}
+#waterdrop-demo .editor-done{border:0;border-radius:20px;padding:8px 17px;min-height:44px;background:#355447;color:#fffdf3;font-size:14px;font-weight:500}
+#waterdrop-demo .editor-guide{margin:0;font-size:13px;line-height:1.7;color:#66736c}
+#waterdrop-demo .editor-dialog textarea{flex:1 1 auto;height:0;min-height:0;max-height:none;width:100%;margin:0;padding:15px;border:1px solid #d0d8cd77;border-radius:14px;background:#fffdf480;color:#304a3f;resize:none;overflow-y:auto;font-size:17px;line-height:1.9;overscroll-behavior:contain;scroll-margin:0}
+#waterdrop-demo .editor-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;line-height:1.6;color:#66736c}
+#waterdrop-demo .editor-meta p{margin:0}
+#waterdrop-demo .footer{padding:19px 10px 0;gap:11px}
+#waterdrop-demo .save{position:relative;isolation:isolate;width:100%;min-height:52px;border:1px solid #ffffffa0;border-radius:30px;background:radial-gradient(ellipse at 15% 0%,#ffffff38,transparent 55%),linear-gradient(140deg,#4e6c5dbd,#294e40cf 65%,#899a6b91);box-shadow:inset 0 2px 1px #ffffff8c,inset 0 -2px 2px #102e2840,0 7px 17px #152f3438;color:#fffdf3;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:17px;font-weight:600;letter-spacing:.06em;backdrop-filter:blur(12px) saturate(1.45);-webkit-backdrop-filter:blur(12px) saturate(1.45);text-shadow:0 1px 2px #17382d40}
+#waterdrop-demo .save:before{content:"";position:absolute;inset:2px;border-radius:inherit;pointer-events:none;z-index:-1;background:linear-gradient(110deg,#ffffff16,transparent 35%,transparent 70%,#ffdeaa30);box-shadow:inset 0 1px 0 #ffffff45}
+#waterdrop-demo .save i{display:flex}
+#waterdrop-demo .save:focus-visible{outline:2px solid #fffdf4;outline-offset:3px}
+#waterdrop-demo .save-state{font-size:12px;color:#fffdf2;line-height:1.6;min-height:20px;text-shadow:0 1px 4px #17332caa}
+#waterdrop-demo .save-state:empty{display:block}
+#waterdrop-demo .wisdom{font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:12px;color:#fffdf3;text-align:center;line-height:1.7;opacity:1;letter-spacing:.01em;text-shadow:0 1px 5px #21373099}
+#waterdrop-demo .month{color:#fff;background:#233d46a6;border-radius:20px}
+#waterdrop-demo .month-grid button{min-height:44px}
+#waterdrop-demo .homebar{display:none}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){#waterdrop-demo .journal{background:rgba(248,246,239,.96)}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){#waterdrop-demo .save{background:linear-gradient(145deg,#557360,#2d5143);box-shadow:inset 0 1px 0 #ffffff80,0 5px 12px #18332a30}}
+@media(max-width:350px){#waterdrop-demo .page{padding-inline:13px}#waterdrop-demo .journal{padding-inline:17px}#waterdrop-demo .field p{font-size:13px}#waterdrop-demo textarea{font-size:16px}#waterdrop-demo .hero{padding-top:15px}}

@@ -114,6 +114,8 @@ public final class MainActivity extends Activity {
                     reply(request, reply, store.enable(request.getJSONObject("times")), null); break;
                 case "disable": store.disable(); reply(request, reply, store.status(), null); break;
                 case "test": reply(request, reply, new JSONObject().put("due", store.test()), null); break;
+                case "diagnostics": showDiagnostics(); reply(request, reply, new JSONObject(), null); break;
+                case "immediateTest": store.immediateTest(); reply(request, reply, new JSONObject(), null); break;
                 case "checkUpdate": checkUpdate(request, reply); break;
                 default: reply(request, reply, null, "不支持的操作");
             }
@@ -142,6 +144,10 @@ public final class MainActivity extends Activity {
         try {
             JSONObject result = store.enable(pending.getJSONObject("times"));
             reply(pending, pendingReply, result, null);
+            new AlertDialog.Builder(this).setTitle("再检查一下后台提醒")
+                .setMessage("通知和定时权限已开启。部分手机还需要允许后台活动或自启动，才能在锁屏时及时提醒。请完成后台检查，再做两分钟测试。")
+                .setPositiveButton("检查设置", (d,w) -> { try { showDiagnostics(); } catch (JSONException ignored) { } })
+                .setNegativeButton("稍后", null).show();
         } catch (Exception error) { reply(pending, pendingReply, null, "未能保存定时提醒，请重试"); }
         pending = null; pendingReply = null;
     }
@@ -158,10 +164,41 @@ public final class MainActivity extends Activity {
     }
     @Override protected void onResume() {
         super.onResume();
+        if (store != null) try { store.reconcile(); } catch (Exception error) { store.record("恢复失败 " + error.getClass().getSimpleName()); }
         if (awaitingExact) {
             awaitingExact = false;
             if (store.exact()) continueEnable(); else failPending("尚未允许闹钟和提醒，可以稍后开启");
         }
+    }
+    private void openSettings(Intent intent) {
+        try { startActivity(intent); }
+        catch (ActivityNotFoundException error) { Toast.makeText(this, "请在系统设置中搜索应用电池或启动管理", Toast.LENGTH_LONG).show(); }
+    }
+    private void showDiagnostics() throws JSONException {
+        JSONObject data = store.diagnostics();
+        String maker = Build.MANUFACTURER.toLowerCase(Locale.ROOT);
+        String guide = maker.contains("samsung") ? "三星：将宽心纪移出休眠/深度休眠应用，电池设为不受限制。"
+            : maker.contains("huawei") || maker.contains("honor") ? "华为/荣耀：应用启动管理改为手动，允许自启动、关联启动和后台活动。"
+            : maker.contains("xiaomi") || maker.contains("redmi") ? "小米：允许后台自启动，应用省电设为无限制。" : "请允许应用后台活动，并检查应用电池限制。";
+        StringBuilder text = new StringBuilder("设备：" + data.getString("device") + " / Android " + data.getString("android")
+            + "\n通知：" + data.getBoolean("canNotify") + "　精确定时：" + data.getBoolean("exact")
+            + "\n系统后台限制：" + data.getBoolean("backgroundRestricted") + "\n电池优化豁免：" + data.getBoolean("batteryExempt")
+            + "\n\n" + guide + "\n厂商自启动开关无法可靠自动读取，请手动核对。\n\n最近记录（仅保存在手机）：\n");
+        JSONArray events = data.getJSONArray("events");
+        for (int i=0; i<events.length(); i++) {
+            JSONObject item = events.getJSONObject(i);
+            text.append(java.time.Instant.ofEpochMilli(item.getLong("at")).atZone(java.time.ZoneId.systemDefault()).toString()).append(" ").append(item.getString("event")).append("\n");
+        }
+        ScrollView scroll = new ScrollView(this); TextView content = new TextView(this);
+        content.setText(text); content.setTextIsSelectable(true); content.setPadding(32,24,32,24); scroll.addView(content);
+        new AlertDialog.Builder(this).setTitle("后台提醒检查 · " + BuildConfig.VERSION_NAME).setView(scroll)
+            .setPositiveButton("应用设置", (d,w) -> openSettings(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:"+getPackageName()))))
+            .setNeutralButton("更多操作", (d,w) -> new AlertDialog.Builder(this).setItems(new String[]{"通知设置", "电池优化设置", "闹钟和提醒权限", "复制诊断记录"}, (dialog,which) -> {
+                if (which==0) openSettings(new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE,getPackageName()));
+                if (which==1) openSettings(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS));
+                if (which==2 && Build.VERSION.SDK_INT>=31) openSettings(new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:"+getPackageName())));
+                if (which==3) { ((android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("宽心纪诊断",text)); Toast.makeText(this,"诊断记录已复制",Toast.LENGTH_SHORT).show(); }
+            }).show()).setNegativeButton("关闭", null).show();
     }
     private void checkUpdate(JSONObject request, JavaScriptReplyProxy reply) {
         network.execute(() -> {

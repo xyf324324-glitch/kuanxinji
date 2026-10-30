@@ -11,7 +11,6 @@ import {
   CaretRight,
   CheckCircle,
   Copy,
-  List,
   Leaf,
   MagnifyingGlass,
   Quotes,
@@ -28,6 +27,7 @@ import { articles, loadArticle } from './content'
 import contentVersion from './content/content-version.json'
 import ChatScreen from './components/ChatScreen'
 import ReminderCard from './components/ReminderCard'
+import SiteNavigation, { SiteMenuButton } from './components/SiteNavigation'
 import {
   listSavedArticles,
   loadReadingProgress,
@@ -146,7 +146,6 @@ function App() {
   const [classicId, setClassicId] = useState('daily-rhythm')
   const [isOpeningBook, setIsOpeningBook] = useState(false)
   const menuButtonRef = useRef(null)
-  const menuFirstItemRef = useRef(null)
   const openingBookTimerRef = useRef(null)
   const {
     isOnline,
@@ -161,17 +160,6 @@ function App() {
     setMenuOpen(false)
     window.requestAnimationFrame(() => menuButtonRef.current?.focus())
   }
-
-  useEffect(() => {
-    if (!menuOpen) return undefined
-
-    window.requestAnimationFrame(() => menuFirstItemRef.current?.focus({ preventScroll: true }))
-    const handleMenuKeydown = (event) => {
-      if (event.key === 'Escape') closeMenu()
-    }
-    window.addEventListener('keydown', handleMenuKeydown)
-    return () => window.removeEventListener('keydown', handleMenuKeydown)
-  }, [menuOpen])
 
   useEffect(() => {
     Promise.all([listSavedArticles(), loadReadingProgress()]).then(([savedEntries, progressEntries]) => {
@@ -199,6 +187,10 @@ function App() {
         setView('chat')
       } else if (section === 'chat') {
         setView('chat')
+      } else if (section === 'reminders') {
+        window.history.replaceState(null, '', '/#/')
+        setView('home')
+        setReminderSettingsRequest(current => current + 1)
       } else if (section === 'library') {
         setView('library')
       } else if (section === 'content') {
@@ -717,79 +709,16 @@ function App() {
                 <img src={kuanxinLogo} alt="宽心纪" />
                 <span>愿您宽心</span>
               </button>
-              <button
-                ref={menuButtonRef}
-                className="icon-button menu-button"
-                type="button"
-                onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
-                aria-label={menuOpen ? '关闭导航' : '打开导航'}
-                aria-expanded={menuOpen}
-                aria-controls="site-menu"
-              >
-                {menuOpen ? <X size={28} weight="light" /> : <List size={31} weight="light" />}
-              </button>
+              <SiteMenuButton open={menuOpen} onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))} buttonRef={menuButtonRef} />
             </header>
 
-            {menuOpen && (
-              <>
-                <button className="menu-scrim" type="button" onClick={closeMenu} aria-label="关闭导航" />
-                <nav id="site-menu" className="menu-panel" aria-label="宽心纪导航">
-                  <button className="menu-close" type="button" onClick={closeMenu} aria-label="关闭导航">
-                    <X size={27} weight="light" />
-                  </button>
-                  <p className="menu-kicker">宽心纪</p>
-                  <h2>从此刻，慢慢走</h2>
-
-                  <section className="menu-group" aria-labelledby="menu-now">
-                    <p id="menu-now">此刻</p>
-                    <button ref={menuFirstItemRef} type="button" onClick={openChat}>
-                      <span><strong>问一问</strong><small>把此刻的心事说说</small></span>
-                      <CaretRight size={19} weight="light" aria-hidden="true" />
-                    </button>
-                  </section>
-
-                  <section className="menu-group" aria-labelledby="menu-read">
-                    <p id="menu-read">慢慢读</p>
-                    <button type="button" onClick={openArticles}>
-                      <span><strong>老师文章</strong><small>从困惑，回到当下</small></span>
-                      <CaretRight size={19} weight="light" aria-hidden="true" />
-                    </button>
-                    <button type="button" onClick={openSayings}>
-                      <span><strong>每日一言</strong><small>留一句话，陪你今日</small></span>
-                      <CaretRight size={19} weight="light" aria-hidden="true" />
-                    </button>
-                  </section>
-
-                  <section className="menu-group" aria-labelledby="menu-explore">
-                    <p id="menu-explore">随四时探索</p>
-                    <button type="button" onClick={openCalendar}>
-                      <span><strong>节气日历</strong><small>跟着时令，照顾身心</small></span>
-                      <CaretRight size={19} weight="light" aria-hidden="true" />
-                    </button>
-                    <button type="button" onClick={() => openMeridians()}>
-                      <span><strong>十二经络</strong><small>从身体，读见流转</small></span>
-                      <CaretRight size={19} weight="light" aria-hidden="true" />
-                    </button>
-                    <button type="button" onClick={() => openClassics()}>
-                      <span><strong>经典阅读</strong><small>在古书里，慢慢相逢</small></span>
-                      <CaretRight size={19} weight="light" aria-hidden="true" />
-                    </button>
-                  </section>
-
-                  <section className="menu-group" aria-labelledby="menu-reminders">
-                    <p id="menu-reminders">每日相伴</p>
-                    <button type="button" onClick={() => { setMenuOpen(false); setReminderSettingsRequest((current) => current + 1) }}>
-                      <span><strong>每日提醒</strong><small>念佛 · 一念回光</small></span>
-                      <CaretRight size={19} weight="light" aria-hidden="true" />
-                    </button>
-                  </section>
-
-                  <button className="menu-shelf" type="button" onClick={openLibrary}>
-                    离线书架 <span>{savedArticleIds.length} 篇已收藏</span>
-                  </button>
-                </nav>
-              </>
-            )}
+            <SiteNavigation open={menuOpen} onClose={closeMenu} savedCount={savedArticleIds.length} onNavigate={(destination) => {
+              const actions = { chat: openChat, articles: openArticles, sayings: openSayings, calendar: openCalendar, meridians: () => openMeridians(), classics: () => openClassics(), library: openLibrary,
+                reminders: () => { setMenuOpen(false); setReminderSettingsRequest(current => current + 1) },
+                gongguoge: () => window.location.assign('/gongguoge/'),
+              }
+              actions[destination]?.()
+            }} />
 
             <div className="hero-center">
               <h1>答案之书</h1>

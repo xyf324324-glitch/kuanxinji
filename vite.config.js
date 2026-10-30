@@ -1,12 +1,19 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import { fileURLToPath } from 'node:url'
 
 // https://vite.dev/config/
 export default defineConfig({
   build: {
     outDir: 'dist/client',
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: fileURLToPath(new URL('./index.html', import.meta.url)),
+        gongguoge: fileURLToPath(new URL('./gongguoge/index.html', import.meta.url)),
+      },
+    },
   },
   plugins: [
     react(),
@@ -38,7 +45,7 @@ export default defineConfig({
         importScripts: ['/reminder-push.js'],
         cleanupOutdatedCaches: true,
         navigateFallback: '/index.html',
-        navigateFallbackDenylist: [/^\/api\//],
+        navigateFallbackDenylist: [/^\/api\//, /^\/gongguoge(?:\/|$)/],
         globPatterns: ['**/*.{js,css,html,png,jpg,jpeg,svg,json,webmanifest}'],
       },
     }),

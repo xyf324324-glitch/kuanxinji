@@ -3,6 +3,7 @@ import { X, Plus, CheckCircle } from '@phosphor-icons/react'
 import brandCloud from '../assets/brand-cloud.png'
 import { disableReminders, enableReminders, getReminderStatus, loadReminderConfig, loadReminderTimes, normalizeTimes, saveReminderTimes, updateReminderTimes, testReminder, DEFAULT_REMINDER_TIMES, hasAndroidReminders, checkAndroidUpdate } from '../lib/reminders'
 import './ReminderCard.css'
+import { androidRequest } from '../lib/android-reminders.js'
 
 export default function ReminderCard({ isHome, settingsRequest, onClose }) {
   const [dismissed, setDismissed] = useState(false)
@@ -113,9 +114,16 @@ export default function ReminderCard({ isHome, settingsRequest, onClose }) {
   const test = async () => {
     setBusy(true)
     try {
-      await testReminder(active.subscription)
-      setMessage('测试通知已安排，将在约两分钟内发送。可以锁屏或切到其他应用等待。')
+      const result = await testReminder(active.subscription)
+      setMessage(hasAndroidReminders() ? `后台测试已安排：${new Date(result.due).toLocaleTimeString()}。请切到后台或锁屏等待，不必重复点击；若延迟，请打开“后台提醒检查”复制记录。` : '测试通知已安排，将在约两分钟内发送。可以锁屏或切到其他应用等待。')
     } catch { setMessage('暂时未能安排测试通知，请一分钟后重试。') }
+    finally { setBusy(false) }
+  }
+
+  const nativeAction = async (action) => {
+    setBusy(true)
+    try { await androidRequest(action); if (action === 'immediateTest') setMessage('已提交通知，请观察系统通知；此项仅检查显示，不代表后台测试通过。') }
+    catch (error) { setMessage(error.message) }
     finally { setBusy(false) }
   }
 
@@ -146,7 +154,7 @@ export default function ReminderCard({ isHome, settingsRequest, onClose }) {
         <p id="reminder-description" className="reminder-description">愿每一次提醒，都能陪您安住当下。</p>
         <button className="reminder-primary" type="button" onClick={close}>好的</button>
         <button className="reminder-later" type="button" onClick={() => { setMode('settings'); setMessage('') }}>调整提醒时间</button>
-        {active && <button className="reminder-later" type="button" onClick={test} disabled={busy}>发送测试通知</button>}
+        {active && <button className="reminder-later" type="button" onClick={test} disabled={busy}>{hasAndroidReminders() ? '两分钟后测试后台提醒' : '发送测试通知'}</button>}
       </>}
       {mode === 'settings' && <>
         <h2 id="reminder-title" tabIndex={-1}>每日提醒设置</h2>
@@ -164,8 +172,12 @@ export default function ReminderCard({ isHome, settingsRequest, onClose }) {
         <button className="reminder-primary" type="button" onClick={save} disabled={busy || Object.values(times).some((items) => items.some((time) => !time))}>{busy ? '正在处理…' : '保存提醒时间'}</button>
         <button className="reminder-later" type="button" onClick={() => { setTimes(normalizeTimes(DEFAULT_REMINDER_TIMES)); setMessage('已恢复默认时间，保存后生效。') }} disabled={busy}>恢复默认时间</button>
         <button className="reminder-later" type="button" onClick={active ? disable : enable} disabled={busy}>{active ? '关闭每日提醒' : '开启每日提醒'}</button>
-        {active && <button className="reminder-later" type="button" onClick={test} disabled={busy}>发送测试通知</button>}
+        {active && <button className="reminder-later" type="button" onClick={test} disabled={busy}>{hasAndroidReminders() ? '两分钟后测试后台提醒' : '发送测试通知'}</button>}
         {hasAndroidReminders() && <button className="reminder-later" type="button" onClick={checkUpdate} disabled={busy}>检查安装包更新</button>}
+      </>}
+      {hasAndroidReminders() && mode !== 'invite' && <>
+        {active && <button className="reminder-later" type="button" onClick={() => nativeAction('immediateTest')} disabled={busy}>立即测试通知显示</button>}
+        <button className="reminder-later" type="button" onClick={() => nativeAction('diagnostics')} disabled={busy}>后台提醒检查</button>
       </>}
       {message && <p className="reminder-message" role="status">{message}</p>}
     </dialog>

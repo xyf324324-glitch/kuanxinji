@@ -42,10 +42,10 @@ jobs:
       - name: Prepare APK and checksums
         run: |
           mkdir -p android-test/output
-          cp android-test/app/build/outputs/apk/debug/app-debug.apk android-test/output/kuanxinji-0.1.0-test.apk
-          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs android-test/output/kuanxinji-0.1.0-test.apk > android-test/output/signature.txt
+          cp android-test/app/build/outputs/apk/debug/app-debug.apk android-test/output/kuanxinji-0.2.0-test.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs android-test/output/kuanxinji-0.2.0-test.apk > android-test/output/signature.txt
           cd android-test/output
-          sha256sum kuanxinji-0.1.0-test.apk > SHA256SUMS.txt
+          sha256sum kuanxinji-0.2.0-test.apk > SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
         with:
           name: kuanxinji-android-test

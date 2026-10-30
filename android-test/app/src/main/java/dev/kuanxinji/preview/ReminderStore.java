@@ -6,6 +6,7 @@ import android.app.*;
 import android.content.*;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.PowerManager;
 import org.json.*;
 import java.time.*;
 import java.util.*;
@@ -59,18 +60,38 @@ public final class ReminderStore {
     public boolean exact() { return Build.VERSION.SDK_INT < 31 || alarms.canScheduleExactAlarms(); }
     public boolean desired() { return prefs.getBoolean("enabled", false); }
     public JSONObject status() throws JSONException { return new JSONObject().put("enabled", desired() && permitted() && exact()).put("times", times()).put("canNotify", permitted()).put("exact", exact()).put("native", true); }
+    public synchronized void record(String event) {
+        try {
+            JSONArray old = new JSONArray(prefs.getString("events", "[]")), next = new JSONArray();
+            for (int i = Math.max(0, old.length()-49); i < old.length(); i++) next.put(old.get(i));
+            next.put(new JSONObject().put("at", System.currentTimeMillis()).put("event", event));
+            prefs.edit().putString("events", next.toString()).commit();
+        } catch (JSONException ignored) { /* Diagnostics must not interrupt delivery. */ }
+    }
+    public JSONObject diagnostics() throws JSONException {
+        PowerManager power = context.getSystemService(PowerManager.class);
+        return status().put("device", Build.MANUFACTURER + " " + Build.MODEL).put("android", Build.VERSION.RELEASE)
+            .put("batteryExempt", power.isIgnoringBatteryOptimizations(context.getPackageName()))
+            .put("backgroundRestricted", (Build.VERSION.SDK_INT >= 28 && context.getSystemService(ActivityManager.class).isBackgroundRestricted()))
+            .put("idle", power.isDeviceIdleMode()).put("testDue", prefs.getLong("due-2000", 0))
+            .put("events", new JSONArray(prefs.getString("events", "[]")));
+    }
     private PendingIntent intent(int minute) {
         Intent target = new Intent(context, ReminderReceiver.class).putExtra("minute", minute);
         return PendingIntent.getBroadcast(context, 100 + minute, target, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
     private void cancel(JSONObject times) throws JSONException {
-        for (int minute : slots(times).keySet()) alarms.cancel(intent(minute));
-        alarms.cancel(intent(2000));
+        for (int minute : slots(times).keySet())  { alarms.cancel(intent(minute)); prefs.edit().remove("due-" + minute).commit(); }
+        alarms.cancel(intent(2000)); prefs.edit().remove("due-2000").commit();
     }
     @SuppressLint("ScheduleExactAlarm")
     public void scheduleSlot(int minute, long when) {
         if (!exact()) throw new SecurityException("请允许闹钟和提醒权限");
-        alarms.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, when, intent(minute));
+        Intent target = new Intent(context, ReminderReceiver.class).putExtra("minute", minute).putExtra("due", when);
+        PendingIntent delivery = PendingIntent.getBroadcast(context, 100 + minute, target, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        alarms.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, when, delivery);
+        prefs.edit().putLong("due-" + minute, when).commit();
+        record("已安排 " + minute + "，计划时间 " + Instant.ofEpochMilli(when).atZone(ZoneId.systemDefault()));
     }
     private void schedule(JSONObject times) throws JSONException {
         for (int minute : slots(times).keySet()) scheduleSlot(minute, ScheduleMath.next(minute, System.currentTimeMillis(), ZoneId.systemDefault()));
@@ -94,23 +115,44 @@ public final class ReminderStore {
         if (!prefs.edit().putBoolean("enabled", false).commit()) throw new IllegalStateException("无法保存提醒设置");
         cancel(times());
     }
-    public void restore() throws JSONException { if (desired() && permitted() && exact()) schedule(times()); }
+    public void restore() throws JSONException { if (desired() && permitted() && exact()) { record("系统事件恢复任务"); schedule(times()); } }
+    public void reconcile() throws JSONException {
+        record("应用进入前台");
+        if (!desired() || !permitted() || !exact()) return;
+        for (int minute : slots(times()).keySet()) {
+            // Leave overdue alarms intact briefly so their actual delayed receipt can be diagnosed.
+            long due = prefs.getLong("due-" + minute, 0);
+            if (due == 0 || DeliveryPolicy.expired(due, System.currentTimeMillis())) {
+                record("修复后续任务 " + minute);
+                scheduleSlot(minute, ScheduleMath.next(minute, System.currentTimeMillis(), ZoneId.systemDefault()));
+            }
+        }
+    }
     public long test() {
         if (!desired() || !permitted() || !exact()) throw new IllegalStateException("请先开启每日提醒");
-        long due = System.currentTimeMillis() + 60000;
+        long existing = prefs.getLong("due-2000", 0);
+        if (DeliveryPolicy.reuseTest(existing, System.currentTimeMillis())) return existing;
+        long due = System.currentTimeMillis() + DeliveryPolicy.TEST_DELAY;
         scheduleSlot(2000, due);
         return due;
     }
+    public void immediateTest() throws JSONException {
+        if (!desired() || !permitted()) throw new IllegalStateException("请先开启每日提醒");
+        fire(2001, 0);
+    }
     @SuppressLint("MissingPermission") // permitted() checks OS permission and channel before notify().
-    public void fire(int minute) throws JSONException {
-        if (!desired() || !permitted()) return;
+    public void fire(int minute, long scheduledDue) throws JSONException {
+        long now = System.currentTimeMillis(), due = scheduledDue > 0 ? scheduledDue : prefs.getLong("due-" + minute, 0);
+        record("系统唤醒 " + minute + "，延迟毫秒 " + (due > 0 ? now-due : -1));
+        if (!desired() || !permitted()) { record("权限或提醒开关阻止发送"); return; }
         int kind;
-        if (minute == 2000) kind = 3;
+        if (minute == 2000 || minute == 2001) { kind = 3; if (minute == 2000) prefs.edit().remove("due-2000").commit(); }
         else {
             Integer current = slots(times()).get(minute);
             if (current == null) return;
             kind = current;
             if (exact()) scheduleSlot(minute, ScheduleMath.next(minute, System.currentTimeMillis(), ZoneId.systemDefault()));
+            if (DeliveryPolicy.expired(due, now)) { record("已跳过超过30分钟的旧提醒"); return; }
             // Suppress duplicate broadcasts for the same local day and time.
             String today = LocalDate.now().toString(), dedup = "sent-" + minute;
             if (today.equals(prefs.getString(dedup, ""))) return;
@@ -122,5 +164,6 @@ public final class ReminderStore {
             .setContentTitle("宽心的提醒").setContentText(body).setStyle(new Notification.BigTextStyle().bigText(body))
             .setVisibility(Notification.VISIBILITY_PUBLIC).setCategory(Notification.CATEGORY_REMINDER).setContentIntent(open).setAutoCancel(true).build();
         context.getSystemService(NotificationManager.class).notify(100 + minute, notification);
+        record("已提交通知 " + minute + "；是否展示横幅由系统决定");
     }
 }
