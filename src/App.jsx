@@ -760,6 +760,18 @@ function App() {
                     </button>
                   </section>
 
+                  <section className="menu-group" aria-labelledby="menu-reminders">
+                    <p id="menu-reminders">每日相伴</p>
+                    <button type="button" onClick={() => window.location.assign('/gongguoge/')}>
+                      <span><strong>功过格</strong><small>观照今日，记下一念</small></span>
+                      <CaretRight size={19} weight="light" aria-hidden="true" />
+                    </button>
+                    <button type="button" onClick={() => { setMenuOpen(false); setReminderSettingsRequest((current) => current + 1) }}>
+                      <span><strong>每日提醒</strong><small>念佛 · 一念回光</small></span>
+                      <CaretRight size={19} weight="light" aria-hidden="true" />
+                    </button>
+                  </section>
+
                   <section className="menu-group" aria-labelledby="menu-explore">
                     <p id="menu-explore">随四时探索</p>
                     <button type="button" onClick={openCalendar}>
@@ -772,14 +784,6 @@ function App() {
                     </button>
                     <button type="button" onClick={() => openClassics()}>
                       <span><strong>经典阅读</strong><small>在古书里，慢慢相逢</small></span>
-                      <CaretRight size={19} weight="light" aria-hidden="true" />
-                    </button>
-                  </section>
-
-                  <section className="menu-group" aria-labelledby="menu-reminders">
-                    <p id="menu-reminders">每日相伴</p>
-                    <button type="button" onClick={() => { setMenuOpen(false); setReminderSettingsRequest((current) => current + 1) }}>
-                      <span><strong>每日提醒</strong><small>念佛 · 一念回光</small></span>
                       <CaretRight size={19} weight="light" aria-hidden="true" />
                     </button>
                   </section>

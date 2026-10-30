@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#355447"><title>功过格 · 宽心纪</title>
+<style>html{background:#536768;scroll-padding-bottom:120px}body{margin:0;min-width:280px}button,textarea{font:inherit}*{box-sizing:border-box}</style>
+</head><body><style>
+#waterdrop-demo{color:#fff;font-family:"PingFang SC","Microsoft YaHei","SimSun",sans-serif;max-width:390px;margin:auto;--wall-cloud:url("./cloud.jpg");--wall-sea:url("./sea.jpg")}
+#waterdrop-demo *{box-sizing:border-box}#waterdrop-demo [hidden]{display:none!important}
+#waterdrop-demo .theme-preview{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px}
+#waterdrop-demo .theme-preview button{border:1px solid light-dark(#d9d9d1,#525b57);background:light-dark(#f8f9f5,#26332c);color:light-dark(#4a554e,#ebeee8);border-radius:18px;padding:7px 13px;font:12px sans-serif}
+#waterdrop-demo .theme-preview button[aria-pressed=true]{background:light-dark(#e0e7df,#4d6253)}
+#waterdrop-demo .phone{position:relative;border:5px solid #202323;border-radius:47px;background:#56616b;overflow:hidden;isolation:isolate;box-shadow:0 10px 35px #101b231c}
+#waterdrop-demo .scene{position:absolute;inset:0;z-index:-3;background-position:center;background-size:cover;background-image:var(--wall-cloud)}
+#waterdrop-demo[data-theme=sea] .scene{background-image:var(--wall-sea)}
+#waterdrop-demo .veil{position:absolute;inset:0;z-index:-2;background:linear-gradient(180deg,#2331450c,#182b3c14 30%,#17273324 62%,#15273315);pointer-events:none}
+#waterdrop-demo .status{height:47px;display:flex;align-items:center;justify-content:space-between;padding:0 25px;font:500 12px Arial,sans-serif;position:relative}
+#waterdrop-demo .island{position:absolute;width:105px;height:27px;border-radius:20px;background:#080b0e;top:10px;left:50%;transform:translateX(-50%)}
+#waterdrop-demo .status small{font:10px Arial,sans-serif;letter-spacing:2px}
+#waterdrop-demo .page{padding:0 17px 10px}
+#waterdrop-demo .top{display:flex;align-items:center;justify-content:space-between;padding:8px 3px 0}
+#waterdrop-demo .brand{position:relative;display:block;width:90px;height:42px;overflow:hidden}
+#waterdrop-demo .brand img{position:absolute;left:-8px;top:-30px;width:106px;height:106px;max-width:none;object-fit:contain;filter:drop-shadow(0 1px 5px #ffffff55)}
+#waterdrop-demo button,#waterdrop-demo textarea{font-family:inherit;-webkit-tap-highlight-color:transparent}
+#waterdrop-demo .glass{position:relative;border:1px solid #ffffff7a;background:linear-gradient(132deg,#ffffff24,#ffffff0c 35%,#ffffff16);box-shadow:inset 1px 1px 1px #ffffff85,inset -1px -1px 2px #ffffff40,0 9px 22px #07141c1c;backdrop-filter:blur(26px) saturate(1.6);-webkit-backdrop-filter:blur(26px) saturate(1.6);color:#fff}
+#waterdrop-demo .menu-button{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;padding:0}
+#waterdrop-demo i{font-style:normal}#waterdrop-demo svg{width:20px;height:20px;stroke-width:1.35}#waterdrop-demo .menu-button i{font:23px Arial,sans-serif}
+#waterdrop-demo .hero{display:flex;align-items:center;justify-content:center;padding:14px 6px 14px}
+#waterdrop-demo h2{font:400 35px/1.35 "Noto Serif SC","SimSun",serif;letter-spacing:.13em;margin:0;text-shadow:0 1px 12px #24313c22}
+#waterdrop-demo h2.title-glass{min-width:186px;padding:10px 25px 11px;border-radius:21px;font-size:32px;text-align:center;text-indent:.13em;background:linear-gradient(135deg,#ffffff26,#ffffff0d 65%),#172b3c50;backdrop-filter:blur(12px) saturate(1.25);-webkit-backdrop-filter:blur(12px) saturate(1.25);border-color:#ffffff88;box-shadow:inset 0 1px 1px #ffffff80,inset 0 -1px 1px #ffffff24,0 5px 18px #14283820;text-shadow:0 1px 3px #14283855}
+#waterdrop-demo .calendar-control{display:flex;justify-content:flex-end;height:24px;margin-top:-4px}
+#waterdrop-demo .month-toggle{display:grid;place-items:center;border:0;background:transparent;color:#fffffff0;width:30px;min-height:28px;padding:2px}
+#waterdrop-demo .month-toggle i{display:flex;font-size:18px}
+#waterdrop-demo .month-toggle svg{width:18px;height:18px}
+#waterdrop-demo .week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0;padding:0 0 18px}
+#waterdrop-demo .day{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:0;min-height:56px;border:1px solid transparent;background:transparent;border-radius:50%;color:white;padding:5px 0;touch-action:pan-y}
+#waterdrop-demo .day small{font-size:10px;opacity:.94}#waterdrop-demo .day span{font:17px Georgia,serif}
+#waterdrop-demo .day.selected{border-color:#ffffff80;background:radial-gradient(ellipse at 20% 15%,#ffffff50,transparent 45%),linear-gradient(140deg,#ffffff1c,#ffffff08 60%,#ffdfa52a);box-shadow:inset 1px 1px 2px #ffffffad,inset -1px -2px 3px #ffe2b780,0 5px 12px #1727331c;backdrop-filter:blur(14px) saturate(1.6);-webkit-backdrop-filter:blur(14px) saturate(1.6)}
+#waterdrop-demo .journal{border-radius:29px;padding:24px 20px 13px;background-color:#12293633;backdrop-filter:blur(9px) saturate(1.3);-webkit-backdrop-filter:blur(9px) saturate(1.3)}
+#waterdrop-demo .field+.field{border-top:1px solid #ffffff48;padding-top:19px}
+#waterdrop-demo label{display:flex;align-items:center;gap:10px;font-size:17px;font-family:"Noto Serif SC","SimSun",serif;letter-spacing:.05em}
+#waterdrop-demo label i{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;font:22px Georgia,serif}
+#waterdrop-demo textarea{display:block;width:100%;min-height:116px;margin:13px 0 0;padding:0 0 16px;background:transparent;border:0;color:white;font-size:15px;line-height:1.9;resize:vertical;text-shadow:0 1px 3px #152b3444;border-radius:4px}
+#waterdrop-demo textarea::placeholder{color:#ffffffb3}#waterdrop-demo textarea:focus-visible{outline:1px solid #ffffff88;outline-offset:5px}
+#waterdrop-demo .footer{display:flex;flex-direction:column;align-items:center;padding:20px 0 0;gap:10px}
+#waterdrop-demo .save{min-height:49px;width:77%;border-radius:40px;display:flex;justify-content:center;align-items:center;gap:12px;font-family:"SimSun",serif;font-size:18px;letter-spacing:.05em;touch-action:pan-y;background:radial-gradient(ellipse at 10% 0%,#ffffff55,transparent 42%),linear-gradient(130deg,#ffffff28,#ffffff08 65%,#ffe4bd30);box-shadow:inset 1px 1px 1px #ffffffb0,inset -2px -2px 4px #ffefcd90,0 8px 20px #14293828}
+#waterdrop-demo .save i{display:flex;font-size:19px}
+#waterdrop-demo .save-state{min-height:15px;font-size:10px;color:#ffffffe6;text-align:center;margin:0}
+#waterdrop-demo .wisdom{font:11px "SimSun",serif;opacity:.86;letter-spacing:.07em;margin:0}
+#waterdrop-demo .homebar{width:116px;height:4px;background:#fff;border-radius:4px;margin:16px auto 1px}
+#waterdrop-demo .droplet{will-change:transform;isolation:isolate}
+#waterdrop-demo .droplet:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:radial-gradient(circle at var(--touch-x,50%) var(--touch-y,50%),#ffffff70,transparent 62%);opacity:0}
+#waterdrop-demo .droplet.pressing:after{animation:ripple-water 700ms ease-out both}
+@keyframes ripple-water{0%{opacity:.15;transform:scale(.4)}40%{opacity:.7}100%{opacity:.3;transform:scale(1.1)}}
+#waterdrop-demo .month{border-radius:20px;padding:12px;margin-bottom:14px;background-color:#1d35495c}
+#waterdrop-demo .month-head{display:flex;align-items:center;justify-content:space-between;font-size:13px;margin-bottom:9px}
+#waterdrop-demo .month-head button{background:transparent;border:0;color:#fff;font-size:20px;min-width:32px;min-height:36px}
+#waterdrop-demo .month-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
+#waterdrop-demo .month-grid button{min-height:35px;min-width:0;border:0;background:transparent;color:#fff;border-radius:50%;font:14px Georgia,serif}
+#waterdrop-demo .month-grid button.selected{background:#ffffff2b;box-shadow:inset 0 1px #ffffff99}
+#waterdrop-demo .menu-shade{position:absolute;inset:0;background:#12243460;border:0;z-index:4;backdrop-filter:blur(5px)}
+#waterdrop-demo nav{position:absolute;z-index:5;inset:0 0 0 17%;padding:62px 27px;background:#34434a99;backdrop-filter:blur(32px) saturate(1.5);-webkit-backdrop-filter:blur(32px) saturate(1.5);border-left:1px solid #ffffff55}
+#waterdrop-demo nav h3{font:27px/1.7 "KaiTi","SimSun",serif;margin:10px 0 35px}
+#waterdrop-demo nav small{font-size:11px;opacity:.7}#waterdrop-demo nav p{padding-top:16px}
+#waterdrop-demo nav button{display:block;border:0;background:transparent;color:#fff;font:17px "SimSun",serif;padding:13px 0;width:100%;text-align:left}
+#waterdrop-demo nav .close{position:absolute;top:15px;right:20px;width:35px;font:25px Arial,sans-serif;text-align:center}
+@media(max-width:350px){#waterdrop-demo .page{padding-inline:12px}#waterdrop-demo .journal{padding-inline:16px}#waterdrop-demo textarea{font-size:14px}#waterdrop-demo .hero{padding-top:17px}}
+@media(pointer:coarse){#waterdrop-demo textarea{font-size:16px}#waterdrop-demo .menu-button{min-height:44px;min-width:44px}#waterdrop-demo .month-grid button{min-height:44px}}
+@media(prefers-reduced-motion:reduce){#waterdrop-demo .droplet:after{animation:none!important}#waterdrop-demo .droplet{will-change:auto}}
+</style>
+<div id="waterdrop-demo" data-theme="cloud" aria-label="功过格手机动效预览">
+ <div class="theme-preview" aria-label="预览背景"><button type="button" data-theme-pick="auto" aria-pressed="true">每日随机</button><button type="button" data-theme-pick="cloud" aria-pressed="false">云光</button><button type="button" data-theme-pick="sea" aria-pressed="false">海光</button></div>
+ <div class="phone"><div class="scene" aria-hidden="true"></div><div class="veil" aria-hidden="true"></div>
+ <div class="status" aria-hidden="true"><span>9:41</span><div class="island"></div><small>▂▅▇ ▰</small></div>
+ <div class="page"><header class="top"><div class="brand"><img src="./brand.png" alt="宽心纪"></div><button class="menu-button glass" type="button" data-action="menu" aria-label="打开导航"><i data-lucide="menu" aria-hidden="true">☰</i></button></header>
+ <div class="hero"><h2>功过格</h2><p>观照今日，不必苛责自己</p></div><div class="calendar-control"><span class="current-month"></span><button class="today-control" type="button" data-action="today">回到今天</button><button class="month-toggle" type="button" data-action="month" aria-label="展开月历" aria-expanded="false" aria-controls="drop-month"><i data-lucide="calendar-days" aria-hidden="true">▦</i></button></div>
+ <div class="week" aria-label="选择记录日期"></div>
+ <section class="month glass" id="drop-month" aria-label="月历" hidden><div class="month-head"><button type="button" data-action="prev-month" aria-label="上个月">‹</button><span></span><button type="button" data-action="next-month" aria-label="下个月">›</button></div><div class="month-grid"></div></section>
+ <form class="journal glass" aria-label="每日言行登记">
+ <div class="field"><div class="field-heading"><label for="drop-good"><span class="zen-mark"><img src="./meditation.svg" alt="" aria-hidden="true"></span>今日之善</label><button type="button" class="expand-editor" data-editor="good" aria-haspopup="dialog">展开编辑</button></div><p id="good-guide">今天有哪些值得记住的善意与善行？</p><textarea id="drop-good" aria-describedby="good-guide" maxlength="400" rows="3" placeholder="在这里写下…"></textarea></div>
+ <div class="field"><div class="field-heading"><label for="drop-loss"><span class="zen-mark"><img src="./meditation.svg" alt="" aria-hidden="true"></span>今日之省</label><button type="button" class="expand-editor" data-editor="loss" aria-haspopup="dialog">展开编辑</button></div><p id="loss-guide">今天哪一念、哪件事，值得重新看看？</p><textarea id="drop-loss" aria-describedby="loss-guide" maxlength="400" rows="3" placeholder="在这里写下…"></textarea></div>
+ <div class="field"><div class="field-heading"><label for="drop-next"><span class="zen-mark"><img src="./meditation.svg" alt="" aria-hidden="true"></span>明日一行</label><button type="button" class="expand-editor" data-editor="next" aria-haspopup="dialog">展开编辑</button></div><p id="next-guide">给明天的自己，留一个可以做到的小行动。</p><textarea id="drop-next" aria-describedby="next-guide" maxlength="400" rows="3" placeholder="在这里写下…"></textarea></div>
+ </form>
+ <footer class="footer"><button class="save droplet" type="button" data-action="save"><i data-lucide="pen-line" aria-hidden="true">✎</i><span>保存今日</span></button><p class="save-state" role="status" aria-live="polite"></p><p class="wisdom">不必写满，记录一念也是开始。</p></footer>
+ </div>
+ <button class="menu-shade" type="button" data-action="close-menu" aria-label="关闭导航" hidden></button><nav aria-label="功过格页面导航" hidden><button class="close" type="button" data-action="close-menu" aria-label="关闭导航">×</button><small>宽心纪 · 日省</small><h3>照见今日，<br>慢慢践行。</h3><button type="button" data-action="focus-good">今日之善</button><button type="button" data-action="focus-loss">今日之省</button><button type="button" data-action="focus-next">明日一行</button><button type="button" data-action="history">查看历史记录</button></nav><dialog class="editor-dialog" aria-labelledby="editor-title" aria-describedby="editor-guide"><div class="editor-heading"><h3 id="editor-title"></h3><button class="editor-done" type="button">完成编辑</button></div><p class="editor-guide" id="editor-guide"></p><textarea id="expanded-text" maxlength="400" aria-labelledby="editor-title" aria-describedby="editor-guide" placeholder="在这里慢慢写下…"></textarea><div class="editor-meta"><p class="editor-status" role="status"></p><span class="editor-count"></span></div></dialog>
+ </div>
+</div>
+<style>/* Scoped refinement of the existing page; no site-wide selectors. */
+#waterdrop-demo{max-width:540px;color:#304a3f;font-family:"PingFang SC","Microsoft YaHei",sans-serif}
+#waterdrop-demo .theme-preview,#waterdrop-demo .status{display:none}
+#waterdrop-demo .phone{border:0;border-radius:0;box-shadow:none;background:#56616b;min-height:100svh;overflow:clip}
+#waterdrop-demo .scene{background-position:58% top}
+#waterdrop-demo .veil{background:linear-gradient(180deg,#152c3424,transparent 24%,#193e3812 45%,#18363115)}
+#waterdrop-demo .page{padding: max(14px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom));}
+#waterdrop-demo .top{padding:0 3px}
+#waterdrop-demo .brand{width:72px;height:34px}
+#waterdrop-demo .brand img{width:85px;height:85px;left:-6px;top:-24px}
+#waterdrop-demo .menu-button{min-height:44px;min-width:44px;background:#fff3;box-shadow:inset 0 1px #ffffff88,0 3px 12px #172e3510}
+#waterdrop-demo .hero{display:block;text-align:center;padding:17px 0 20px}
+#waterdrop-demo h2{color:#fffdf4;font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:clamp(34px,10vw,40px);font-weight:700;letter-spacing:.1em;text-indent:.1em;line-height:1.3;text-shadow:0 2px 5px #21363c40}
+#waterdrop-demo .hero p{margin:9px 0 0;color:#fffdf3;font-size:13px;font-weight:500;letter-spacing:.03em;line-height:1.6;text-shadow:0 1px 3px #243b4266}
+#waterdrop-demo .calendar-control{align-items:center;justify-content:space-between;gap:8px;min-height:36px;height:auto;margin:0 0 5px;color:#fffdf4}
+#waterdrop-demo .current-month{font-size:13px;letter-spacing:.05em;flex:1;text-shadow:0 1px 3px #172a3b88}
+#waterdrop-demo .today-control{color:#fffdf3;background:#fff2;border:1px solid #ffffff70;border-radius:20px;min-height:36px;padding:5px 12px;font-size:12px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+#waterdrop-demo .month-toggle{min-height:36px;min-width:30px}
+#waterdrop-demo .week{padding-bottom:15px;gap:1px}
+#waterdrop-demo .day{min-height:50px;max-width:50px;margin:auto;width:100%;color:#fffdf3}
+#waterdrop-demo .day.selected{color:#34483e;isolation:isolate;background:radial-gradient(ellipse at 18% 12%,#ffffffb0,transparent 45%),linear-gradient(145deg,#fff8e6a8,#e6c79566 65%,#fff2d991);border-color:#fff7debc;box-shadow:inset 1px 2px 2px #ffffffe6,inset -1px -2px 3px #a97e4340,0 5px 12px #52361c30;backdrop-filter:blur(8px) saturate(1.5);-webkit-backdrop-filter:blur(8px) saturate(1.5)}
+#waterdrop-demo .day.selected:before{content:"";position:absolute;inset:2px;border-radius:inherit;background:linear-gradient(125deg,#ffffff88,transparent 28%,transparent 72%,#ffefc74d);pointer-events:none;z-index:-1}
+#waterdrop-demo .day small{font-size:11px}
+#waterdrop-demo .day span{font-size:18px;font-weight:500}
+#waterdrop-demo .day.selected span{font-weight:700}
+#waterdrop-demo .journal{padding:22px 20px 21px;border-radius:24px;border:1px solid #ffffffb8;background:linear-gradient(135deg,#fffaf420,transparent 45%,#f6d39a1c),rgba(248,246,239,.70);backdrop-filter:blur(14px) saturate(1.25);-webkit-backdrop-filter:blur(14px) saturate(1.25);box-shadow:inset 0 1px 1px #ffffffcf,inset 0 -1px 1px #fff4db44,0 8px 24px #24352b1a;color:#304a3f}
+#waterdrop-demo .field+.field{border-top:1px solid #c8c5b775;padding-top:22px;margin-top:22px}
+#waterdrop-demo label{font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:18px;letter-spacing:.035em;color:#263f34;font-weight:600;gap:9px}
+#waterdrop-demo .zen-mark{display:grid;place-items:center;flex:0 0 auto;width:32px;height:32px;border-radius:50%;background:linear-gradient(145deg,#fffdf06e,#d9dfca45);box-shadow:inset 0 1px 0 #ffffff80}
+#waterdrop-demo .zen-mark img{display:block;width:23px;height:23px}
+#waterdrop-demo .field p{font-size:13px;font-weight:500;line-height:1.7;color:#536458;margin:7px 0 10px;letter-spacing:0}
+#waterdrop-demo textarea{min-height:96px;max-height:320px;height:auto;margin:0;padding:12px 13px;background:rgba(255,253,247,.36);border:1px solid #ffffff60;border-radius:13px;color:#304a3f;font-size:16px;line-height:1.8;resize:none;text-shadow:none;overflow-y:auto;overflow-wrap:anywhere;scroll-margin-top:26px;scroll-margin-bottom:120px}
+#waterdrop-demo textarea::placeholder{color:#7b827a}
+#waterdrop-demo textarea:focus-visible{outline:2px solid #6c8c7566;outline-offset:2px;background:#fffdf766}
+#waterdrop-demo .journal textarea{height:108px;min-height:108px;max-height:108px;overscroll-behavior:contain}
+#waterdrop-demo .field-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#waterdrop-demo .expand-editor{flex:0 0 auto;min-height:36px;padding:4px 0 4px 8px;border:0;background:transparent;color:#456350;font-size:12px;font-weight:500;white-space:nowrap}
+#waterdrop-demo .editor-dialog{position:fixed;inset:12px 0 auto;box-sizing:border-box;margin:0 auto;width:calc(100% - 24px);max-width:500px;height:min(720px,calc(100dvh - 24px));max-height:none;padding:22px 20px max(18px,env(safe-area-inset-bottom));border:1px solid #ffffffc0;border-radius:24px;background:rgba(248,246,239,.96);color:#304a3f;box-shadow:inset 0 1px #fff9,0 18px 55px #102c3440;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+#waterdrop-demo .editor-dialog[open]{display:flex;flex-direction:column;gap:13px}
+#waterdrop-demo .editor-dialog::backdrop{background:#142f3d73;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#waterdrop-demo .editor-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#waterdrop-demo .editor-heading h3{margin:0;font-size:20px;letter-spacing:.04em;font-weight:600}
+#waterdrop-demo .editor-done{border:0;border-radius:20px;padding:8px 17px;min-height:44px;background:#355447;color:#fffdf3;font-size:14px;font-weight:500}
+#waterdrop-demo .editor-guide{margin:0;font-size:13px;line-height:1.7;color:#66736c}
+#waterdrop-demo .editor-dialog textarea{flex:1 1 auto;height:0;min-height:0;max-height:none;width:100%;margin:0;padding:15px;border:1px solid #d0d8cd77;border-radius:14px;background:#fffdf480;color:#304a3f;resize:none;overflow-y:auto;font-size:17px;line-height:1.9;overscroll-behavior:contain;scroll-margin:0}
+#waterdrop-demo .editor-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;line-height:1.6;color:#66736c}
+#waterdrop-demo .editor-meta p{margin:0}
+#waterdrop-demo .footer{padding:19px 10px 0;gap:11px}
+#waterdrop-demo .save{position:relative;isolation:isolate;width:100%;min-height:52px;border:1px solid #ffffffa0;border-radius:30px;background:radial-gradient(ellipse at 15% 0%,#ffffff38,transparent 55%),linear-gradient(140deg,#4e6c5dbd,#294e40cf 65%,#899a6b91);box-shadow:inset 0 2px 1px #ffffff8c,inset 0 -2px 2px #102e2840,0 7px 17px #152f3438;color:#fffdf3;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:17px;font-weight:600;letter-spacing:.06em;backdrop-filter:blur(12px) saturate(1.45);-webkit-backdrop-filter:blur(12px) saturate(1.45);text-shadow:0 1px 2px #17382d40}
+#waterdrop-demo .save:before{content:"";position:absolute;inset:2px;border-radius:inherit;pointer-events:none;z-index:-1;background:linear-gradient(110deg,#ffffff16,transparent 35%,transparent 70%,#ffdeaa30);box-shadow:inset 0 1px 0 #ffffff45}
+#waterdrop-demo .save i{display:flex}
+#waterdrop-demo .save:focus-visible{outline:2px solid #fffdf4;outline-offset:3px}
+#waterdrop-demo .save-state{font-size:12px;color:#fffdf2;line-height:1.6;min-height:20px;text-shadow:0 1px 4px #17332caa}
+#waterdrop-demo .save-state:empty{display:block}
+#waterdrop-demo .wisdom{font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:12px;color:#fffdf3;text-align:center;line-height:1.7;opacity:1;letter-spacing:.01em;text-shadow:0 1px 5px #21373099}
+#waterdrop-demo .month{color:#fff;background:#233d46a6;border-radius:20px}
+#waterdrop-demo .month-grid button{min-height:44px}
+#waterdrop-demo .homebar{display:none}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){#waterdrop-demo .journal{background:rgba(248,246,239,.96)}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){#waterdrop-demo .save{background:linear-gradient(145deg,#557360,#2d5143);box-shadow:inset 0 1px 0 #ffffff80,0 5px 12px #18332a30}}
+@media(max-width:350px){#waterdrop-demo .page{padding-inline:13px}#waterdrop-demo .journal{padding-inline:17px}#waterdrop-demo .field p{font-size:13px}#waterdrop-demo textarea{font-size:16px}#waterdrop-demo .hero{padding-top:15px}}
+</style><script src="./icons.js"></script><script>lucide.createIcons({attrs:{width:20,height:20}})</script><script src="./page.js"></script></body></html>
