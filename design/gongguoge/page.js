@@ -47,10 +47,6 @@ root.addEventListener('click',e=>{
  if(action==='today')chooseDate(dayKey());
  if(action==='month'){const p=$('.month');p.hidden=!p.hidden;$('.month-toggle').setAttribute('aria-expanded',String(!p.hidden));month=parse(selected);renderMonth();}
  if(action==='prev-month'||action==='next-month'){month=new Date(month.getFullYear(),month.getMonth()+(action==='prev-month'?-1:1),1);renderMonth();}
- if(action==='menu'){$('nav').hidden=false;$('.menu-shade').hidden=false;$('nav .close').focus({preventScroll:true});}
- if(action==='close-menu'){$('nav').hidden=true;$('.menu-shade').hidden=true;$('.menu-button').focus({preventScroll:true});}
- if(action?.startsWith('focus-')){$('nav').hidden=true;$('.menu-shade').hidden=true;$('#drop-'+action.slice(6)).focus();}
- if(action==='history'){$('nav').hidden=true;$('.menu-shade').hidden=true;$('.month').hidden=false;$('.month-toggle').setAttribute('aria-expanded','true');month=parse(selected);renderMonth();$('.month').scrollIntoView({block:'nearest'});}
 });
 $('.journal').addEventListener('input',e=>{dirty=true;if(e.target.tagName==='TEXTAREA')autosize(e.target);keepDraft();});
 $('.journal').addEventListener('submit',e=>{e.preventDefault();saveRecord();});bindDrop($('.save'));
@@ -60,7 +56,7 @@ window.addEventListener('resize',keepEditorVisible);
 $('.journal').addEventListener('focusin',()=>setTimeout(keepEditorVisible,180));
 window.addEventListener('beforeunload',e=>{if(dirty&&!stash()){e.preventDefault();e.returnValue='';}});
 window.addEventListener('pagehide',()=>{if(dirty)keepDraft();});
-root.addEventListener('keydown',e=>{if(e.key==='Escape'){$('nav').hidden=true;$('.menu-shade').hidden=true;$('.month').hidden=true;$('.month-toggle').setAttribute('aria-expanded','false');}});
+root.addEventListener('keydown',e=>{if(e.key==='Escape'){$('.month').hidden=true;$('.month-toggle').setAttribute('aria-expanded','false');}});
 function applyState(s){if(!s)return;if(valid(s.selected))selected=s.selected;if(['auto','cloud','sea'].includes(s.themeMode))themeMode=s.themeMode;if(s.records&&typeof s.records==='object')for(const[k,r]of Object.entries(s.records).slice(-3)){if(valid(k)&&r&&['good','loss','next'].every(f=>typeof r[f]==='string'&&r[f].length<=400))records[k]=r}renderWeek();loadFields();setTheme();}
 applyState(window.openai?.widgetState?.privateContent);window.addEventListener('openai:set_globals',e=>{const s=e.detail?.globals?.widgetState?.privateContent;if(!dirty&&s&&(s.selected!==selected||s.themeMode!==themeMode))applyState(s)});
 renderWeek();setTheme();loadFields();root.querySelectorAll('button').forEach(b=>b.classList.add('cursor-interaction'));

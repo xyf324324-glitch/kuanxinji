@@ -1,7 +1,7 @@
 const {chromium}=require('C:/Users/yifan/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
 const assert=require('node:assert/strict'),path=require('node:path');
 (async()=>{const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});try{
- const context=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:4186/');
+ const context=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(process.argv[2]||'http://127.0.0.1:4191/gongguoge/');
  const measure=()=>page.evaluate(()=>({page:document.documentElement.scrollHeight,card:document.querySelector('.journal').getBoundingClientRect().height,field:document.querySelector('#drop-good').getBoundingClientRect().height}));
  const before=await measure();const long=('回看今天发生的事，给明天留一个小小行动。\n').repeat(18).slice(0,399);await page.locator('#drop-good').fill(long);assert.deepEqual(await measure(),before);
  assert.ok(await page.locator('#drop-good').evaluate(el=>el.scrollHeight>el.clientHeight));

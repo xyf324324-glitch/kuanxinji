@@ -20,7 +20,6 @@
 #waterdrop-demo .brand img{position:absolute;left:-8px;top:-30px;width:106px;height:106px;max-width:none;object-fit:contain;filter:drop-shadow(0 1px 5px #ffffff55)}
 #waterdrop-demo button,#waterdrop-demo textarea{font-family:inherit;-webkit-tap-highlight-color:transparent}
 #waterdrop-demo .glass{position:relative;border:1px solid #ffffff7a;background:linear-gradient(132deg,#ffffff24,#ffffff0c 35%,#ffffff16);box-shadow:inset 1px 1px 1px #ffffff85,inset -1px -1px 2px #ffffff40,0 9px 22px #07141c1c;backdrop-filter:blur(26px) saturate(1.6);-webkit-backdrop-filter:blur(26px) saturate(1.6);color:#fff}
-#waterdrop-demo .menu-button{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;padding:0}
 #waterdrop-demo i{font-style:normal}#waterdrop-demo svg{width:20px;height:20px;stroke-width:1.35}#waterdrop-demo .menu-button i{font:23px Arial,sans-serif}
 #waterdrop-demo .hero{display:flex;align-items:center;justify-content:center;padding:14px 6px 14px}
 #waterdrop-demo h2{font:400 35px/1.35 "Noto Serif SC","SimSun",serif;letter-spacing:.13em;margin:0;text-shadow:0 1px 12px #24313c22}
@@ -55,21 +54,15 @@
 #waterdrop-demo .month-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
 #waterdrop-demo .month-grid button{min-height:35px;min-width:0;border:0;background:transparent;color:#fff;border-radius:50%;font:14px Georgia,serif}
 #waterdrop-demo .month-grid button.selected{background:#ffffff2b;box-shadow:inset 0 1px #ffffff99}
-#waterdrop-demo .menu-shade{position:absolute;inset:0;background:#12243460;border:0;z-index:4;backdrop-filter:blur(5px)}
-#waterdrop-demo nav{position:absolute;z-index:5;inset:0 0 0 17%;padding:62px 27px;background:#34434a99;backdrop-filter:blur(32px) saturate(1.5);-webkit-backdrop-filter:blur(32px) saturate(1.5);border-left:1px solid #ffffff55}
-#waterdrop-demo nav h3{font:27px/1.7 "KaiTi","SimSun",serif;margin:10px 0 35px}
-#waterdrop-demo nav small{font-size:11px;opacity:.7}#waterdrop-demo nav p{padding-top:16px}
-#waterdrop-demo nav button{display:block;border:0;background:transparent;color:#fff;font:17px "SimSun",serif;padding:13px 0;width:100%;text-align:left}
-#waterdrop-demo nav .close{position:absolute;top:15px;right:20px;width:35px;font:25px Arial,sans-serif;text-align:center}
 @media(max-width:350px){#waterdrop-demo .page{padding-inline:12px}#waterdrop-demo .journal{padding-inline:16px}#waterdrop-demo textarea{font-size:14px}#waterdrop-demo .hero{padding-top:17px}}
-@media(pointer:coarse){#waterdrop-demo textarea{font-size:16px}#waterdrop-demo .menu-button{min-height:44px;min-width:44px}#waterdrop-demo .month-grid button{min-height:44px}}
+@media(pointer:coarse){#waterdrop-demo textarea{font-size:16px}#waterdrop-demo .month-grid button{min-height:44px}}
 @media(prefers-reduced-motion:reduce){#waterdrop-demo .droplet:after{animation:none!important}#waterdrop-demo .droplet{will-change:auto}}
 </style>
 <div id="waterdrop-demo" data-theme="cloud" aria-label="功过格手机动效预览">
  <div class="theme-preview" aria-label="预览背景"><button type="button" data-theme-pick="auto" aria-pressed="true">每日随机</button><button type="button" data-theme-pick="cloud" aria-pressed="false">云光</button><button type="button" data-theme-pick="sea" aria-pressed="false">海光</button></div>
  <div class="phone"><div class="scene" aria-hidden="true"></div><div class="veil" aria-hidden="true"></div>
  <div class="status" aria-hidden="true"><span>9:41</span><div class="island"></div><small>▂▅▇ ▰</small></div>
- <div class="page"><header class="top"><div class="brand"><img src="./brand.png" alt="宽心纪"></div><button class="menu-button glass" type="button" data-action="menu" aria-label="打开导航"><i data-lucide="menu" aria-hidden="true">☰</i></button></header>
+ <div class="page"><header class="top"><div class="brand"><img src="./brand.png" alt="宽心纪"></div><span id="journal-navigation"></span></header>
  <div class="hero"><h2>功过格</h2><p>观照今日，不必苛责自己</p></div><div class="calendar-control"><span class="current-month"></span><button class="today-control" type="button" data-action="today">回到今天</button><button class="month-toggle" type="button" data-action="month" aria-label="展开月历" aria-expanded="false" aria-controls="drop-month"><i data-lucide="calendar-days" aria-hidden="true">▦</i></button></div>
  <div class="week" aria-label="选择记录日期"></div>
  <section class="month glass" id="drop-month" aria-label="月历" hidden><div class="month-head"><button type="button" data-action="prev-month" aria-label="上个月">‹</button><span></span><button type="button" data-action="next-month" aria-label="下个月">›</button></div><div class="month-grid"></div></section>
@@ -80,7 +73,7 @@
  </form>
  <footer class="footer"><button class="save droplet" type="button" data-action="save"><i data-lucide="pen-line" aria-hidden="true">✎</i><span>保存今日</span></button><p class="save-state" role="status" aria-live="polite"></p><p class="wisdom">不必写满，记录一念也是开始。</p></footer>
  </div>
- <button class="menu-shade" type="button" data-action="close-menu" aria-label="关闭导航" hidden></button><nav aria-label="功过格页面导航" hidden><button class="close" type="button" data-action="close-menu" aria-label="关闭导航">×</button><small>宽心纪 · 日省</small><h3>照见今日，<br>慢慢践行。</h3><button type="button" data-action="focus-good">今日之善</button><button type="button" data-action="focus-loss">今日之省</button><button type="button" data-action="focus-next">明日一行</button><button type="button" data-action="history">查看历史记录</button></nav><dialog class="editor-dialog" aria-labelledby="editor-title" aria-describedby="editor-guide"><div class="editor-heading"><h3 id="editor-title"></h3><button class="editor-done" type="button">完成编辑</button></div><p class="editor-guide" id="editor-guide"></p><textarea id="expanded-text" maxlength="400" aria-labelledby="editor-title" aria-describedby="editor-guide" placeholder="在这里慢慢写下…"></textarea><div class="editor-meta"><p class="editor-status" role="status"></p><span class="editor-count"></span></div></dialog>
+ <dialog class="editor-dialog" aria-labelledby="editor-title" aria-describedby="editor-guide"><div class="editor-heading"><h3 id="editor-title"></h3><button class="editor-done" type="button">完成编辑</button></div><p class="editor-guide" id="editor-guide"></p><textarea id="expanded-text" maxlength="400" aria-labelledby="editor-title" aria-describedby="editor-guide" placeholder="在这里慢慢写下…"></textarea><div class="editor-meta"><p class="editor-status" role="status"></p><span class="editor-count"></span></div></dialog>
  </div>
 </div>
 <style>/* Scoped refinement of the existing page; no site-wide selectors. */
@@ -93,7 +86,6 @@
 #waterdrop-demo .top{padding:0 3px}
 #waterdrop-demo .brand{width:72px;height:34px}
 #waterdrop-demo .brand img{width:85px;height:85px;left:-6px;top:-24px}
-#waterdrop-demo .menu-button{min-height:44px;min-width:44px;background:#fff3;box-shadow:inset 0 1px #ffffff88,0 3px 12px #172e3510}
 #waterdrop-demo .hero{display:block;text-align:center;padding:17px 0 20px}
 #waterdrop-demo h2{color:#fffdf4;font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-size:clamp(34px,10vw,40px);font-weight:700;letter-spacing:.1em;text-indent:.1em;line-height:1.3;text-shadow:0 2px 5px #21363c40}
 #waterdrop-demo .hero p{margin:9px 0 0;color:#fffdf3;font-size:13px;font-weight:500;letter-spacing:.03em;line-height:1.6;text-shadow:0 1px 3px #243b4266}
@@ -144,4 +136,4 @@
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){#waterdrop-demo .journal{background:rgba(248,246,239,.96)}}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){#waterdrop-demo .save{background:linear-gradient(145deg,#557360,#2d5143);box-shadow:inset 0 1px 0 #ffffff80,0 5px 12px #18332a30}}
 @media(max-width:350px){#waterdrop-demo .page{padding-inline:13px}#waterdrop-demo .journal{padding-inline:17px}#waterdrop-demo .field p{font-size:13px}#waterdrop-demo textarea{font-size:16px}#waterdrop-demo .hero{padding-top:15px}}
-</style><script src="./icons.js"></script><script>lucide.createIcons({attrs:{width:20,height:20}})</script><script src="./page.js"></script></body></html>
+</style><script src="./icons.js"></script><script>lucide.createIcons({attrs:{width:20,height:20}})</script><script src="./page.js"></script><script type="module" src="/src/gongguoge-navigation.jsx"></script></body></html>

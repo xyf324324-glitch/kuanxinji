@@ -6,8 +6,10 @@
 
 - `page.fragment.html`：原页面结构及原有隔离样式，保留日期、三字段和水珠按钮。
 - `refinement.css`：本次暖白玻璃、墨绿文字、移动输入布局的覆盖样式，只作用于该页面。
-- `page.js`：复用日期切换、菜单和动效，增加本机保存、失败反馈和草稿恢复。
-- `build.py`：生成可直接打开的 `index.html`；无额外依赖安装。
+- `page.js`：日期切换、水珠动效、本机保存、失败反馈和草稿恢复。
+- `build.py`：生成供 Vite 处理的设计页入口；正式构建使用下述 Node 脚本。
+- `src/components/SiteNavigation.jsx` / `.css`：首页与功过格共用的全站导航。
+- `src/gongguoge-navigation.jsx`：在独立记录页挂载相同导航组件。
 - `sea.jpg` / `cloud.jpg`：原手机预览已有背景的原样副本，未重新生图；默认海光。
 - `brand.png`：原版透明品牌标识；`icons.js` 为原预览已有 Lucide 资源。
 - `check.cjs`：使用宿主已有 Playwright 检查输入、存储和移动布局。
@@ -15,7 +17,7 @@
 
 ## 构建与本地查看
 
-在此目录执行 `python build.py`；再执行 `python -m http.server 4186 --bind 127.0.0.1`，访问 `http://127.0.0.1:4186/`。记录按浏览器来源隔离，请持续使用同一浏览器和地址。
+在项目根目录执行 `npm run dev`，访问终端显示地址的 `/gongguoge/`。正式构建执行 `npm run build`，再用 `npm run preview` 查看。导航含共享 React 组件，不能再通过独立 Python 静态服务器编译。记录按浏览器来源隔离，请持续使用同一浏览器和地址。
 
 ## 数据与边界
 
@@ -23,9 +25,9 @@
 
 正式记录保存在 `kuanxin-gongguoge-records-v1`，草稿单独保存在 `kuanxin-gongguoge-drafts-v1`，当前日期选择保存在 `kuanxin-gongguoge-selected-v1`。只填写一项即可保存。写入后回读校验，失败不显示成功。已有记录无法解析时禁止覆盖。输入时保留草稿；存储失败且内容未落盘时阻止日期切换，并在关闭页面时触发浏览器防丢失提示。
 
-本地存储不跨设备同步，清除浏览器网站数据会删除本机记录。网站导航“每日相伴”已增加本页入口 `/gongguoge/`，尚未接入 AI。菜单只提供当前页面实际可用的栏目跳转和历史日期选择。
+本地存储不跨设备同步，清除浏览器网站数据会删除本机记录。网站导航“每日相伴”已增加本页入口 `/gongguoge/`，尚未接入 AI。右上角导航与首页共用同一组件，栏目、顺序、样式和入口保持一致；历史日期仍通过原日期选择器查看。
 
-网站构建时，`scripts/prepare-gongguoge.mjs` 从本目录生成 `public/gongguoge/` 发布文件，再由 Vite 复制到正式产物；无需额外安装 Python。生成目录不作为另一份源码维护。PWA 导航回退排除本页，避免被首页覆盖。
+网站构建时，`scripts/prepare-gongguoge.mjs` 从本目录生成 `gongguoge/index.html` 和 `public/gongguoge/` 静态资源，再由 Vite 多入口构建到正式产物；无需额外安装 Python。生成目录不作为另一份源码维护。PWA 导航回退排除本页，避免被首页覆盖。
 
 ## 固定版式与展开编辑
 

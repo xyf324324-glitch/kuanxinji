@@ -14,6 +14,6 @@ css=(root/'refinement.css').read_text(encoding='utf-8')
 html='''<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#355447"><title>功过格 · 宽心纪</title>
 <style>html{background:#536768;scroll-padding-bottom:120px}body{margin:0;min-width:280px}button,textarea{font:inherit}*{box-sizing:border-box}</style>
-</head><body>'''+fragment+'<style>'+css+'</style><script src="./icons.js"></script><script>lucide.createIcons({attrs:{width:20,height:20}})</script><script src="./page.js"></script></body></html>'
+</head><body>'''+fragment+'<style>'+css+'</style><script src="./icons.js"></script><script>lucide.createIcons({attrs:{width:20,height:20}})</script><script src="./page.js"></script><script type="module" src="/src/gongguoge-navigation.jsx"></script></body></html>'
 (root/'index.html').write_text(html,encoding='utf-8')
 print('Built existing-page refinement:',root/'index.html')
