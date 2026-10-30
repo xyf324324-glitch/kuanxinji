@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { DatabaseSync } from 'node:sqlite'
 import { readFileSync } from 'node:fs'
 import { defaults, validateSchedule, nextDue, kindAt } from '../schedule.mjs'
-import worker, { tick, identity } from '../worker.mjs'
+import worker, { tick, identity, sendPush } from '../worker.mjs'
 import { buildPushPayload } from '@block65/webcrypto-web-push'
 
 function db() {
@@ -72,4 +72,19 @@ test('Web Push uses Apple-compatible aes128gcm and valid VAPID authorization', a
   assert.equal(payload.headers['content-encoding'], 'aes128gcm')
   assert.match(payload.headers.authorization, /^vapid /i)
   assert.equal(payload.body.byteLength, 4096)
+  const originalFetch = globalThis.fetch
+  try {
+    let calls = 0
+    globalThis.fetch = async (url, options) => {
+      calls++
+      assert.equal(url, subscription.endpoint)
+      // Matches workerd's supported redirect modes; old redirect:error fails here.
+      assert.equal(options.redirect, 'manual')
+      assert.equal(options.body.byteLength, 4096)
+      return new Response(null, { status: 302, headers: { Location: 'https://example.test/untrusted' } })
+    }
+    const response = await sendPush({ VAPID_PUBLIC_KEY: Buffer.from(await crypto.subtle.exportKey('raw', vapid.publicKey)).toString('base64url'), VAPID_PRIVATE_KEY: jwk.d }, { subscription: JSON.stringify(subscription) }, 'both', 'test')
+    assert.equal(response.status, 302)
+    assert.equal(calls, 1)
+  } finally { globalThis.fetch = originalFetch }
 })

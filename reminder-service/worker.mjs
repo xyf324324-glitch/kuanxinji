@@ -11,14 +11,25 @@ export async function identity(subscription) {
   // Endpoint alone cannot authorize changes: include both secret subscription keys.
   return hash(JSON.stringify([url.href, subscription.keys.p256dh, subscription.keys.auth]))
 }
-async function send(env, row, kind, tag) {
+export async function sendPush(env, row, kind, tag) {
   const sub = JSON.parse(row.subscription)
-  const payload = await buildPushPayload({ data: JSON.stringify({ kind, tag }), options: { ttl: 300 } }, sub, {
+  let payload
+  try { payload = await buildPushPayload({ data: JSON.stringify({ kind, tag }), options: { ttl: 300 } }, sub, {
     subject: 'https://kuanxinji.pages.dev', publicKey: env.VAPID_PUBLIC_KEY, privateKey: env.VAPID_PRIVATE_KEY,
-  })
-  return fetch(sub.endpoint, { ...payload, redirect: 'error', signal: AbortSignal.timeout(15000) })
+  }) } catch (cause) {
+    const error = new Error('Push payload failed')
+    error.deliveryCode = `payload-${['InvalidAccessError', 'DataError', 'OperationError', 'TypeError', 'NotSupportedError'].includes(cause.name) ? cause.name : 'error'}`
+    throw error
+  }
+  // Workers supports manual/follow only. Never follow redirects with push credentials.
+  try { return await fetch(sub.endpoint, { ...payload, redirect: 'manual', signal: AbortSignal.timeout(15000) }) }
+  catch (cause) {
+    const error = new Error('Push transport failed')
+    error.deliveryCode = `transport-${cause.name === 'TimeoutError' ? 'timeout' : 'error'}`
+    throw error
+  }
 }
-export async function tick(env, now = Date.now(), sender = send) {
+export async function tick(env, now = Date.now(), sender = sendPush) {
   await env.DB.prepare("INSERT INTO service_state(id, value) VALUES('heartbeat', ?) ON CONFLICT(id) DO UPDATE SET value=excluded.value").bind(now).run()
   const rows = await env.DB.prepare('SELECT * FROM subscriptions WHERE next_due <= ? OR test_due <= ? LIMIT 100').bind(now, now).all()
   for (const row of rows.results) {
@@ -47,7 +58,7 @@ export async function tick(env, now = Date.now(), sender = send) {
           if (response.status === 404 || response.status === 410) await env.DB.prepare('DELETE FROM subscriptions WHERE id=?').bind(row.id).run()
         } else state = 'cancelled'
       }
-    } catch { state = 'failed' }
+    } catch (error) { state = error.deliveryCode || 'failed' }
     await env.DB.prepare('UPDATE deliveries SET state=?, attempts=1, updated_at=? WHERE id=?').bind(state, now, deliveryId).run()
     // Do not blindly retry ambiguous delivery failures: that can duplicate a received alert.
     if (isTest) await env.DB.prepare('UPDATE subscriptions SET test_due=NULL WHERE id=? AND test_due=?').bind(row.id, due).run()

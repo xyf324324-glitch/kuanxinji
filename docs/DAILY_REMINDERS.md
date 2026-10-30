@@ -72,4 +72,8 @@ npm run build
 - 本地 6 项后台测试和 5 项客户端测试通过，Vite 构建、Worker dry-run 打包通过。
 - 尚需用户真实 iPhone 确认收到通知；接口通过不能替代锁屏、切换应用及默认时刻的收件验收。
 
+## 发送故障修复
+
+用户实测未收到后，确认订阅和 Cron 正常，但发送记录连续失败。根因为 Workers 不支持 Fetch 的 `redirect: 'error'`，请求构造时直接抛出 TypeError，尚未发送到苹果。改用 `manual`，继续禁止自动跟随重定向；3xx 按发送失败处理。新增覆盖真实 sendPush 路径的回归断言，校验请求参数、加密负载和不跟随跳转。投递记录现在区分加密与传输阶段错误，避免只留下无法定位的 failed。
+
 若依赖目录是只读共享链接、Vite 无法写入 `.vite-temp`，可使用 `node node_modules/vite/bin/vite.js build --configLoader native`，然后运行 `node scripts/prepare-sites-build.mjs`；预览使用 `node node_modules/vite/bin/vite.js preview --configLoader native`。
