@@ -37,6 +37,11 @@ test('permission denial cannot report enabled success', async () => {
   await assert.rejects(enableReminders({ native: true }, null), /尚未允许通知/)
 })
 test('unknown native replies cannot resolve another pending request', async () => {
-  bridge(() => ({ ok: true, data: { enabled: true } }))
+  const native = { postMessage(raw) {
+    const { id } = JSON.parse(raw)
+    native.onmessage({ data: JSON.stringify({ id: 'another-request', ok: true, data: { enabled: false } }) })
+    queueMicrotask(() => native.onmessage({ data: JSON.stringify({ id, ok: true, data: { enabled: true } }) }))
+  } }
+  globalThis.window = { KuanxinAndroid: native }
   assert.equal((await androidRequest('status')).enabled, true)
 })

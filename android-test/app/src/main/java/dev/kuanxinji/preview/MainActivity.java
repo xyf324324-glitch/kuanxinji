@@ -72,6 +72,8 @@ public final class MainActivity extends Activity {
         });
         setContentView(web);
         web.loadUrl(BuildConfig.SITE_URL);
+        try { checkUpdate(new JSONObject().put("id", "startup"), null); }
+        catch (JSONException ignored) { /* Constant request ID. */ }
     }
     private String originOf(Uri uri) { return uri.getScheme() + "://" + uri.getAuthority(); }
     private void openExternal(Uri uri) {
@@ -86,6 +88,7 @@ public final class MainActivity extends Activity {
         setContentView(layout);
     }
     private void reply(JSONObject request, JavaScriptReplyProxy target, JSONObject data, String error) {
+        if (target == null) return;
         try {
             JSONObject response = new JSONObject().put("id", request.getString("id")).put("ok", error == null);
             if (data != null) response.put("data", data);
@@ -164,7 +167,7 @@ public final class MainActivity extends Activity {
         network.execute(() -> {
             JSONObject result = new JSONObject(); String error = null;
             try {
-                HttpURLConnection connection = (HttpURLConnection) new URL("https://kuanxinji.pages.dev/android/version.json").openConnection();
+                HttpURLConnection connection = (HttpURLConnection) new URL(origin + "/android/version.json").openConnection();
                 connection.setConnectTimeout(8000); connection.setReadTimeout(8000); connection.setInstanceFollowRedirects(false);
                 connection.setRequestProperty("Cache-Control", "no-cache");
                 try {
