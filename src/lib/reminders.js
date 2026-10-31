@@ -1,3 +1,4 @@
+import { waitForReminderWorker } from './reminder-worker.js'
 const SETTINGS_KEY = 'kuanxin-reminder-times-v1'
 export const DEFAULT_REMINDER_TIMES = { nianfo: ['09:00', '21:00'], huiguang: ['09:00', '13:00', '21:00'] }
 const unavailable = '手机提醒服务暂未开放，请稍后再试。'
@@ -64,8 +65,7 @@ export async function enableReminders(config, times) {
   // Request from the user's click, before any asynchronous network work.
   const permission = await Notification.requestPermission()
   if (permission !== 'granted') throw new Error(permission === 'denied' ? '通知权限已关闭，请在浏览器设置中允许通知后重试。' : '您尚未允许通知，可以稍后再开启。')
-  const registration = await navigator.serviceWorker.getRegistration()
-  if (!registration?.active) throw new Error('页面正在准备提醒功能，请稍后再试。')
+  const registration = await waitForReminderWorker(navigator.serviceWorker)
   const publicKey = Uint8Array.from(atob(config.publicKey.replace(/-/g, '+').replace(/_/g, '/')), (character) => character.charCodeAt(0))
   const existing = await registration.pushManager.getSubscription()
   const subscription = existing || await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: publicKey })
