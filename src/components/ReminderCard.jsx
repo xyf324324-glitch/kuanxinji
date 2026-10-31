@@ -4,8 +4,15 @@ import brandCloud from '../assets/brand-cloud.png'
 import { disableReminders, enableReminders, getReminderStatus, loadReminderConfig, loadReminderTimes, normalizeTimes, saveReminderTimes, updateReminderTimes, testReminder } from '../lib/reminders'
 import './ReminderCard.css'
 
+const INVITE_HIDDEN_KEY = 'kuanxin-reminder-invite-hidden-v1'
+function isInviteHidden() {
+  try { return localStorage.getItem(INVITE_HIDDEN_KEY) === '1' }
+  catch { return false }
+}
+
 export default function ReminderCard({ isHome, settingsRequest, onClose }) {
   const [dismissed, setDismissed] = useState(false)
+  const [inviteHidden, setInviteHidden] = useState(isInviteHidden)
   const [mode, setMode] = useState('invite')
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [times, setTimes] = useState(loadReminderTimes)
@@ -15,7 +22,7 @@ export default function ReminderCard({ isHome, settingsRequest, onClose }) {
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState('')
   const dialogRef = useRef(null)
-  const open = isHome && (settingsOpen || (!checkingExisting && !dismissed && !active))
+  const open = isHome && (settingsOpen || (!checkingExisting && !dismissed && !inviteHidden && !active))
 
   useEffect(() => {
     let ignore = false
@@ -61,6 +68,18 @@ export default function ReminderCard({ isHome, settingsRequest, onClose }) {
     setSettingsOpen(false)
     setMessage('')
     onClose()
+  }
+
+  const hideInvitation = () => {
+    if (busy) return
+    try {
+      localStorage.setItem(INVITE_HIDDEN_KEY, '1')
+      if (!isInviteHidden()) throw new Error('Preference was not saved')
+      setInviteHidden(true)
+      close()
+    } catch {
+      setMessage('暂时无法记住此选择，请允许网站存储后重试。可先点“暂不开启”关闭本次邀请。')
+    }
   }
 
   const enable = async () => {
@@ -128,7 +147,10 @@ export default function ReminderCard({ isHome, settingsRequest, onClose }) {
         <p id="reminder-description" className="reminder-description">开启后，手机会定时提醒您</p>
         <p className="reminder-practices"><span>念佛</span><span className="reminder-divider" aria-hidden="true" /><span>一念回光</span></p>
         <button className="reminder-primary" type="button" onClick={enable} disabled={busy}>{busy ? '正在开启…' : '开启每日提醒'}</button>
-        <button className="reminder-later" type="button" onClick={close} disabled={busy}>暂不开启</button>
+        <div className="reminder-invite-actions">
+          <button className="reminder-later" type="button" onClick={close} disabled={busy}>暂不开启</button>
+          <button className="reminder-later" type="button" onClick={hideInvitation} disabled={busy} title="不再自动弹出邀请，仍可从导航开启每日提醒">不再提醒</button>
+        </div>
         <p className="reminder-footnote">开启后，可在导航中调整时间或关闭。</p>
       </>}
       {mode === 'success' && <>

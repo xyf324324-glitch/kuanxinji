@@ -83,3 +83,6 @@
 @media (hover: hover) { .reminder-primary:hover { filter: brightness(1.08); } .reminder-later:hover, .reminder-close:hover { background: rgba(255, 255, 255, .2); } }
 @media (max-width: 350px) { .reminder-card { padding-inline: 20px; } .reminder-practices { gap: 12px; } }
 @media (prefers-reduced-motion: reduce) { .reminder-card[open] { animation: none; } .reminder-primary { transition: none; } }
+
+.reminder-invite-actions { display: flex; justify-content: center; gap: 4px; margin: 7px 0 9px; }
+.reminder-invite-actions .reminder-later { min-width: 0; min-height: 44px; margin: 0; padding-inline: 14px; }
