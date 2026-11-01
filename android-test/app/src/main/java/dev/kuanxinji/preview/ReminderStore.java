@@ -76,6 +76,21 @@ public final class ReminderStore {
             .put("idle", power.isDeviceIdleMode()).put("testDue", prefs.getLong("due-2000", 0))
             .put("events", new JSONArray(prefs.getString("events", "[]")));
     }
+    public void setForeground(boolean value) { prefs.edit().putBoolean("foreground", value).commit(); }
+    public JSONObject setupStatus() throws JSONException {
+        return status().put("manufacturer", Build.MANUFACTURER)
+            .put("backgroundRestricted", Build.VERSION.SDK_INT >= 28 && context.getSystemService(ActivityManager.class).isBackgroundRestricted())
+            .put("verified", prefs.getLong("confirmed_at", 0) > 0)
+            .put("testReceivedAt", prefs.getLong("test_received", 0));
+    }
+    public JSONObject confirmReceived() throws JSONException {
+        if (!desired() || !permitted() || !exact()) throw new IllegalStateException("请先允许通知及定时权限");
+        if (!DeliveryPolicy.canConfirm(prefs.getLong("test_received", 0), prefs.getBoolean("test_was_background", false)))
+            throw new IllegalStateException("尚无后台测试执行记录。请先点击两分钟测试，锁屏或切换应用，收到后再确认。");
+        prefs.edit().putLong("confirmed_at", System.currentTimeMillis()).commit();
+        record("用户确认收到后台测试通知");
+        return setupStatus();
+    }
     private PendingIntent intent(int minute) {
         Intent target = new Intent(context, ReminderReceiver.class).putExtra("minute", minute);
         return PendingIntent.getBroadcast(context, 100 + minute, target, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
@@ -103,7 +118,7 @@ public final class ReminderStore {
         cancel(previous);
         try {
             schedule(next);
-            if (!prefs.edit().putString("times", next.toString()).putBoolean("enabled", true).commit()) throw new IllegalStateException("无法保存提醒设置");
+            if (!prefs.edit().putString("times", next.toString()).putBoolean("enabled", true).remove("confirmed_at").remove("test_received").putBoolean("test_was_background", false).commit()) throw new IllegalStateException("无法保存提醒设置");
         } catch (RuntimeException | JSONException error) {
             cancel(next);
             if (wasEnabled) schedule(previous);
@@ -112,7 +127,7 @@ public final class ReminderStore {
         return status();
     }
     public synchronized void disable() throws JSONException {
-        if (!prefs.edit().putBoolean("enabled", false).commit()) throw new IllegalStateException("无法保存提醒设置");
+        if (!prefs.edit().putBoolean("enabled", false).remove("confirmed_at").commit()) throw new IllegalStateException("无法保存提醒设置");
         cancel(times());
     }
     public void restore() throws JSONException { if (desired() && permitted() && exact()) { record("系统事件恢复任务"); schedule(times()); } }
@@ -132,6 +147,7 @@ public final class ReminderStore {
         if (!desired() || !permitted() || !exact()) throw new IllegalStateException("请先开启每日提醒");
         long existing = prefs.getLong("due-2000", 0);
         if (DeliveryPolicy.reuseTest(existing, System.currentTimeMillis())) return existing;
+        prefs.edit().remove("confirmed_at").remove("test_received").putBoolean("test_was_background", false).commit();
         long due = System.currentTimeMillis() + DeliveryPolicy.TEST_DELAY;
         scheduleSlot(2000, due);
         return due;
@@ -164,6 +180,7 @@ public final class ReminderStore {
             .setContentTitle("宽心的提醒").setContentText(body).setStyle(new Notification.BigTextStyle().bigText(body))
             .setVisibility(Notification.VISIBILITY_PUBLIC).setCategory(Notification.CATEGORY_REMINDER).setContentIntent(open).setAutoCancel(true).build();
         context.getSystemService(NotificationManager.class).notify(100 + minute, notification);
+        if (minute == 2000) prefs.edit().putLong("test_received", now).putBoolean("test_was_background", !prefs.getBoolean("foreground", false)).commit();
         record("已提交通知 " + minute + "；是否展示横幅由系统决定");
     }
 }

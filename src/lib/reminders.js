@@ -1,4 +1,5 @@
 import { androidRequest, hasAndroidReminders } from './android-reminders.js'
+import { waitForReminderWorker } from './reminder-worker.js'
 export { hasAndroidReminders } from './android-reminders.js'
 const SETTINGS_KEY = 'kuanxin-reminder-times-v1'
 export const DEFAULT_REMINDER_TIMES = { nianfo: ['09:00', '21:00'], huiguang: ['09:00', '13:00', '21:00'] }
@@ -21,14 +22,25 @@ export function saveReminderTimes(times) {
 }
 
 async function request(path, body) {
-  const response = await fetch(`/api/reminders/${path}`, {
-    method: body ? 'POST' : 'GET',
-    headers: body ? { 'Content-Type': 'application/json' } : {},
-    ...(body ? { body: JSON.stringify(body) } : {}),
-    cache: 'no-store',
-    signal: AbortSignal.timeout(10000),
-  })
-  if (!response.ok || !response.headers.get('content-type')?.includes('application/json')) throw new Error(unavailable)
+  let response
+  try {
+    response = await fetch(`/api/reminders/${path}`, {
+      method: body ? 'POST' : 'GET',
+      headers: body ? { 'Content-Type': 'application/json' } : {},
+      ...(body ? { body: JSON.stringify(body) } : {}),
+      cache: 'no-store', signal: AbortSignal.timeout(10000),
+    })
+  } catch (error) {
+    if (path === 'test') throw new Error(error.name === 'TimeoutError' ? '测试请求超时，可能已安排。请先等待两分钟，避免重复提交。' : '无法连接提醒服务，请检查网络。若请求曾发出，可能已安排，请先等待两分钟。')
+    throw error
+  }
+  if (path === 'test') {
+    if (response.status === 429) throw new Error('一分钟内只能测试一次，前一次可能已安排，请先等待通知。')
+    if (response.status === 404 || response.status === 410) throw new Error('这台手机的提醒订阅已失效，请关闭每日提醒后重新开启。')
+    if (response.status === 503) throw new Error('提醒服务暂时不可用，请稍后重试。')
+    if (response.status === 403) throw new Error('测试请求未被接受，请从宽心纪主屏幕入口重新打开后重试。')
+  }
+  if (!response.ok || !response.headers.get('content-type')?.includes('application/json')) throw new Error(path === 'test' ? '测试请求未完成，请稍后重试。' : unavailable)
   const data = await response.json()
   if (data.ok !== true) throw new Error(unavailable)
   return data
@@ -76,8 +88,7 @@ export async function enableReminders(config, times) {
   // Request from the user's click, before any asynchronous network work.
   const permission = await Notification.requestPermission()
   if (permission !== 'granted') throw new Error(permission === 'denied' ? '通知权限已关闭，请在浏览器设置中允许通知后重试。' : '您尚未允许通知，可以稍后再开启。')
-  const registration = await navigator.serviceWorker.getRegistration()
-  if (!registration?.active) throw new Error('页面正在准备提醒功能，请稍后再试。')
+  const registration = await waitForReminderWorker(navigator.serviceWorker)
   const publicKey = Uint8Array.from(atob(config.publicKey.replace(/-/g, '+').replace(/_/g, '/')), (character) => character.charCodeAt(0))
   const existing = await registration.pushManager.getSubscription()
   const subscription = existing || await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: publicKey })

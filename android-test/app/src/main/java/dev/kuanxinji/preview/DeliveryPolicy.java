@@ -6,4 +6,5 @@ public final class DeliveryPolicy {
     public static final long TEST_DELAY = 120000L;
     public static boolean expired(long due, long now) { return due > 0 && now - due > 30 * 60000L; }
     public static boolean reuseTest(long due, long now) { return due > 0 && now < due + 10 * 60000L; }
+    public static boolean canConfirm(long receivedAt, boolean wasBackground) { return receivedAt > 0 && wasBackground; }
 }

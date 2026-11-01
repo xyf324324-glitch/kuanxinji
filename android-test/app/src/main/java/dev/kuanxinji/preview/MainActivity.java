@@ -103,6 +103,18 @@ public final class MainActivity extends Activity {
             if (!request.getString("id").matches("[a-zA-Z0-9-]{1,70}")) return;
             String action = request.getString("action");
             switch (action) {
+                case "setupStatus": reply(request, reply, store.setupStatus(), null); break;
+                case "confirmReceived":
+                    try { reply(request, reply, store.confirmReceived(), null); }
+                    catch (IllegalStateException error) { reply(request, reply, null, error.getMessage()); }
+                    break;
+                case "openReminderSettings":
+                    String setting = request.optString("setting");
+                    if ("notifications".equals(setting)) openSettings(new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName()));
+                    else if ("battery".equals(setting)) openSettings(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS));
+                    else if ("exact".equals(setting) && Build.VERSION.SDK_INT >= 31) openSettings(new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:" + getPackageName())));
+                    else openSettings(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName())));
+                    reply(request, reply, new JSONObject(), null); break;
                 case "status": reply(request, reply, store.status(), null); break;
                 case "enable":
                     if (pending != null) { reply(request, reply, null, "正在处理另一个提醒请求"); return; }
@@ -144,10 +156,7 @@ public final class MainActivity extends Activity {
         try {
             JSONObject result = store.enable(pending.getJSONObject("times"));
             reply(pending, pendingReply, result, null);
-            new AlertDialog.Builder(this).setTitle("再检查一下后台提醒")
-                .setMessage("通知和定时权限已开启。部分手机还需要允许后台活动或自启动，才能在锁屏时及时提醒。请完成后台检查，再做两分钟测试。")
-                .setPositiveButton("检查设置", (d,w) -> { try { showDiagnostics(); } catch (JSONException ignored) { } })
-                .setNegativeButton("稍后", null).show();
+
         } catch (Exception error) { reply(pending, pendingReply, null, "未能保存定时提醒，请重试"); }
         pending = null; pendingReply = null;
     }
@@ -164,11 +173,17 @@ public final class MainActivity extends Activity {
     }
     @Override protected void onResume() {
         super.onResume();
+        if (store != null) store.setForeground(true);
+        if (web != null) web.evaluateJavascript("window.dispatchEvent(new Event('kuanxin-resume'))", null);
         if (store != null) try { store.reconcile(); } catch (Exception error) { store.record("恢复失败 " + error.getClass().getSimpleName()); }
         if (awaitingExact) {
             awaitingExact = false;
             if (store.exact()) continueEnable(); else failPending("尚未允许闹钟和提醒，可以稍后开启");
         }
+    }
+    @Override protected void onPause() {
+        if (store != null) store.setForeground(false);
+        super.onPause();
     }
     private void openSettings(Intent intent) {
         try { startActivity(intent); }
