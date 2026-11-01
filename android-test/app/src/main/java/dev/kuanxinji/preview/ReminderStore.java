@@ -80,13 +80,13 @@ public final class ReminderStore {
     public JSONObject setupStatus() throws JSONException {
         return status().put("manufacturer", Build.MANUFACTURER)
             .put("backgroundRestricted", Build.VERSION.SDK_INT >= 28 && context.getSystemService(ActivityManager.class).isBackgroundRestricted())
-            .put("verified", prefs.getLong("confirmed_at", 0) > 0)
+            .put("verified", prefs.getLong("confirmed_at", 0) > 0 && !(Build.VERSION.SDK_INT >= 28 && context.getSystemService(ActivityManager.class).isBackgroundRestricted()))
             .put("testReceivedAt", prefs.getLong("test_received", 0));
     }
     public JSONObject confirmReceived() throws JSONException {
         if (!desired() || !permitted() || !exact()) throw new IllegalStateException("请先允许通知及定时权限");
-        if (!DeliveryPolicy.canConfirm(prefs.getLong("test_received", 0), prefs.getBoolean("test_was_background", false)))
-            throw new IllegalStateException("尚无后台测试执行记录。请先点击两分钟测试，锁屏或切换应用，收到后再确认。");
+        if (!DeliveryPolicy.canConfirm(prefs.getLong("test_received", 0), prefs.getBoolean("test_was_background", false)) || !prefs.getBoolean("test_timely", false))
+            throw new IllegalStateException("尚无按时执行的后台测试记录。请先检查后台设置，点击两分钟测试，锁屏收到后再确认。");
         prefs.edit().putLong("confirmed_at", System.currentTimeMillis()).commit();
         record("用户确认收到后台测试通知");
         return setupStatus();
@@ -180,7 +180,7 @@ public final class ReminderStore {
             .setContentTitle("宽心的提醒").setContentText(body).setStyle(new Notification.BigTextStyle().bigText(body))
             .setVisibility(Notification.VISIBILITY_PUBLIC).setCategory(Notification.CATEGORY_REMINDER).setContentIntent(open).setAutoCancel(true).build();
         context.getSystemService(NotificationManager.class).notify(100 + minute, notification);
-        if (minute == 2000) prefs.edit().putLong("test_received", now).putBoolean("test_was_background", !prefs.getBoolean("foreground", false)).commit();
+        if (minute == 2000) prefs.edit().putLong("test_received", now).putBoolean("test_was_background", !prefs.getBoolean("foreground", false)).putBoolean("test_timely", due > 0 && now-due <= 60000).commit();
         record("已提交通知 " + minute + "；是否展示横幅由系统决定");
     }
 }
