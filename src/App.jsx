@@ -715,7 +715,8 @@ function App() {
             <SiteNavigation open={menuOpen} onClose={closeMenu} savedCount={savedArticleIds.length} onNavigate={(destination) => {
               const actions = { chat: openChat, articles: openArticles, sayings: openSayings, calendar: openCalendar, meridians: () => openMeridians(), classics: () => openClassics(), library: openLibrary,
                 reminders: () => { setMenuOpen(false); setReminderSettingsRequest(current => current + 1) },
-                gongguoge: () => window.location.assign('/gongguoge/'),
+                gongguoge: () => { setMenuOpen(false); window.location.hash = '/gongguoge' },
+                zen: () => { setMenuOpen(false); window.location.hash = '/zen' },
               }
               actions[destination]?.()
             }} />

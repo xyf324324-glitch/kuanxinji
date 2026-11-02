@@ -1,0 +1,11 @@
+.zen-space-frame{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:11000;visibility:hidden;pointer-events:none;background:#112137}
+.zen-space-frame.is-open{visibility:visible;pointer-events:auto}
+.zen-space-open{overflow:hidden}
+.zen-space-open teacher-video-companion{visibility:hidden!important;pointer-events:none!important}
+.site-music-toggle{position:fixed;top:max(112px,calc(env(safe-area-inset-top) + 96px));right:max(26px,calc((100vw - 440px)/2 + 26px));z-index:40;width:44px;height:44px;border:0;background:transparent;box-shadow:none;color:#69766d;opacity:.7;display:grid;place-items:center;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.site-music-toggle svg{width:19px;height:19px}
+.site-music-toggle:hover,.site-music-toggle:focus-visible{opacity:1}
+.site-music-toggle:focus-visible{outline:1px solid currentColor;outline-offset:2px;border-radius:50%}
+.zen-journal-panel{position:fixed;inset:0;z-index:30;background:#536768}
+.zen-journal-panel>iframe{border:0;width:100%;height:100%}
+.zen-journal-back{position:absolute;bottom:max(12px,env(safe-area-inset-bottom));left:14px;border:1px solid #fff4;border-radius:20px;padding:10px 16px;background:#253e4680;color:white;font-size:12px;backdrop-filter:blur(8px)}

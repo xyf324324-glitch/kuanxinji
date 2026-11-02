@@ -12,6 +12,7 @@ export default function JournalNavigation() {
   const navigate = (key) => {
     close()
     if (key === 'gongguoge') return
+    if(window.parent!==window){window.parent.postMessage({type:'journal-navigate',destination:key},location.origin);return}
     window.location.assign(`/#/${key}`)
   }
   return <><SiteMenuButton open={open} onClick={() => setOpen(current => !current)} buttonRef={buttonRef} />

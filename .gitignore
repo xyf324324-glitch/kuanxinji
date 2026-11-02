@@ -31,3 +31,5 @@ output
 *.njsproj
 *.sln
 *.sw?
+
+public/zen/

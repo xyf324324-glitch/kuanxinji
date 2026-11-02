@@ -6,7 +6,7 @@ import './SiteNavigation.css'
 const groups = [
   { title: '此刻', items: [['chat', '问一问', '把此刻的心事说说']] },
   { title: '慢慢读', items: [['articles', '老师文章', '从困惑，回到当下'], ['sayings', '每日一言', '留一句话，陪你今日']] },
-  { title: '每日相伴', items: [['gongguoge', '功过格', '观照今日，记下一念'], ['reminders', '每日提醒', '念佛 · 一念回光']] },
+  { title: '每日相伴', items: [['gongguoge', '功过格', '观照今日，记下一念'], ['reminders', '每日提醒', '念佛 · 一念回光'], ['zen', '禅意空间', '听一段清音，静坐一会儿']] },
   { title: '随四时探索', items: [['calendar', '节气日历', '跟着时令，照顾身心'], ['meridians', '十二经络', '从身体，读见流转'], ['classics', '经典阅读', '在古书里，慢慢相逢']] },
 ]
 
@@ -17,6 +17,10 @@ export function SiteMenuButton({ open, onClick, buttonRef }) {
 }
 
 export default function SiteNavigation({ open, onClose, onNavigate, savedCount = 0 }) {
+  useEffect(() => {
+    if (window.parent !== window) window.parent.postMessage({ type: 'journal-menu-state', open }, location.origin)
+    else window.dispatchEvent(new CustomEvent('zen-menu', { detail: open }))
+  }, [open])
   const panelRef = useRef(null)
   const closeRef = useRef(onClose)
   closeRef.current = onClose
