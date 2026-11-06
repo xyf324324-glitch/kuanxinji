@@ -1,8 +1,9 @@
 import { cp, mkdir, readFile, writeFile } from 'node:fs/promises'
+import './prepare-zen-analysis.mjs'
 const source = new URL('../design/zen/', import.meta.url)
 const target = new URL('../public/zen/', import.meta.url)
 await mkdir(target, { recursive: true })
-for (const file of ['index.html', 'style.css', 'refinement.css', 'music-store.js', 'music-library.js', 'water.js', 'app.js']) {
+for (const file of ['index.html', 'style.css', 'refinement.css', 'music-store.js', 'music-library.js', 'music-visuals.js', 'water.js', 'app.js']) {
   await cp(new URL(file, source), new URL(file, target))
 }
 await cp(new URL('assets/', source), new URL('assets/', target), { recursive: true })

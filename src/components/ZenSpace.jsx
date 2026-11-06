@@ -46,6 +46,7 @@ export default function ZenSpace({ children }) {
   }, [open, journalOpen, ready])
 
   return <>
+    <audio id="zen-native-audio" preload="none" />
     <div inert={open || journalOpen ? true : undefined} aria-hidden={open || journalOpen || undefined}>{children}</div>
     {journalOpen && <section className="zen-journal-panel" aria-label="功过格">
       <iframe src="/gongguoge/" title="功过格" />

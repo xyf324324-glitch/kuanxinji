@@ -2,5 +2,10 @@
   "versionCode": 10000,
   "versionName": "1.0.0",
   "channel": "production",
-  "downloadReady": false
+  "downloadReady": true,
+  "apkUrl": "https://kuanxinji.pages.dev/downloads/android/kuanxinji-1.0.0.apk",
+  "sizeBytes": 965992,
+  "sha256": "d73ce45e5112145d1c269b4aaeacfdbbd8f6f2c290e9adf07174d290ba1a342e",
+  "packageName": "dev.kuanxinji.app",
+  "certificateSha256": "b606170ba426079082f7af7a33a583e60ce03d78d4d88abfbdf8084d124e7a58"
 }

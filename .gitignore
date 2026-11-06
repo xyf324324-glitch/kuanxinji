@@ -33,3 +33,5 @@ output
 *.sw?
 
 public/zen/
+# Generated from the pinned public asset manifest during prepare-zen.
+design/zen/assets/music-analysis/*.bin

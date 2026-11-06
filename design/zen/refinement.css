@@ -12,3 +12,11 @@
 /* Everyday controls and readable feedback. */
 #global-music{position:fixed;top:max(112px,calc(env(safe-area-inset-top) + 96px));right:26px;bottom:auto;z-index:25;width:44px;height:44px;padding:0;border:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;color:#69766d;opacity:.7;transition:opacity .2s}#global-music svg{width:19px;height:19px;stroke-width:1.4}#global-music:hover,#global-music:focus-visible{opacity:1}#global-music.is-loading{opacity:.4}.music-row{display:flex;align-items:center}.music-row>button:first-child{flex:1;min-width:0}#music-list .remove-track{flex:none;font-size:11px;opacity:.7;min-width:44px;padding:12px 6px}#add-time{border:1px solid #8baabc66;border-radius:18px;padding:12px;background:#fff6;width:100%}.end{font-size:12px;opacity:.95}#space[data-scene=stars] #notice{color:#eff7ff}#session-result{font-size:13px;line-height:1.8;letter-spacing:2px}.practice-tools{width:min(290px,calc(100% - 40px));left:50%}@media(max-height:580px){#space{min-height:520px}.session-caption{top:23%;width:185px;height:185px}.lotus{margin-bottom:5px}.quiet-line{font-size:9px}#timer{font-size:36px;margin:6px}.player{bottom:13%}.practice-tools{bottom:4px}.wordmark h1{font-size:18px}}
 
+
+/* A small opt-in sleep timer is available before meditation starts. */
+.sleep-control{display:flex;justify-content:center;padding:7px 0;margin:0 0 10px}
+.sleep-close{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:28px;padding:0 12px;border:1px solid #eff9ff66;border-radius:18px;background:#d5e9f20b;color:inherit;font-size:11px;letter-spacing:1px;box-shadow:none;cursor:pointer}
+.sleep-close svg{width:13px;height:13px}.sleep-check{display:none;font-size:10px}
+.sleep-close[aria-pressed=true]{background:#b6d2e936;border-color:#f5fbff9c}.sleep-close[aria-pressed=true] .sleep-check{display:inline}
+.sleep-close:disabled{opacity:.35;cursor:default}.entry .duration{margin-bottom:2px}
+#duration-panel .sleep-control{margin:4px 0 0}#duration-panel .sleep-close{color:#304a5c;border-color:#7397ad66;background:transparent}#duration-panel .sleep-close[aria-pressed=true]{background:#b0c9db66;border-color:#7397ad99}

@@ -1,0 +1,56 @@
+[
+  {
+    "path": "design/zen/assets/music-analysis/track-01.bin",
+    "publicUrl": "https://kuanxinji.pages.dev/zen/assets/music-analysis/track-01.bin",
+    "http": 200,
+    "bytes": 203532,
+    "sha256": "76987f3334d5e2b481ad5387a5f6d8466b9550150f920c7d83d696d712c15616",
+    "publicSha256": "76987f3334d5e2b481ad5387a5f6d8466b9550150f920c7d83d696d712c15616",
+    "identical": true
+  },
+  {
+    "path": "design/zen/assets/music-analysis/track-02.bin",
+    "publicUrl": "https://kuanxinji.pages.dev/zen/assets/music-analysis/track-02.bin",
+    "http": 200,
+    "bytes": 604842,
+    "sha256": "dee991c105f6f5f1b174fd2ddb563fea6b7421a1700750d36812634b166155f8",
+    "publicSha256": "dee991c105f6f5f1b174fd2ddb563fea6b7421a1700750d36812634b166155f8",
+    "identical": true
+  },
+  {
+    "path": "design/zen/assets/music-analysis/track-03.bin",
+    "publicUrl": "https://kuanxinji.pages.dev/zen/assets/music-analysis/track-03.bin",
+    "http": 200,
+    "bytes": 604842,
+    "sha256": "80f70d3f8fc2aef4a6c7b0f3219762955d67d1ec23fb1f22e3f54254a372624e",
+    "publicSha256": "80f70d3f8fc2aef4a6c7b0f3219762955d67d1ec23fb1f22e3f54254a372624e",
+    "identical": true
+  },
+  {
+    "path": "design/zen/assets/music-analysis/track-04.bin",
+    "publicUrl": "https://kuanxinji.pages.dev/zen/assets/music-analysis/track-04.bin",
+    "http": 200,
+    "bytes": 604842,
+    "sha256": "1382e31a0c5f8a8d20ffcd9a9c223778c5bc54192aa6fe53fa5a52552a0841e7",
+    "publicSha256": "1382e31a0c5f8a8d20ffcd9a9c223778c5bc54192aa6fe53fa5a52552a0841e7",
+    "identical": true
+  },
+  {
+    "path": "design/zen/assets/music-analysis/track-05.bin",
+    "publicUrl": "https://kuanxinji.pages.dev/zen/assets/music-analysis/track-05.bin",
+    "http": 200,
+    "bytes": 604842,
+    "sha256": "7ee8dedba3e18e74903c282bf2a0534fa5e2fb5f7f75b54a3ba5f7591523ae99",
+    "publicSha256": "7ee8dedba3e18e74903c282bf2a0534fa5e2fb5f7f75b54a3ba5f7591523ae99",
+    "identical": true
+  },
+  {
+    "path": "design/zen/assets/music-analysis/track-06.bin",
+    "publicUrl": "https://kuanxinji.pages.dev/zen/assets/music-analysis/track-06.bin",
+    "http": 200,
+    "bytes": 604842,
+    "sha256": "f4a140ea399f709cd8abf431b56c85d4d651e0c9a68e383014990acc84644f97",
+    "publicSha256": "f4a140ea399f709cd8abf431b56c85d4d651e0c9a68e383014990acc84644f97",
+    "identical": true
+  }
+]
