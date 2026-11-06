@@ -6,7 +6,7 @@ import './SiteNavigation.css'
 const groups = [
   { title: '此刻', items: [['chat', '问一问', '把此刻的心事说说']] },
   { title: '慢慢读', items: [['articles', '老师文章', '从困惑，回到当下'], ['sayings', '每日一言', '留一句话，陪你今日']] },
-  { title: '每日相伴', items: [['gongguoge', '功过格', '观照今日，记下一念'], ['reminders', '每日提醒', '念佛 · 一念回光'], ['zen', '禅意空间', '听一段清音，静坐一会儿']] },
+  { title: '每日相伴', items: [['gongguoge', '功过格', '观照今日，记下一念'], ['reminders', '每日提醒', '念佛 · 一念回光'], ['android-download', '下载安卓应用', '安装宽心纪，开启手机提醒'], ['zen', '禅意空间', '听一段清音，静坐一会儿']] },
   { title: '随四时探索', items: [['calendar', '节气日历', '跟着时令，照顾身心'], ['meridians', '十二经络', '从身体，读见流转'], ['classics', '经典阅读', '在古书里，慢慢相逢']] },
 ]
 
@@ -49,7 +49,7 @@ export default function SiteNavigation({ open, onClose, onNavigate, savedCount =
       <p className="menu-kicker">宽心纪</p><h2>从此刻，慢慢走</h2>
       {groups.map((group, index) => <section className="menu-group" aria-labelledby={`menu-group-${index}`} key={group.title}>
         <p id={`menu-group-${index}`}>{group.title}</p>
-        {group.items.map(([key, title, description]) => <button type="button" onClick={() => onNavigate(key)} key={key}>
+        {group.items.map(([key, title, description]) => <button type="button" onClick={() => { if (key === 'android-download') window.location.assign('/android/index.html'); else onNavigate(key) }} key={key}>
           <span><strong>{title}</strong><small>{description}</small></span><CaretRight size={19} weight="light" aria-hidden="true" />
         </button>)}
       </section>)}

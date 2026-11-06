@@ -1,0 +1,47 @@
+name: Build Android release candidate
+on:
+  push:
+    branches: ['codex/android-release']
+    paths: ['android/**', '.github/workflows/android-release.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check reminders and onboarding
+        run: node --test scripts/reminders.test.mjs scripts/android-reminders.test.mjs scripts/reminder-worker.test.mjs scripts/android-onboarding.test.mjs
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - name: Test, lint and compile release
+        run: gradle -p android :app:testReleaseUnitTest :app:lintRelease :app:assembleRelease --no-daemon
+      - name: Package unsigned release and official signing tool
+        run: |
+          mkdir -p android/output
+          cp android/app/build/outputs/apk/release/app-release-unsigned.apk android/output/kuanxinji-1.0.0-unsigned.apk
+          cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" android/output/apksigner.jar
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging android/output/kuanxinji-1.0.0-unsigned.apk > android/output/package.txt
+          cd android/output
+          sha256sum kuanxinji-1.0.0-unsigned.apk apksigner.jar > SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kuanxinji-release-unsigned
+          path: android/output/
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: android-release-reports
+          path: android/app/build/reports/
+          retention-days: 7
